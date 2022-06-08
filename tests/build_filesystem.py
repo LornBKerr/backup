@@ -3,9 +3,7 @@ Provide common support functionality for several test files.
 """
 import os
 import pathlib
-
-# import subprocess
-# import sys
+import sys
 import time
 
 import pytest
@@ -15,21 +13,26 @@ from lbk_library import IniFileParser
 # if "/home/larry/development/backup/src" not in sys.path:
 #    sys.path.append("/home/larry/development/backup/src")
 
-
+# Directories for Windows and Linux
 directories = [
     ".config",
     "test1",
     "test2",
     "cache",
-    "Cache",
     "trash",
-    "Trash",
     "$RECYCLE.BIN",
     "Downloads",
     "System Volume Information",
     "test_links",
 ]
 """ The set of temporary directories. """
+
+# additional directories for Linux, Windows is case insensitive by
+# default so these are flagged as dupicates.
+if sys.platform.startswith("linux"):
+    directories.append("Cache")
+    directories.append("Trash")
+
 
 links = ["link_good", "link_bad"]
 """ The set of test links, one valid link, one broken link. """
@@ -184,8 +187,10 @@ def filesystem(tmp_path):
 
     # make a set of source directories and files
     load_directory_set(directories, source)
-    link_source_dir = source / "test_links"
-    load_links(links, link_source_dir)
+    # only do symlinks for Linux, not Windows
+    if sys.platform.startswith("linux"):
+        link_source_dir = source / "test_links"
+        load_links(links, link_source_dir)
 
     # set the config file
     config_handler = IniFileParser("backup.ini", "LBKBackup", source)

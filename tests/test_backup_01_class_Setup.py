@@ -1,12 +1,14 @@
 # command --> pytest --cov-report term-missing --cov=backup ../tests/
 
+import os
 import sys
 import time
 
 import pytest
 
-if "/home/larry/development/backup/src" not in sys.path:
-    sys.path.append("/home/larry/development/backup/src")
+src_path = os.path.join(os.path.realpath("."), "src")
+if src_path not in sys.path:
+    sys.path.append(src_path)
 
 from default_config import default_config
 from lbk_library import IniFileParser
@@ -16,15 +18,22 @@ config_handler = IniFileParser("backup.ini", "LBKBackup")
 config_file = default_config
 
 
-def test_01_setup_constr():
+def test_01():
     """
+    Testing SetupDialog.__init__()
+
     Test the the setup object is really a Setup class
     """
     setup = SetupDialog(config_file, config_handler)
     assert isinstance(setup, SetupDialog)
 
 
-def test_02_config_settings():
+def test_02():
+    """
+    Testing the basic configuration settings from SetupDialog.
+
+    This is a placeholder until the actual dialog is written.
+    """
     setup = SetupDialog(config_file, config_handler)
     assert isinstance(setup.config, dict)
     assert setup.config["general"]["base_dir"] == "/home"
