@@ -18,7 +18,7 @@ config_handler = IniFileParser("backup.ini", "LBKBackup")
 config_file = default_config
 
 
-def test_01():
+def test_SetupDialog_01():
     """
     Testing SetupDialog.__init__()
 
@@ -26,9 +26,10 @@ def test_01():
     """
     setup = SetupDialog(config_file, config_handler)
     assert isinstance(setup, SetupDialog)
+    # end test_SetupDialog_01()
 
 
-def test_02():
+def test_SetupDialog_02():
     """
     Testing the basic configuration settings from SetupDialog.
 
@@ -39,3 +40,4 @@ def test_02():
     assert setup.config["general"]["base_dir"] == "/home"
     assert setup.config["general"]["backup_location"] == "/run/media/larry/Backup/Linux"
     assert setup.config["general"]["last_backup"] <= int(time.time() - 86400)
+    # end test_SetupDialog_02()

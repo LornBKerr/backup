@@ -23,7 +23,7 @@ from external_storage import ExternalStorage
 # from lbk_library import IniFileParser
 
 
-def test_01():
+def test_ExternalStorage_01():
     """
     Testing Backup.ExternalStorage.__init__()
 
@@ -32,10 +32,10 @@ def test_01():
     test_config = get_test_config()
     bes = ExternalStorage(test_config)
     assert isinstance(bes, ExternalStorage)
-    # end test_01()
+    # end test_ExternalStorage_01()
 
 
-def test_02():
+def test_ExternalStorage_02():
     """
     Testing ExternalStorage.dir_exclude_list() with no exclusions.
 
@@ -50,10 +50,10 @@ def test_02():
     assert not exclusion_list is test_config["dir_exclude"]["specific_dirs"]
     assert not exclusion_list is test_config["dir_exclude"]
     assert not exclusion_list is test_config
-    # end test_02()
+    # end test_ExternalStorage_02()
 
 
-def test_03():
+def test_ExternalStorage_03():
     """
     Testing ExternalStorage.dir_exclude_list() for excluding specific directories.
 
@@ -68,10 +68,10 @@ def test_03():
     assert exclusion_list == test_config["dir_exclude"]["specific_dirs"]
     assert not exclusion_list is test_config["dir_exclude"]["specific_dirs"]
     assert "a dir" in exclusion_list
-    # end test_03()
+    # end test_ExternalStorage_03()
 
 
-def test_04():
+def test_ExternalStorage_04():
     """
     Testing ExternalStorage.dir_exclude_list() for excluding 'cache' directories.
 
@@ -87,10 +87,10 @@ def test_04():
     assert "cache" in exclusion_list
     assert "Cache" in exclusion_list
     assert not "a dir" in exclusion_list
-    # end test_04()
+    # end test_ExternalStorage_04()
 
 
-def test_05_dir_exclude_trash_dirs():
+def test_ExternalStorage_05():
     """
     Testing ExternalStorage.dir_exclude_list() for excluding 'trash' directories.
 
@@ -106,10 +106,10 @@ def test_05_dir_exclude_trash_dirs():
     assert "trash" in exclusion_list
     assert "Trash" in exclusion_list
     assert "$RECYCLE.BIN" in exclusion_list
-    # end test_05()
+    # end test_ExternalStorage_05()
 
 
-def test_06():
+def test_ExternalStorage_06():
     """
     Testing ExternalStorage.dir_exclude_list() for excluding 'download' directories.
 
@@ -123,10 +123,10 @@ def test_06():
     bes = ExternalStorage(test_config)
     exclusion_list = bes.dir_exclude_list
     assert "Downloads" in exclusion_list
-    # end test_06()
+    # end test_ExternalStorage_06()
 
 
-def test_07_dir():
+def test_ExternalStorage_07():
     """
     Testing ExternalStorage.dir_exclude_list() for excluding 'SysVolInfo' directories.
 
@@ -140,10 +140,10 @@ def test_07_dir():
     bes = ExternalStorage(test_config)
     exclusion_list = bes.dir_exclude_list
     assert "System Volume Information" in exclusion_list
-    # end test_07()
+    # end test_ExternalStorage_07()
 
 
-def test_08():
+def test_ExternalStorage_08():
     """
     Testing ExternalStorage.dir_include_list() for directories.
 
@@ -164,10 +164,10 @@ def test_08():
     assert inclusion_list == test_config["dir_include"]["specific_dirs"]
     assert not inclusion_list is test_config["dir_include"]["specific_dirs"]
     assert "a dir" in inclusion_list
-    # end test_08()
+    # end test_ExternalStorage_08()
 
 
-def test_09():
+def test_ExternalStorage_09():
     """
     Testing ExternalStorage.file_exclude_list() for not excluding any files.
 
@@ -182,10 +182,10 @@ def test_09():
     assert not exclusion_list is test_config["file_exclude"]["specific_files"]
     assert not exclusion_list is test_config["file_exclude"]
     assert not exclusion_list is test_config
-    # end test_09()
+    # end test_ExternalStorage_09()
 
 
-def test_10():
+def test_ExternalStorage_10():
     """
     Testing ExternalStorage.file_exclude_list() for excluding specific files.
 
@@ -200,10 +200,10 @@ def test_10():
     assert exclusion_list == test_config["file_exclude"]["specific_files"]
     assert not exclusion_list is test_config["file_exclude"]["specific_files"]
     assert "a file" in exclusion_list
-    # end test_10()
+    # end test_ExternalStorage_10()
 
 
-def test_11():
+def test_ExternalStorage_11():
     """
     Testing ExternalStorage.file_exclude_list() for excluding backup files.
 
@@ -219,10 +219,10 @@ def test_11():
     assert "~" in exclusion_list
     assert ".bak" in exclusion_list
     assert not "a file" in exclusion_list
-    # end test_11()
+    # end test_ExternalStorage_11()
 
 
-def test_12():
+def test_ExternalStorage_12():
     """
     Testing ExternalStorage.file_exclude_list() for excluding 'cache' files.
 
@@ -238,10 +238,10 @@ def test_12():
     assert "cache" in exclusion_list
     assert "Cache" in exclusion_list
     assert not "a file" in exclusion_list
-    # end test_12()
+    # end test_ExternalStorage_12()
 
 
-def test_13():
+def test_ExternalStorage_13():
     """
     Testing the ExternalStorage.file_include_list() method.
 
@@ -272,10 +272,10 @@ def test_13():
     assert inclusion_list == test_config["file_include"]["specific_files"]
     assert not inclusion_list is test_config["file_include"]["specific_files"]
     assert "a file" in inclusion_list
-    # end test_13()
+    # end test_ExternalStorage_13()
 
 
-def test_14(filesystem):
+def test_ExternalStorage_14(filesystem):
     """
     Test the results of the ExternalStorage.process_file() method.
 
@@ -302,10 +302,10 @@ def test_14(filesystem):
     os.utime(current_dir / "file1.txt", (new_time, new_time))
     bes.process_file(current_dir, destination_dir, "file1.txt")
     assert new_time == os.path.getmtime(destination_dir / "file1.txt")
-    # end test_14()
+    # end test_ExternalStorage_14()
 
 
-def test_15(filesystem):
+def test_ExternalStorage_15(filesystem):
     """
     Test the results of the ExternalStorage.process_file() method.
 
@@ -331,10 +331,10 @@ def test_15(filesystem):
         assert not os.path.islink(current_dir / "bad_link")
     else:  # Windows doesn't do symlinks well probably should look at shortcuts
         assert 1
-    # test_15()
+    # test_ExternalStorage_15()
 
 
-def test_16_process_dir_files(filesystem):
+def test_ExternalStorage_16(filesystem):
     """
     Test the results of the ExternalStorage.process_dir_files() method.
 
@@ -352,10 +352,10 @@ def test_16_process_dir_files(filesystem):
     bes.process_dir_files(current_dir, destination_dir, additional_files)
     for filename in additional_files:
         assert os.path.isfile(destination_dir / filename)
-    # end test_16_process_dir_file()
+    # end test_ExternalStorage_16()
 
 
-def test_17_process_dir_file_exclude_backup_files(filesystem):
+def test_ExternalStorage_17(filesystem):
     """
     Test the results of the ExternalStorage.process_dir_files() method.
 
@@ -377,10 +377,10 @@ def test_17_process_dir_file_exclude_backup_files(filesystem):
     assert os.path.isfile(destination_dir / "file_is_cache_file")
     assert os.path.isfile(destination_dir / "py_file.py")
     assert os.path.isfile(destination_dir / "py_file.pyc")
-    # end test_17()
+    # end test_ExternalStorage_17()
 
 
-def test_18(filesystem):
+def test_ExternalStorage_18(filesystem):
     """
     Test the results of the ExternalStorage.process_dir_files() method.
 
@@ -403,10 +403,10 @@ def test_18(filesystem):
     assert not os.path.isfile(destination_dir / "file_is_cache_file")
     assert os.path.isfile(destination_dir / "py_file.py")
     assert os.path.isfile(destination_dir / "py_file.pyc")
-    # end test_18()
+    # end test_ExternalStorage_18()
 
 
-def test_19(filesystem):
+def test_ExternalStorage_19(filesystem):
     """
     Test the results of the ExternalStorage.process_dir_files() method.
 
@@ -429,10 +429,10 @@ def test_19(filesystem):
     assert os.path.isfile(destination_dir / "file_is_cache_file")
     assert os.path.isfile(destination_dir / "py_file.py")
     assert not os.path.isfile(destination_dir / "py_file.pyc")
-    # end test_19()
+    # end test_ExternalStorage_19()
 
 
-def test_20(filesystem):
+def test_ExternalStorage_20(filesystem):
     """
     Test the overall program with a base config file.
 
@@ -455,10 +455,10 @@ def test_20(filesystem):
                     assert os.path.isfile(destination_dir / a_dir / filename)
                 else:
                     assert not os.path.isfile(destination_dir / a_dir / filename)
-    # end test_20()
+    # end test_ExternalStorage_20()
 
 
-def test_21(filesystem):
+def test_ExternalStorage_21(filesystem):
     """
     Test the overall program excluding cache directories.
 
@@ -479,7 +479,7 @@ def test_21(filesystem):
             assert not os.path.exists(destination_dir / a_dir)
         else:
             assert os.path.exists(destination_dir / a_dir)
-    # end test_21()
+    # end test_ExternalStorage_21()
 
 
 # end test_backup_02_clss_ExternalStorage.py
