@@ -11,6 +11,8 @@ Copyright:  (c) 2022 Lorn B Kerr
 License:    see License.txt
 """
 
+import os
+import sys
 import time
 
 from default_config import default_config
@@ -38,12 +40,14 @@ class SetupDialog:
         """
         # initial settings while developing, to be replaced with GUI
         self.config = default_config
-        self.config["general"]["base_dir"] = "/home"
-        self.config["general"]["backup_location"] = "/run/media/larry/Backup/Linux"
+        self.config["general"]["base_dir"] = os.path.expanduser("~")
+        if sys.platform.startswith("linux"):
+            self.config["general"]["backup_location"] = "/run/media/larry/Backup/Linux"
+        elif sys.platform.startswith("win"):
+            self.config["general"]["backup_location"] = "E:\\Windows11"
         self.config["general"]["last_backup"] = 0
-        config_handler.write_config(default_config)
-
-    # end __init()
+        config_handler.write_config(self.config)
+        # end __init()
 
 
 # end class SetupDialog

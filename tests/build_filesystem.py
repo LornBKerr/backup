@@ -73,7 +73,7 @@ def get_test_config(source: pathlib.Path = "", dest: pathlib.Path = ""):
             "last_backup": 0,
             "base_dir": source,
             "backup_dir": dest,
-            "config_file": os.path.join(source, ".config"),
+            #            "config_file": os.path.join(source, ".config"),
             "external_storage": False,
             "cloud_storage": False,
         },
@@ -193,7 +193,7 @@ def filesystem(tmp_path):
         load_links(links, link_source_dir)
 
     # set the config file
-    config_handler = IniFileParser("backup.ini", "LBKBackup", source)
+    config_handler = IniFileParser("backup.ini", "LBKBackup", source / ".config")
     config_handler.write_config(get_test_config(source, dest))
 
     return source, dest
