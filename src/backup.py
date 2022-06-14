@@ -73,7 +73,7 @@ class Backup:
         self.actions = self.set_required_actions(action_list)
         self.config_handler = IniFileParser("backup.ini", "LBKBackup", config_dir)
 
-        if self.actions["setup"]:  
+        if self.actions["setup"]:
             SetupDialog(self.config, self.config_handler)
         self.config = self.get_config_file()
 
@@ -86,7 +86,7 @@ class Backup:
             exit()
 
         if self.actions["backup"]:
-            if self.config["general"]["external_storage"]:
+          if self.config["general"]["external_storage"]:
                 ExternalStorage(self.config)
 
            # update the conf file last backup time
@@ -121,7 +121,6 @@ class Backup:
             # no requested actions, set to backup only (normal condition)
             actions["backup"] = True
         else:
-            print(args)
             # some set of arguments are requested
             for action in args:
                 if action == "-b" or action == "--backup":
@@ -174,12 +173,12 @@ class Backup:
 # end Class Backup
 
 
-# if __name__ == "__main__":
-#    # get the command line arguments
-#    args = sys.argv
-#    args.pop(0)  # discard the program name
-#
-#    # Run the program
-#    #    app = QApplication(sys.argv)  # used for the setup GUI
-#    Backup(args)
+if __name__ == "__main__":
+    # get the command line arguments
+    args = sys.argv
+    args.pop(0)  # discard the program name
+
+    # Run the program
+    #    app = QApplication(sys.argv)  # used for the setup GUI
+    Backup(args)
 # end file backup.py

@@ -81,7 +81,7 @@ def get_test_config(source: pathlib.Path = "", dest: pathlib.Path = ""):
             "cache_dir": False,
             "trash_dir": False,
             "download_dir": False,
-            "sysVolInfo_dir": False,
+            "sysvolinfo_dir": False,
             "specific_dirs": [],
         },
         "dir_include": {

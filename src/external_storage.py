@@ -4,7 +4,7 @@ Backup a directory structure to an external drive.
 File:       external_storage.py
 Author:     Lorn B Kerr
 Copyright:  (c) 2022 Lorn B Kerr
-License:    see License.txt
+License:    see LICENSE file
 """
 
 import os
@@ -51,16 +51,21 @@ class ExternalStorage:
         ensure the destination is present prior to tring to copy a
         new or changed file to the destination.
         """
+        print("in ExternalStorage.backup()")
         source = self.config["general"]["base_dir"]
+        print('Source directory is', source)
         source_len = len(str(source)) + 1
         destination = self.config["general"]["backup_dir"]
+        print('Destination directory is', destination)
 
         # make sure the base destination directory exists
         if not os.path.isdir(destination):
             os.mkdir(destination)
 
             # walk the base directory and all subdirectories.
+        print('Walking the directory structure')
         for current_dir, subdirs, fileset in os.walk(source):
+            print(current_dir)
             # if directory not excluded, check the directory's file_set
             is_dir_excluded = [
                 ele for ele in self.dir_exclude_list if ele in current_dir
@@ -149,7 +154,7 @@ class ExternalStorage:
             # Don't save the Windows 'System Volume Information'.
             # Restoring this MAY lead to interesting and unnerving
             # results with Windows.
-        if self.config["dir_exclude"]["sysVolInfo_dir"]:
+        if self.config["dir_exclude"]["sysvolinfo_dir"]:
             exclusion_list.append("System Volume Information")
 
         return exclusion_list

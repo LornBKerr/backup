@@ -63,13 +63,13 @@ def test_Backup_02(filesystem):
     assert not actions['test']
     assert not actions['verbose']
 
-    # do action list with setup only; not defined yet so all should be False.
+    # do action list with setup only; all except setup should be False.
     action_list = ['-s',]
     backup = Backup(action_list, config_dir)
     # actions should have everything set to False
     actions = backup.set_required_actions(action_list)
     assert not actions['backup']
-    assert not actions['setup']
+    assert actions['setup']
     assert not actions['restore']
     assert not actions['test']
     assert not actions['verbose']

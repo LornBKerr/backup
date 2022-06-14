@@ -1,14 +1,16 @@
 """
 Initialize the configuration settings for the Backup program.
 
-For now, just uses the default configuration settings. Eventually this
-will be a nice gui dialog to set and change all the configuration
-options.
+For now, it just uses the default configuration settings plus setting the
+source and destination directories.
+
+Eventually this will be a nice gui dialog to set and change all the
+configuration options.
 
 File:       setup.py
 Author:     Lorn B Kerr
 Copyright:  (c) 2022 Lorn B Kerr
-License:    see License.txt
+License:    see LICENSE file
 """
 
 import os
@@ -42,9 +44,9 @@ class SetupDialog:
         self.config = default_config
         self.config["general"]["base_dir"] = os.path.expanduser("~")
         if sys.platform.startswith("linux"):
-            self.config["general"]["backup_location"] = "/run/media/larry/Backup/Linux"
+            self.config["general"]["backup_dir"] = "/run/media/larry/Backup/Linux"
         elif sys.platform.startswith("win"):
-            self.config["general"]["backup_location"] = "E:\\Windows11"
+            self.config["general"]["backup_dir"] = "E:\\Windows11"
         self.config["general"]["last_backup"] = 0
         config_handler.write_config(self.config)
         # end __init()

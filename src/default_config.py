@@ -18,15 +18,15 @@ default_config = {
         # Time stamp of the last backup. Default of '0' means never.
         "last_backup": 0,
         # What is the base directory to start scanning for changed
-        # files. By default, it is the 'users' dir, '/home/' on linux
+        # files. By default, it is the 'users' dir, '/home/{user_id}' on linux
         # or 'C:\Users' on Windows.
         "base_dir": "",
         # Where is the external storage? For a usb drive, Fedora Linux is
         # '/run/media/*backup_directory*', Windows will be a drive letter,
         # generally 'E:' or greater.
-        "backup_location": "",
+        "backup_dir": "",
         # Do we want to backup to external storage, True if so, False if not
-        "external_storage": False,
+        "external_storage": True,
         # Do we want to backup to cloud storage, True if so, False if not,
         # Specific config options for cloud storage are in the
         # 'cloud_backup_options' section below
@@ -55,10 +55,10 @@ default_config = {
         # Don't save the Windows 'System Volume Information'.
         # Restoring this MAY lead to interesting and unnerving
         # results with Windows.
-        "sysVolInfo_dir": True,
+        "sysvolinfo_dir": True,
         # Specific directories can be noted for exclusion as desired.
         "specific_dirs": [
-            "venv",
+            "venv", "tox",
         ],
     },
     # What specific files do we want to exclude from backup.

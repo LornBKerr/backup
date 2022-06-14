@@ -136,7 +136,7 @@ def test_ExternalStorage_07():
     bes = ExternalStorage(test_config)
     exclusion_list = bes.dir_exclude_list
     assert not "System Volume Information" in exclusion_list
-    test_config["dir_exclude"]["sysVolInfo_dir"] = True
+    test_config["dir_exclude"]["sysvolinfo_dir"] = True
     bes = ExternalStorage(test_config)
     exclusion_list = bes.dir_exclude_list
     assert "System Volume Information" in exclusion_list
