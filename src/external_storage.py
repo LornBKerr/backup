@@ -9,6 +9,7 @@ License:    see LICENSE file
 
 import os
 import shutil
+import sys
 from copy import deepcopy
 from typing import Any
 
@@ -18,7 +19,7 @@ class ExternalStorage:
     Backup a directory structure to an external drive.
     """
 
-    def __init__(self, config: dict[str, Any]) -> None:
+    def __init__(self, config: dict[str, Any], actions: dict[str, bool] = None) -> None:
         """
         Backup all fresh files to the external drive.
 
@@ -26,9 +27,16 @@ class ExternalStorage:
         last backup and are not otherwise excluded from backup
 
         Parameters:
-            config: (dict[str, Any]) the criteria for the backup.
+            config: (dict[str, Any]) the config file; the criteria for
+                the backup.
+            actions: (dict[str, bool]) The required actions to take.
         """
         self.config: dict[str, Any] = config
+        self.actions: dict[str, bool] = actions
+        self.directories_checked: int = 0
+        self.directories_backed_up: int = 0
+        self.files_files_checked: int = 0
+        self.files_backed_up: int = 0
 
         if (
             self.config["general"]["base_dir"] != ""
@@ -38,6 +46,14 @@ class ExternalStorage:
         else:
             pass
             # log the failure eventually
+
+        if self.actions["verbose"]:
+            print(self.directories_checked, "directories checked.")
+            print(
+                self.directories_backed_up, "directories backed up to external storage."
+            )
+            print(self.files_files_checked, "files checked.")
+            print(self.files_backed_up, "files backed up to external storage.")
 
     # end __init__()
 
@@ -51,21 +67,18 @@ class ExternalStorage:
         ensure the destination is present prior to tring to copy a
         new or changed file to the destination.
         """
-        print("in ExternalStorage.backup()")
         source = self.config["general"]["base_dir"]
-        print('Source directory is', source)
         source_len = len(str(source)) + 1
         destination = self.config["general"]["backup_dir"]
-        print('Destination directory is', destination)
 
         # make sure the base destination directory exists
         if not os.path.isdir(destination):
             os.mkdir(destination)
 
             # walk the base directory and all subdirectories.
-        print('Walking the directory structure')
         for current_dir, subdirs, fileset in os.walk(source):
-            print(current_dir)
+            if self.actions["verbose"]:
+                self.directories_checked += 1
             # if directory not excluded, check the directory's file_set
             is_dir_excluded = [
                 ele for ele in self.dir_exclude_list if ele in current_dir
@@ -74,6 +87,9 @@ class ExternalStorage:
                 ele for ele in self.dir_include_list if ele in current_dir
             ]
             if not bool(is_dir_excluded) or bool(is_dir_included):
+                if self.actions["verbose"]:
+                    self.directories_backed_up += 1
+
                 # make sure the current destination directory exists
                 destination_dir = os.path.join(destination, current_dir[source_len:])
                 if not os.path.isdir(destination_dir):
@@ -96,6 +112,8 @@ class ExternalStorage:
             fileset: (list[str]) the set of files to backup.
         """
         for filename in fileset:
+            if self.actions["verbose"]:
+                self.files_files_checked += 1
             if not (
                 filename.endswith(tuple(self.file_exclude_list))
                 or bool([ele for ele in self.file_exclude_list if (ele in filename)])
@@ -128,7 +146,13 @@ class ExternalStorage:
 
             # if file is newer than backup file, back it up
         if int(os.stat(current_path).st_mtime) > self.config["general"]["last_backup"]:
-            shutil.copy2(current_path, destination_path, follow_symlinks=False)
+            try:
+                shutil.copy2(current_path, destination_path, follow_symlinks=False)
+                if self.actions["verbose"]:
+                    self.files_backed_up += 1
+            except Exception as exc:
+                if self.actions["verbose"]:
+                    print("Backup of file", current_path, "failed.")
 
     # end process_file()
 

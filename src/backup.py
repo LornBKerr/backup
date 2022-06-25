@@ -12,24 +12,25 @@ timestamp is greater than the stored last backup timestamp.
 Any new directories are created in the backup store and changed files
 are copied to the store.
 
-Part 2
+Part 2 - Not yet implemented
 After the external storage is updated, backup to cloud storage using
 the 'restic' program.
 
  File:       backup.py
  Author:     Lorn B Kerr
  Copyright:  (c) 2022 Lorn B Kerr
- License:    see License.txt
+ License:    see file LICENSE
  """
 
+
+import datetime
 import re
 import sys
-import time  # datetime,
+import time
 from typing import Any
 
-from lbk_library import IniFileParser
-
 from external_storage import ExternalStorage
+from lbk_library import IniFileParser
 from setup_dialog import SetupDialog
 
 
@@ -49,18 +50,23 @@ class Backup:
                     (Not Implemented) Run the setup portion to configure the
                     program
                 -b, --backup
-                    Run the backup portion (default if setup is not requested,
-                    required if backup is desired after setup is requested.
+                    Run the backup portion (default if no other option is
+                    included, required if backup is desired after setup is
+                    requested.
                 -r, --restore
                     (Not Implemented) Restore the previously saved cloud backup
                 -t, --test
                     (Not Implemented) Run the backup portion showing what would
                     be accomplished without actually saving anything.
                 -v, --verbose
-                    (Not Implemented) Show the steps being accomplished
+                    Show the steps being accomplished
 
               config_dir: (string) override the default system config path,
                     default is empty string to use the default system location.
+        Errors:
+            Exits  with error code 3 and with an error message if no
+            configuration file is present and the program is executed without
+            the '-s' or '--setup' action flag.
         """
         self.actions: dict[str, bool]
         """ The set of requested actions """
@@ -68,30 +74,42 @@ class Backup:
         """ The configuration File (dict)"""
         self.config_handler: IniFileParser
         """ Config file reader/writer """
+        self.setup_dialog: SetupDialog = None
+        """ The Setup Dialog class """
+        self.external_storage: ExternalStorage = None
+
+        self.actions = self.set_required_actions(action_list)
 
         start_time = time.time()  # Get the starting timestamp
-        self.actions = self.set_required_actions(action_list)
+        if self.actions["verbose"]:
+            print("started:", start_time)
+
         self.config_handler = IniFileParser("backup.ini", "LBKBackup", config_dir)
 
         if self.actions["setup"]:
-            SetupDialog(self.config, self.config_handler)
+            self.setup_dialog = SetupDialog(self.config, self.config_handler)
         self.config = self.get_config_file()
-
         if not self.config and not self.actions["setup"]:
             print(
                 "\n\tERROR! No Configuration File:",
                 "\n\tCannot run the backup program",
                 "\n\tPlease use 'backup -s' or 'backup --setup'\n",
             )
-            exit()
+            sys.exit(3)  # Error 3: No Config File, Run Setup.
 
         if self.actions["backup"]:
-          if self.config["general"]["external_storage"]:
-                ExternalStorage(self.config)
+            if self.config["general"]["external_storage"]:
+                self.external_storage = ExternalStorage(self.config, self.actions)
 
-           # update the conf file last backup time
+        # update the config file 'last backup' time
         self.config["general"]["last_backup"] = int(start_time)
         self.config_handler.write_config(self.config)
+
+        end_time = time.time()  # Get the ending timestamp
+        elapsed = int(end_time - start_time)  # how long did backup take.
+        if self.actions["verbose"]:
+            print("ended:", end_time)
+            print("Elapsed time:", datetime.timedelta(seconds=elapsed))
         # end __init__()
 
     def set_required_actions(self, args: list[str]) -> list[bool]:
@@ -127,12 +145,12 @@ class Backup:
                     actions["backup"] = True
                 elif action == "-s" or action == "--setup":
                     actions["setup"] = True
-#                elif action == "-r" or action == "--restore":
-#                    actions["restore"] = True
-#                elif action == "-t" or action == "--test":
-#                    actions["test"] = True
-#                elif action == "-v" or action == "--verbose":
-#                    actions["verbose"] = True
+                #                elif action == "-r" or action == "--restore":
+                #                    actions["restore"] = True
+                #                elif action == "-t" or action == "--test":
+                #                    actions["test"] = True
+                elif action == "-v" or action == "--verbose":
+                    actions["verbose"] = True
         return actions
 
     # end set_required_actions()
@@ -170,6 +188,8 @@ class Backup:
                         config[section][option] = dir_list.split(",")
         return config
         # end get_config_file()
+
+
 # end Class Backup
 
 

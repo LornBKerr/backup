@@ -55,9 +55,9 @@ test the file exclusion config settings.
 
 def get_test_config(source: pathlib.Path = "", dest: pathlib.Path = ""):
     """
-    A basic, do nothing  config file with the base_dir set to source, the
-    basckup_dir set to dest and the config file set to 'source/.config'. All
-    other selections are set to the False or empty settings.
+    A basic, do nothing  config file with the base_dir set to source and the
+    backup_dir set to dest. All other selections are set to the False or
+    empty settings.
 
     Parameters:
         source: (pathlib.Path) the file path to be backed up, default is
