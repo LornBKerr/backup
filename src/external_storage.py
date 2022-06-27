@@ -79,6 +79,8 @@ class ExternalStorage:
         for current_dir, subdirs, fileset in os.walk(source):
             if self.actions["verbose"]:
                 self.directories_checked += 1
+                if self.directories_checked % 1000 == 0:
+                    print(self.directories_checked, "directories processsed")
             # if directory not excluded, check the directory's file_set
             is_dir_excluded = [
                 ele for ele in self.dir_exclude_list if ele in current_dir
@@ -148,6 +150,7 @@ class ExternalStorage:
         if int(os.stat(current_path).st_mtime) > self.config["general"]["last_backup"]:
             try:
                 shutil.copy2(current_path, destination_path, follow_symlinks=False)
+                shutil.copystat(current_path, destination_path, follow_symlinks=False)
                 if self.actions["verbose"]:
                     self.files_backed_up += 1
             except Exception as exc:

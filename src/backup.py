@@ -82,7 +82,7 @@ class Backup:
 
         start_time = time.time()  # Get the starting timestamp
         if self.actions["verbose"]:
-            print("started:", start_time)
+            print("started:", time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(start_time)))
 
         self.config_handler = IniFileParser("backup.ini", "LBKBackup", config_dir)
 
@@ -108,7 +108,7 @@ class Backup:
         end_time = time.time()  # Get the ending timestamp
         elapsed = int(end_time - start_time)  # how long did backup take.
         if self.actions["verbose"]:
-            print("ended:", end_time)
+            print("ended:", time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(end_time)))
             print("Elapsed time:", datetime.timedelta(seconds=elapsed))
         # end __init__()
 
