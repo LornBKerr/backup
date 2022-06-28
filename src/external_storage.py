@@ -153,6 +153,7 @@ class ExternalStorage:
                 shutil.copystat(current_path, destination_path, follow_symlinks=False)
                 if self.actions["verbose"]:
                     self.files_backed_up += 1
+                    print('file:', destination_path)
             except Exception as exc:
                 if self.actions["verbose"]:
                     print("Backup of file", current_path, "failed.")
