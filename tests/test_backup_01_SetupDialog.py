@@ -38,6 +38,9 @@ def test_SetupDialog_02():
     setup = SetupDialog(config_file, config_handler)
     assert isinstance(setup.config, dict)
     assert setup.config["general"]["base_dir"] == os.path.expanduser("~")
-    assert setup.config["general"]["backup_dir"] == "/run/media/larry/Backup/Linux"
+    if sys.platform.startswith('linux'):
+        assert setup.config["general"]["backup_dir"] == "/run/media/larry/Backup/Linux"
+    elif sys.platform.startswith('win'):
+        assert setup.config["general"]["backup_dir"] == 'E:\\Windows11'
     assert setup.config["general"]["last_backup"] <= int(time.time() - 86400)
     # end test_SetupDialog_02()
