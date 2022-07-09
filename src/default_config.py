@@ -7,26 +7,21 @@ Copyright:  (c) 2022 Lorn B Kerr
 License:    see License.txt
 """
 
-import os
-
-# import platform
-import sys
-
 default_config = {
     # General conditions that apply in all cases
     "general": {
         # Time stamp of the last backup. Default of '0' means never.
         "last_backup": 0,
         # What is the base directory to start scanning for changed
-        # files. By default, it is the 'users' dir, '/home/{user_id}' on linux
-        # or 'C:\Users' on Windows.
+        # files. By default, it is the 'user_id' dir, '/home/{user_id}' on linux
+        # or 'C:\Users\{user_id}' on Windows.
         "base_dir": "",
         # Where is the external storage? For a usb drive, Fedora Linux is
         # '/run/media/*backup_directory*', Windows will be a drive letter,
         # generally 'E:' or greater.
         "backup_dir": "",
         # Do we want to backup to external storage, True if so, False if not
-        "external_storage": True,
+        "external_storage": False,
         # Do we want to backup to cloud storage, True if so, False if not,
         # Specific config options for cloud storage are in the
         # 'cloud_backup_options' section below
@@ -58,8 +53,8 @@ default_config = {
         "sysvolinfo_dir": True,
         # Specific directories can be noted for exclusion as desired.
         "specific_dirs": [
-            "venv",
-            "tox",
+            "venv",     # python virtual environment dir should be regenerated, 
+            "tox",      # the tox directory should not be backed up
         ],
     },
     # What specific files do we want to exclude from backup.

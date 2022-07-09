@@ -47,7 +47,7 @@ class Backup:
             action_list: (list[string]) the set of requested actions.
                 Actions defined (all optional) are:
                 -s, --setup
-                    (Not Implemented) Run the setup portion to configure the
+                    (Partially Implemented) Run the setup portion to configure the
                     program
                 -b, --backup
                     Run the backup portion (default if no other option is
@@ -59,7 +59,7 @@ class Backup:
                     (Not Implemented) Run the backup portion showing what would
                     be accomplished without actually saving anything.
                 -v, --verbose
-                    Show the steps being accomplished
+                    Show the steps being accomplished.
 
               config_dir: (string) override the default system config path,
                     default is empty string to use the default system location.
@@ -70,13 +70,22 @@ class Backup:
         """
         self.actions: dict[str, bool]
         """ The set of requested actions """
-        self.config: dict = {}
+        self.config: dict[str, Any] = {}
         """ The configuration File (dict)"""
         self.config_handler: IniFileParser
         """ Config file reader/writer """
+        self.external_storage: ExternalStorage = None
+        """ Handle the backup to the external storage drive """
+        self.logger: Logger
+        """ The results database log driver """
         self.setup_dialog: SetupDialog = None
         """ The Setup Dialog class """
-        self.external_storage: ExternalStorage = None
+
+        # initialize
+        start_time = time.time()  # Get the starting timestamp
+        self.config_handler = IniFileParser("backup.ini", "LBKBackup", config_dir)
+        # put the logger file in the same directory as the config file
+        self.logger = Logger(self.config_handler.config_path())
 
         self.actions = self.set_required_actions(action_list)
 
@@ -151,6 +160,7 @@ class Backup:
                 #                    actions["test"] = True
                 elif action == "-v" or action == "--verbose":
                     actions["verbose"] = True
+
         return actions
 
     # end set_required_actions()
