@@ -1,13 +1,13 @@
 """
 File Backup
 
-Backup the '/home' filesystem to the backup storage and to cloud storage.
+Backup the selected file system to the backup storage and to cloud storage.
 
 Part 1: backup to external storage
 Backup any new and changed files in the global home directory to the backup
 directory on an external disk drive. A new file is one that has been added or
 renamed since the last backup. A changed file is one whose modification
-timestamp is greater than the stored last backup timestamp.
+time stamp is greater than the backed up file time stamp.
 
 Any new directories are created in the backup store and changed files
 are copied to the store.
@@ -30,7 +30,8 @@ import time
 from typing import Any
 
 from external_storage import ExternalStorage
-from lbk_library import IniFileParser
+from lbk_library import Dbal, IniFileParser
+from logger import Logger
 from setup_dialog import SetupDialog
 
 
@@ -89,11 +90,11 @@ class Backup:
 
         self.actions = self.set_required_actions(action_list)
 
-        start_time = time.time()  # Get the starting timestamp
         if self.actions["verbose"]:
-            print("started:", time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(start_time)))
+            print(
+                "started:", time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(start_time))
+            )
 
-        self.config_handler = IniFileParser("backup.ini", "LBKBackup", config_dir)
 
         if self.actions["setup"]:
             self.setup_dialog = SetupDialog(self.config, self.config_handler)

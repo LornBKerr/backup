@@ -1,4 +1,4 @@
-## A Backup Program for Linux and Windows.
+# A Backup Program for Linux and Windows.
 
 ## File Backup
 
