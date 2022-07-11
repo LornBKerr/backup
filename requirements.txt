@@ -1,0 +1,14 @@
+# Requirements file for Backup virtuasl environment
+
+--extra-index-url https://test.pypi.org/simple/
+
+# local project library
+lbk_library
+
+# Testing Requirments
+pytest
+pytest_cover
+coverage
+tox
+
+
