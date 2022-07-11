@@ -21,7 +21,7 @@ from setup_dialog import SetupDialog
 
 def test_Backup_01(filesystem):
     """
-    Test the the object object is really a Backup class
+    Test the the object is really a Backup class
     """
     # set filesystem
     source, dest = filesystem

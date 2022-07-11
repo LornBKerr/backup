@@ -76,6 +76,9 @@ def get_test_config(source: pathlib.Path = "", dest: pathlib.Path = ""):
             #            "config_file": os.path.join(source, ".config"),
             "external_storage": False,
             "cloud_storage": False,
+            "config_dir": "LBKBackup",
+            "config_file": "backup.ini",
+            "log_file": "backup_log.db",
         },
         "dir_exclude": {
             "cache_dir": False,

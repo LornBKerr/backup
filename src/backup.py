@@ -24,13 +24,15 @@ the 'restic' program.
 
 
 import datetime
+import os
 import re
 import sys
 import time
 from typing import Any
 
+from lbk_library import IniFileParser
+
 from external_storage import ExternalStorage
-from lbk_library import Dbal, IniFileParser
 from logger import Logger
 from setup_dialog import SetupDialog
 
@@ -78,17 +80,30 @@ class Backup:
         self.external_storage: ExternalStorage = None
         """ Handle the backup to the external storage drive """
         self.logger: Logger
-        """ The results database log driver """
+        """ The results log database driver """
         self.setup_dialog: SetupDialog = None
         """ The Setup Dialog class """
 
         # initialize
         start_time = time.time()  # Get the starting timestamp
-        self.config_handler = IniFileParser("backup.ini", "LBKBackup", config_dir)
-        # put the logger file in the same directory as the config file
-        self.logger = Logger(self.config_handler.config_path())
 
+        # get the configuration
+        self.config_handler = IniFileParser("backup.ini", "LBKBackup", config_dir)
+        self.config = self.get_config_file()
         self.actions = self.set_required_actions(action_list)
+
+        if not self.config and not self.actions["setup"]:
+            print(
+                "\n\tERROR! No Configuration File:",
+                "\n\tCannot run the backup program",
+                "\n\tPlease use 'backup -s' or 'backup --setup'\n",
+            )
+            sys.exit(3)  # Error 3: No Config File, Run Setup.
+        
+        # Setup logging
+        #put the logger file in the same directory as the config file
+        self.logger = Logger(os.path.join(os.path.dirname(self.config_handler.config_path()), self.config['general']['log_file']))
+
 
         if self.actions["verbose"]:
             print(
@@ -98,14 +113,6 @@ class Backup:
 
         if self.actions["setup"]:
             self.setup_dialog = SetupDialog(self.config, self.config_handler)
-        self.config = self.get_config_file()
-        if not self.config and not self.actions["setup"]:
-            print(
-                "\n\tERROR! No Configuration File:",
-                "\n\tCannot run the backup program",
-                "\n\tPlease use 'backup -s' or 'backup --setup'\n",
-            )
-            sys.exit(3)  # Error 3: No Config File, Run Setup.
 
         if self.actions["backup"]:
             if self.config["general"]["external_storage"]:

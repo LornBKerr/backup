@@ -9,7 +9,6 @@ src_path = os.path.join(os.path.realpath("."), "src")
 if src_path not in sys.path:
     sys.path.append(src_path)
 
-# import pytest
 from build_filesystem import (
     add_files,
     additional_files,
@@ -20,14 +19,12 @@ from build_filesystem import (
 )
 from external_storage import ExternalStorage
 
-# from lbk_library import IniFileParser
-
 
 def test_ExternalStorage_01():
     """
     Testing Backup.ExternalStorage.__init__()
 
-    Test the the object object is really a ExternalStorage class
+    Test the the object is really a ExternalStorage class
     """
     test_config = get_test_config()
     actions = {
