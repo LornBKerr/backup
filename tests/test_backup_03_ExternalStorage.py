@@ -18,6 +18,7 @@ from build_filesystem import (
     load_directory_set,
 )
 from external_storage import ExternalStorage
+from logger import Logger
 
 
 def test_ExternalStorage_01():
@@ -30,8 +31,10 @@ def test_ExternalStorage_01():
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     assert isinstance(bes, ExternalStorage)
+    os.remove("./temp.db")
     # end test_ExternalStorage_01()
 
 
@@ -46,13 +49,15 @@ def test_ExternalStorage_02():
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     # empty list and not a empty subset of any of the pieces of test_config.
     assert len(exclusion_list) == 0
     assert not exclusion_list is test_config["dir_exclude"]["specific_dirs"]
     assert not exclusion_list is test_config["dir_exclude"]
     assert not exclusion_list is test_config
+    os.remove("./temp.db")
     # end test_ExternalStorage_02()
 
 
@@ -69,7 +74,8 @@ def test_ExternalStorage_03():
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert exclusion_list == test_config["dir_exclude"]["specific_dirs"]
     assert not exclusion_list is test_config["dir_exclude"]["specific_dirs"]
@@ -87,15 +93,17 @@ def test_ExternalStorage_04():
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert not "cache" in exclusion_list
     test_config["dir_exclude"]["cache_dir"] = True
-    bes = ExternalStorage(test_config, actions)
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert "cache" in exclusion_list
     assert "Cache" in exclusion_list
     assert not "a dir" in exclusion_list
+    os.remove("./temp.db")
     # end test_ExternalStorage_04()
 
 
@@ -109,15 +117,17 @@ def test_ExternalStorage_05():
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert not "trash" in exclusion_list
     test_config["dir_exclude"]["trash_dir"] = True
-    bes = ExternalStorage(test_config, actions)
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert "trash" in exclusion_list
     assert "Trash" in exclusion_list
     assert "$RECYCLE.BIN" in exclusion_list
+    os.remove("./temp.db")
     # end test_ExternalStorage_05()
 
 
@@ -131,13 +141,15 @@ def test_ExternalStorage_06():
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert not "Downloads" in exclusion_list
     test_config["dir_exclude"]["download_dir"] = True
-    bes = ExternalStorage(test_config, actions)
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert "Downloads" in exclusion_list
+    os.remove("./temp.db")
     # end test_ExternalStorage_06()
 
 
@@ -151,14 +163,15 @@ def test_ExternalStorage_07():
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert not "System Volume Information" in exclusion_list
     test_config["dir_exclude"]["sysvolinfo_dir"] = True
-    bes = ExternalStorage(test_config, actions)
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert "System Volume Information" in exclusion_list
-    # end test_ExternalStorage_07()
+    os.remove("./temp.db")  # end test_ExternalStorage_07()
 
 
 def test_ExternalStorage_08():
@@ -171,7 +184,8 @@ def test_ExternalStorage_08():
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     inclusion_list = bes.dir_include_list
     # empty list and not a empty subset of any of the pieces of test_config.
     assert len(inclusion_list) == 0
@@ -180,11 +194,12 @@ def test_ExternalStorage_08():
     assert not inclusion_list is test_config
     # check that 'specific_dirs' is picked up
     test_config["dir_include"]["specific_dirs"].append("a dir")
-    bes = ExternalStorage(test_config, actions)
+    bes = ExternalStorage(test_config, logger, actions)
     inclusion_list = bes.dir_include_list
     assert inclusion_list == test_config["dir_include"]["specific_dirs"]
     assert not inclusion_list is test_config["dir_include"]["specific_dirs"]
     assert "a dir" in inclusion_list
+    os.remove("./temp.db")
     # end test_ExternalStorage_08()
 
 
@@ -199,13 +214,15 @@ def test_ExternalStorage_09():
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.file_exclude_list
     # empty list and not a empty subset of any of the pieces of test_config.
     assert len(exclusion_list) == 0
     assert not exclusion_list is test_config["file_exclude"]["specific_files"]
     assert not exclusion_list is test_config["file_exclude"]
     assert not exclusion_list is test_config
+    os.remove("./temp.db")
     # end test_ExternalStorage_09()
 
 
@@ -222,11 +239,13 @@ def test_ExternalStorage_10():
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.file_exclude_list
     assert exclusion_list == test_config["file_exclude"]["specific_files"]
     assert not exclusion_list is test_config["file_exclude"]["specific_files"]
     assert "a file" in exclusion_list
+    os.remove("./temp.db")
     # end test_ExternalStorage_10()
 
 
@@ -240,15 +259,17 @@ def test_ExternalStorage_11():
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.file_exclude_list
     assert not ".bak" in exclusion_list
     test_config["file_exclude"]["backup_files"] = True
-    bes = ExternalStorage(test_config, actions)
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.file_exclude_list
     assert "~" in exclusion_list
     assert ".bak" in exclusion_list
     assert not "a file" in exclusion_list
+    os.remove("./temp.db")
     # end test_ExternalStorage_11()
 
 
@@ -262,15 +283,17 @@ def test_ExternalStorage_12():
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.file_exclude_list
     assert not "cache" in exclusion_list
     test_config["file_exclude"]["cache_files"] = True
-    bes = ExternalStorage(test_config, actions)
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.file_exclude_list
     assert "cache" in exclusion_list
     assert "Cache" in exclusion_list
     assert not "a file" in exclusion_list
+    os.remove("./temp.db")
     # end test_ExternalStorage_12()
 
 
@@ -294,7 +317,8 @@ def test_ExternalStorage_13():
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     inclusion_list = bes.file_include_list
     # empty list and not a empty subset of any of the pieces of test_config.
     assert len(inclusion_list) == 0
@@ -303,11 +327,12 @@ def test_ExternalStorage_13():
     assert not inclusion_list is test_config
     # check that 'specific_files' is picked up
     test_config["file_include"]["specific_files"].append("a file")
-    bes = ExternalStorage(test_config, actions)
+    bes = ExternalStorage(test_config, logger, actions)
     inclusion_list = bes.file_include_list
     assert inclusion_list == test_config["file_include"]["specific_files"]
     assert not inclusion_list is test_config["file_include"]["specific_files"]
     assert "a file" in inclusion_list
+    os.remove("./temp.db")
     # end test_ExternalStorage_13()
 
 
@@ -327,8 +352,8 @@ def test_ExternalStorage_14(filesystem):
     actions = {
         "verbose": True,
     }
-    print("actions are", actions)
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     load_directory_set(directories, dest, False)
     # Test for regular files
     current_dir = source / "test1"
@@ -342,6 +367,7 @@ def test_ExternalStorage_14(filesystem):
     os.utime(current_dir / "file1.txt", (new_time, new_time))
     bes.process_file(current_dir, destination_dir, "file1.txt")
     assert new_time == os.path.getmtime(destination_dir / "file1.txt")
+    os.remove("./temp.db")
     # end test_ExternalStorage_14()
 
 
@@ -358,7 +384,8 @@ def test_ExternalStorage_15(filesystem):
         actions = {
             "verbose": True,
         }
-        bes = ExternalStorage(test_config, actions)
+        logger = Logger("./temp.db")
+        bes = ExternalStorage(test_config, logger, actions)
         load_directory_set(directories, dest, False)
         # good link is copied and bad link is not
         current_dir = source / "test_links"
@@ -372,8 +399,9 @@ def test_ExternalStorage_15(filesystem):
         # Check bad link
         bes.process_file(current_dir, destination_dir, "link_bad")
         assert not os.path.islink(current_dir / "bad_link")
-    else:  # Windows doesn't do symlinks well probably should look at shortcuts
+    else:  # Windows doesn't do symlinks well, probably should look at shortcuts
         assert 1
+    os.remove("./temp.db")
     # test_ExternalStorage_15()
 
 
@@ -394,10 +422,12 @@ def test_ExternalStorage_16(filesystem):
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     bes.process_dir_files(current_dir, destination_dir, additional_files)
     for filename in additional_files:
         assert os.path.isfile(destination_dir / filename)
+    os.remove("./temp.db")
     # end test_ExternalStorage_16()
 
 
@@ -419,13 +449,15 @@ def test_ExternalStorage_17(filesystem):
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     bes.process_dir_files(current_dir, destination_dir, additional_files)
     assert not os.path.isfile(destination_dir / "backup_file_1~")
     assert not os.path.isfile(destination_dir / "backup_file2.bak")
     assert os.path.isfile(destination_dir / "file_is_cache_file")
     assert os.path.isfile(destination_dir / "py_file.py")
     assert os.path.isfile(destination_dir / "py_file.pyc")
+    os.remove("./temp.db")
     # end test_ExternalStorage_17()
 
 
@@ -448,13 +480,15 @@ def test_ExternalStorage_18(filesystem):
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     bes.process_dir_files(current_dir, destination_dir, additional_files)
     assert os.path.isfile(destination_dir / "backup_file_1~")
     assert os.path.isfile(destination_dir / "backup_file2.bak")
     assert not os.path.isfile(destination_dir / "file_is_cache_file")
     assert os.path.isfile(destination_dir / "py_file.py")
     assert os.path.isfile(destination_dir / "py_file.pyc")
+    os.remove("./temp.db")
     # end test_ExternalStorage_18()
 
 
@@ -477,13 +511,15 @@ def test_ExternalStorage_19(filesystem):
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     bes.process_dir_files(current_dir, destination_dir, additional_files)
     assert os.path.isfile(destination_dir / "backup_file_1~")
     assert os.path.isfile(destination_dir / "backup_file2.bak")
     assert os.path.isfile(destination_dir / "file_is_cache_file")
     assert os.path.isfile(destination_dir / "py_file.py")
     assert not os.path.isfile(destination_dir / "py_file.pyc")
+    os.remove("./temp.db")
     # end test_ExternalStorage_19()
 
 
@@ -503,7 +539,8 @@ def test_ExternalStorage_20(filesystem):
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     for a_dir in directories:
         for filename in os.listdir(source / a_dir):
             if not os.path.islink(source / a_dir / filename):
@@ -513,6 +550,7 @@ def test_ExternalStorage_20(filesystem):
                     assert os.path.isfile(destination_dir / a_dir / filename)
                 else:
                     assert not os.path.isfile(destination_dir / a_dir / filename)
+    os.remove("./temp.db")
     # end test_ExternalStorage_20()
 
 
@@ -533,13 +571,15 @@ def test_ExternalStorage_21(filesystem):
     actions = {
         "verbose": True,
     }
-    bes = ExternalStorage(test_config, actions)
+    logger = Logger("./temp.db")
+    bes = ExternalStorage(test_config, logger, actions)
     exclusions = bes.dir_exclude_list
     for a_dir in directories:
         if a_dir == "Cache" or a_dir == "cache":
             assert not os.path.exists(destination_dir / a_dir)
         else:
             assert os.path.exists(destination_dir / a_dir)
+    os.remove("./temp.db")
     # end test_ExternalStorage_21()
 
 

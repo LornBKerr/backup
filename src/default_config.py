@@ -53,8 +53,8 @@ default_config = {
         "sysvolinfo_dir": True,
         # Specific directories can be noted for exclusion as desired.
         "specific_dirs": [
-            "venv",     # python virtual environment dir should be regenerated, 
-            "tox",      # the tox directory should not be backed up
+            "venv",  # python virtual environment dir should be regenerated,
+            "tox",  # the tox directory should not be backed up
         ],
     },
     # What specific files do we want to exclude from backup.

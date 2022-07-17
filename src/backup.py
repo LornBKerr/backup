@@ -30,46 +30,45 @@ import sys
 import time
 from typing import Any
 
-from lbk_library import IniFileParser
-
 from external_storage import ExternalStorage
+from lbk_library import IniFileParser
 from logger import Logger
+from result_codes import ResultCodes
 from setup_dialog import SetupDialog
 
 
 class Backup:
     """
     This executes the backup program.
+
+    Parameters:
+        action_list (list[str]):  the set of requested actions.
+            Actions defined (all optional) are:
+            -s, --setup
+                (Partially Implemented) Run the setup portion to configure the
+                program
+            -b, --backup
+                Run the backup portion (default if no other option is
+                included, required if backup is desired after setup is
+                requested.
+            -r, --restore
+                (Not Implemented) Restore the previously saved cloud backup
+            -t, --test
+                (Not Implemented) Run the backup portion showing what would
+                be accomplished without actually saving anything.
+            -v, --verbose
+                Show the steps being accomplished.
+        config_dir (str): override the default system config path,
+                    default is empty string to use the default system location.
+    Errors:
+        Exits  with error code 3 and with an error message if no
+        configuration file is present and the program is executed without
+        the '-s' or '--setup' action flag.
     """
 
     def __init__(self, action_list: list[str] = [], config_dir: str = "") -> None:
         """
         Initialize and run the backup program based on the action list.
-
-        Parameters:
-            action_list: (list[string]) the set of requested actions.
-                Actions defined (all optional) are:
-                -s, --setup
-                    (Partially Implemented) Run the setup portion to configure the
-                    program
-                -b, --backup
-                    Run the backup portion (default if no other option is
-                    included, required if backup is desired after setup is
-                    requested.
-                -r, --restore
-                    (Not Implemented) Restore the previously saved cloud backup
-                -t, --test
-                    (Not Implemented) Run the backup portion showing what would
-                    be accomplished without actually saving anything.
-                -v, --verbose
-                    Show the steps being accomplished.
-
-              config_dir: (string) override the default system config path,
-                    default is empty string to use the default system location.
-        Errors:
-            Exits  with error code 3 and with an error message if no
-            configuration file is present and the program is executed without
-            the '-s' or '--setup' action flag.
         """
         self.actions: dict[str, bool]
         """ The set of requested actions """
@@ -95,28 +94,42 @@ class Backup:
         if not self.config and not self.actions["setup"]:
             print(
                 "\n\tERROR! No Configuration File:",
-                "\n\tCannot run the backup program",
+                "\n\tCannot run the backup program until setup is completed",
                 "\n\tPlease use 'backup -s' or 'backup --setup'\n",
             )
-            sys.exit(3)  # Error 3: No Config File, Run Setup.
-        
-        # Setup logging
-        #put the logger file in the same directory as the config file
-        self.logger = Logger(os.path.join(os.path.dirname(self.config_handler.config_path()), self.config['general']['log_file']))
+            sys.exit(ResultCodes.NO_CONFIG_FILE)  # Error 3: No Config File, Run Setup.
 
+        # Setup logging
+        # put the logger file in the same directory as the config file
+        log_db_path = os.path.join(
+            os.path.dirname(self.config_handler.config_path()),
+            self.config["general"]["log_file"],
+        )
+        self.logger = Logger(log_db_path)
+
+        self.logger.add_log_entry(
+            {
+                "timestamp": int(start_time),
+                "result": ResultCodes.SUCCESS,
+                "description": "Backup Started "
+                + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(start_time)),
+            }
+        )
 
         if self.actions["verbose"]:
             print(
-                "started:", time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(start_time))
+                "started:",
+                time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(start_time)),
             )
-
 
         if self.actions["setup"]:
             self.setup_dialog = SetupDialog(self.config, self.config_handler)
 
         if self.actions["backup"]:
             if self.config["general"]["external_storage"]:
-                self.external_storage = ExternalStorage(self.config, self.actions)
+                self.external_storage = ExternalStorage(
+                    self.config, self.logger, self.actions
+                )
 
         # update the config file 'last backup' time
         self.config["general"]["last_backup"] = int(start_time)
@@ -124,9 +137,30 @@ class Backup:
 
         end_time = time.time()  # Get the ending timestamp
         elapsed = int(end_time - start_time)  # how long did backup take.
+        self.logger.add_log_entry(
+            {
+                "timestamp": int(end_time),
+                "result": ResultCodes.SUCCESS,
+                "description": "Backup Finished "
+                + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(start_time)),
+            }
+        )
+        self.logger.add_log_entry(
+            {
+                "timestamp": int(end_time),
+                "result": ResultCodes.SUCCESS,
+                "description": "Elapsed time: "
+                + str(datetime.timedelta(seconds=elapsed)),
+            }
+        )
+
+        self.logger.close_log()
+
         if self.actions["verbose"]:
-            print("ended:", time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(end_time)))
-            print("Elapsed time:", datetime.timedelta(seconds=elapsed))
+            print(
+                "ended:", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(end_time))
+            )
+            print("Elapsed time: " + datetime.timedelta(seconds=elapsed))
         # end __init__()
 
     def set_required_actions(self, args: list[str]) -> list[bool]:
@@ -136,10 +170,10 @@ class Backup:
         If no arguments are supplied, then set for backup only.
 
         Parameters:
-            args: (list[string]) the set of requested actions
+            args (list[str]): the set of requested actions
 
         Returns:
-            (list[bool]) the rquested actions
+            (list[bool]) the requested actions
         """
         # initialize requested actions
         actions = {

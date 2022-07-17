@@ -16,6 +16,7 @@ from build_filesystem import (  # add_files,; additional_files,; directories,; g
 )
 from external_storage import ExternalStorage
 from lbk_library import IniFileParser
+from result_codes import ResultCodes
 from setup_dialog import SetupDialog
 
 
@@ -145,7 +146,7 @@ def test_Backup_05(filesystem, capsys):
     with pytest.raises(SystemExit) as pytest_wrapped_e:
         backup = Backup(action_list, config_dir)
     assert pytest_wrapped_e.type == SystemExit
-    assert pytest_wrapped_e.value.code == 3
+    assert pytest_wrapped_e.value.code == ResultCodes.NO_CONFIG_FILE
     # end test_Backup_05()
 
 

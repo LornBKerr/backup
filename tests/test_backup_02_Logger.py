@@ -3,23 +3,26 @@
 
 import os
 import sys
-#import time
+
+# import time
 
 src_path = os.path.join(os.path.realpath("."), "src")
 if src_path not in sys.path:
     sys.path.append(src_path)
 
-from build_filesystem import (
+import pytest
+from lbk_library import Dbal  # IniFileParser
+
+# from build_filesystem import (
 #    add_files,
 #    additional_files,
 #    directories,
 #    filesystem,
-    get_test_config,
+#    get_test_config,
 #    load_directory_set,
-)
+# )
 from logger import Logger
-
-# from lbk_library import IniFileParser
+from result_codes import ResultCodes
 
 
 def test_Logger_01():
@@ -28,11 +31,125 @@ def test_Logger_01():
 
     Test the the object is really a Logger class
     """
-    test_config = get_test_config()
-    path = ''
+    path = "./test_log.db"  # dummy path which gets removed at end
     logger = Logger(path)
     assert isinstance(logger, Logger)
-    # end test_ExternalStorage_01()
+    os.remove("./test_log.db")
+    # end test_Logger_01()
 
 
+def test_Logger_02():
+    """
+    Testing Backup.Logger.close_log()
 
+    The database should be closed after the call
+    """
+    path = "./test_log.db"  # dummy path which gets removed at end
+    logger = Logger(path)
+    assert logger.log_db
+    assert logger.log_db.sql_is_connected()
+    logger.close_log()
+    assert not logger.log_db.sql_is_connected()
+    os.remove("./test_log.db")
+
+    # end test_Logger_02()
+
+
+def test_Logger_03():
+    """
+    Testing Backup.Logger.create_log_database()
+
+    Call with empty path. Should raise a FileNotFound exception.
+    """
+    path = "./test_log.db"  # dummy path which gets removed
+    logger = Logger(path)
+    os.remove("./test_log.db")
+
+    with pytest.raises(FileNotFoundError) as pytest_wrapped_e:
+        logger.create_log_database("")
+    assert pytest_wrapped_e.type == FileNotFoundError
+    assert str(pytest_wrapped_e.value) == "Log Database path cannot be empty."
+    # end test_Logger_03()
+
+
+def test_Logger_04():
+    """
+    Testing Backup.Logger.create_log_database()
+
+    Call with a temp file name. Check for table presence. Check for
+    empty table. Check for columns in table.
+    """
+    path = "./test_log.db"  # dummy path which gets removed.
+    logger = Logger(path)
+    os.remove("./test_log.db")
+
+    # does path to db exist
+    path = "./test_log2.db"
+    logger.create_log_database(path)
+    assert os.path.exists("./test_log2.db")
+    assert logger.log_path == path
+
+    # does table exist
+    dbref = Dbal()
+    dbref.sql_connect(path)
+    # check table exists
+    sql = (
+        "SELECT count(*) FROM sqlite_master WHERE type='table'"
+        + " AND name='"
+        + logger.table
+        + "'"
+    )
+    result = dbref.sql_query(sql, {})
+    assert dbref.sql_fetchrow(result)["count(*)"] == 1
+
+    # check column names and types
+    sql = "PRAGMA table_info(" + logger.table + ")"
+    result = dbref.sql_query(sql, {})
+    table_desc = dbref.sql_fetchrowset(result)
+    assert len(table_desc) == len(logger.table_def)
+    for row in logger.table_def:
+        print(row)
+        db_row = next(
+            (table_row for table_row in table_desc if table_row["name"] == row["name"]),
+            None,
+        )
+        print(db_row)
+        assert db_row["name"] == row["name"]
+        assert db_row["type"] == row["type"]
+
+    logger.close_log()
+    os.remove("./test_log2.db")
+
+    # end test_Logger_04()
+
+
+def test_logger_05():
+    """
+    Test Backup.dd_log_entry()
+
+    Generate a valid log entry, write to database, cheek the resulting
+    row
+    """
+    path = "./test_log.db"  # dummy path which gets removed.
+    logger = Logger(path)
+    assert logger.log_db.sql_is_connected()
+    time = 1000000
+    result_code = ResultCodes.NO_CONFIG_FILE
+    description = "Test"
+    entry = {"timestamp": time, "result": result_code, "description": description}
+    logger.add_log_entry(entry)
+    # test results
+    dbref = Dbal()
+    dbref.sql_connect(path)
+    sql = "SELECT * FROM " + logger.table
+    result = dbref.sql_query(sql, {})
+    data = dbref.sql_fetchrow(result)
+    assert data["timestamp"] == time
+    assert data["result"] == result_code
+    assert data["description"] == description
+    logger.close_log()
+    os.remove("./test_log.db")
+    # end test_logger_05()
+
+
+# end test_backup_02_logger.py

@@ -10,33 +10,47 @@ License:    see LICENSE file
 import os
 import shutil
 import sys
+import time
 from copy import deepcopy
 from typing import Any
+
+from logger import Logger
+from result_codes import ResultCodes
 
 
 class ExternalStorage:
     """
     Backup a directory structure to an external drive.
+
+    Parameters:
+        config (dict[str, Any]): the config file; the criteria for
+                the backup.
+        actions (dict[str, bool]): The required actions to take.
     """
 
-    def __init__(self, config: dict[str, Any], actions: dict[str, bool] = None) -> None:
+    def __init__(
+        self, config: dict[str, Any], logger: Logger, actions: dict[str, bool] = None
+    ) -> None:
         """
         Backup all fresh files to the external drive.
 
         Fresh files are those files that added or have changed since the
-        last backup and are not otherwise excluded from backup
-
-        Parameters:
-            config: (dict[str, Any]) the config file; the criteria for
-                the backup.
-            actions: (dict[str, bool]) The required actions to take.
+        last backup and are not otherwise excluded from backup.
         """
-        self.config: dict[str, Any] = config
         self.actions: dict[str, bool] = actions
+        """ The list of actions directed """
+        self.config: dict[str, Any] = config
+        """ The configuration controlling the backup """
         self.directories_checked: int = 0
+        """ The count of all directories traversed. """
         self.directories_backed_up: int = 0
+        """ The count of the new directories backed up """
         self.files_files_checked: int = 0
+        """ The count of files checked for potential backup. """
         self.files_backed_up: int = 0
+        """ The count of the fresh files actually backed up """
+        self.logger: Logger = logger
+        """ The result logger for the database. """
 
         if (
             self.config["general"]["base_dir"] != ""
@@ -49,11 +63,45 @@ class ExternalStorage:
 
         if self.actions["verbose"]:
             print(self.directories_checked, "directories checked.")
+            self.logger.add_log_entry(
+                {
+                    "timestamp": int(time.time()),
+                    "result": ResultCodes.SUCCESS,
+                    "description": str(self.directories_checked)
+                    + " directories checked.",
+                }
+            )
+
             print(
                 self.directories_backed_up, "directories backed up to external storage."
             )
+            self.logger.add_log_entry(
+                {
+                    "timestamp": int(time.time()),
+                    "result": ResultCodes.SUCCESS,
+                    "description": str(self.directories_backed_up)
+                    + " directories backed up to external storage.",
+                }
+            )
+
             print(self.files_files_checked, "files checked.")
+            self.logger.add_log_entry(
+                {
+                    "timestamp": int(time.time()),
+                    "result": ResultCodes.SUCCESS,
+                    "description": str(self.files_files_checked) + " files checked.",
+                }
+            )
+
             print(self.files_backed_up, "files backed up to external storage.")
+            self.logger.add_log_entry(
+                {
+                    "timestamp": int(time.time()),
+                    "result": ResultCodes.SUCCESS,
+                    "description": str(self.files_backed_up)
+                    + " files backed up to external storage.",
+                }
+            )
 
     # end __init__()
 
@@ -153,8 +201,15 @@ class ExternalStorage:
                 shutil.copystat(current_path, destination_path, follow_symlinks=False)
                 if self.actions["verbose"]:
                     self.files_backed_up += 1
-                    print('file:', destination_path)
+                    print("file:", destination_path)
             except Exception as exc:
+                self.logger.add_log_entry(
+                    {
+                        "timestamp": int(time.time()),
+                        "result": ResultCodes.FILE_NOT_COPIED,
+                        "description": "Backup of file " + current_path + " failed.",
+                    }
+                )
                 if self.actions["verbose"]:
                     print("Backup of file", current_path, "failed.")
 
