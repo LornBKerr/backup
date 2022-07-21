@@ -76,7 +76,7 @@ class Backup:
         """ The configuration File (dict)"""
         self.config_handler: IniFileParser
         """ Config file reader/writer """
-        self.external_storage: ExternalStorage = None
+        self.external_storage: ExternalStorage
         """ Handle the backup to the external storage drive """
         self.logger: Logger
         """ The results log database driver """
@@ -98,6 +98,11 @@ class Backup:
                 "\n\tPlease use 'backup -s' or 'backup --setup'\n",
             )
             sys.exit(ResultCodes.NO_CONFIG_FILE)  # Error 3: No Config File, Run Setup.
+
+        # Update the config file if required
+        if self.actions["setup"]:
+            self.setup_dialog = SetupDialog(self.config, self.config_handler)
+            self.config = self.get_config_file()
 
         # Setup logging
         # put the logger file in the same directory as the config file
@@ -121,9 +126,6 @@ class Backup:
                 "started:",
                 time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(start_time)),
             )
-
-        if self.actions["setup"]:
-            self.setup_dialog = SetupDialog(self.config, self.config_handler)
 
         if self.actions["backup"]:
             if self.config["general"]["external_storage"]:
@@ -160,7 +162,7 @@ class Backup:
             print(
                 "ended:", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(end_time))
             )
-            print("Elapsed time: " + datetime.timedelta(seconds=elapsed))
+            print("Elapsed time: " + str(datetime.timedelta(seconds=elapsed)))
         # end __init__()
 
     def set_required_actions(self, args: list[str]) -> list[bool]:
