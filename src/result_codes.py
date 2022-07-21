@@ -22,3 +22,6 @@ class ResultCodes:
 
     FILE_NOT_COPIED = 4
     """ During file backup to External Storage, a file failed to copy. """
+
+    NO_SOURCE_OR_DESTINATION = 5
+    """ Need to specify both the source and destination directories """
