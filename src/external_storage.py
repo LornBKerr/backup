@@ -58,50 +58,52 @@ class ExternalStorage:
         ):
             self.backup()
         else:
-            pass
-            # log the failure eventually
+            self.logger.add_log_entry(
+                {
+                    "timestamp": int(time.time()),
+                    "result": ResultCodes.NO_SOURCE_OR_DESTINATION,
+                    "description": " Need to specify both the source and destination directories. ",
+                }
+            )
+
+        self.logger.add_log_entry(
+            {
+                "timestamp": int(time.time()),
+                "result": ResultCodes.SUCCESS,
+                "description": str(self.directories_checked) + " directories checked.",
+            }
+        )
+        self.logger.add_log_entry(
+            {
+                "timestamp": int(time.time()),
+                "result": ResultCodes.SUCCESS,
+                "description": str(self.directories_backed_up)
+                + " directories backed up to external storage.",
+            }
+        )
+        self.logger.add_log_entry(
+            {
+                "timestamp": int(time.time()),
+                "result": ResultCodes.SUCCESS,
+                "description": str(self.files_files_checked) + " files checked.",
+            }
+        )
+        self.logger.add_log_entry(
+            {
+                "timestamp": int(time.time()),
+                "result": ResultCodes.SUCCESS,
+                "description": str(self.files_backed_up)
+                + " files backed up to external storage.",
+            }
+        )
 
         if self.actions["verbose"]:
             print(self.directories_checked, "directories checked.")
-            self.logger.add_log_entry(
-                {
-                    "timestamp": int(time.time()),
-                    "result": ResultCodes.SUCCESS,
-                    "description": str(self.directories_checked)
-                    + " directories checked.",
-                }
-            )
-
             print(
                 self.directories_backed_up, "directories backed up to external storage."
             )
-            self.logger.add_log_entry(
-                {
-                    "timestamp": int(time.time()),
-                    "result": ResultCodes.SUCCESS,
-                    "description": str(self.directories_backed_up)
-                    + " directories backed up to external storage.",
-                }
-            )
-
             print(self.files_files_checked, "files checked.")
-            self.logger.add_log_entry(
-                {
-                    "timestamp": int(time.time()),
-                    "result": ResultCodes.SUCCESS,
-                    "description": str(self.files_files_checked) + " files checked.",
-                }
-            )
-
             print(self.files_backed_up, "files backed up to external storage.")
-            self.logger.add_log_entry(
-                {
-                    "timestamp": int(time.time()),
-                    "result": ResultCodes.SUCCESS,
-                    "description": str(self.files_backed_up)
-                    + " files backed up to external storage.",
-                }
-            )
 
     # end __init__()
 
