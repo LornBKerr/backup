@@ -1,11 +1,11 @@
-# Requirements file for Backup virtuasl environment
+# Requirements file for Backup virtual environment
 
 --extra-index-url https://test.pypi.org/simple/
 
 # local project library
 lbk_library
 
-# Testing Requirments
+# Testing Requirements
 pytest
 pytest_cover
 coverage
