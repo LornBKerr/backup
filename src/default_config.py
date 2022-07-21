@@ -21,7 +21,7 @@ default_config = {
         # generally 'E:' or greater.
         "backup_dir": "",
         # Do we want to backup to external storage, True if so, False if not
-        "external_storage": False,
+        "external_storage": True,
         # Do we want to backup to cloud storage, True if so, False if not,
         # Specific config options for cloud storage are in the
         # 'cloud_backup_options' section below
