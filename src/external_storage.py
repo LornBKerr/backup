@@ -51,7 +51,6 @@ class ExternalStorage:
         """ The count of the fresh files actually backed up """
         self.logger: Logger = logger
         """ The result logger for the database. """
-
         if (
             self.config["general"]["base_dir"] != ""
             and self.config["general"]["backup_dir"] != ""
@@ -127,8 +126,8 @@ class ExternalStorage:
 
             # walk the base directory and all subdirectories.
         for current_dir, subdirs, fileset in os.walk(source):
+            self.directories_checked += 1
             if self.actions["verbose"]:
-                self.directories_checked += 1
                 if self.directories_checked % 1000 == 0:
                     print(self.directories_checked, "directories processsed")
             # if directory not excluded, check the directory's file_set
@@ -139,9 +138,7 @@ class ExternalStorage:
                 ele for ele in self.dir_include_list if ele in current_dir
             ]
             if not bool(is_dir_excluded) or bool(is_dir_included):
-                if self.actions["verbose"]:
-                    self.directories_backed_up += 1
-
+                self.directories_backed_up += 1
                 # make sure the current destination directory exists
                 destination_dir = os.path.join(destination, current_dir[source_len:])
                 if not os.path.isdir(destination_dir):
@@ -164,8 +161,7 @@ class ExternalStorage:
             fileset: (list[str]) the set of files to backup.
         """
         for filename in fileset:
-            if self.actions["verbose"]:
-                self.files_files_checked += 1
+            self.files_files_checked += 1
             if not (
                 filename.endswith(tuple(self.file_exclude_list))
                 or bool([ele for ele in self.file_exclude_list if (ele in filename)])
@@ -201,8 +197,8 @@ class ExternalStorage:
             try:
                 shutil.copy2(current_path, destination_path, follow_symlinks=False)
                 shutil.copystat(current_path, destination_path, follow_symlinks=False)
+                self.files_backed_up += 1
                 if self.actions["verbose"]:
-                    self.files_backed_up += 1
                     print("file:", destination_path)
             except Exception as exc:
                 self.logger.add_log_entry(

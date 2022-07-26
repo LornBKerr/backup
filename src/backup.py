@@ -184,7 +184,6 @@ class Backup:
             "restore": False,  # do restore?
             "test": False,  # do test actions?
             "verbose": False,  # show progress on terminal
-            "config_loc": False,  # no config file specified
         }
 
         # set required actions
