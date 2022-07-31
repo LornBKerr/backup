@@ -1,0 +1,12 @@
+[Unit]
+Description="Run the Backup Program daily"
+
+[Timer]
+OnCalendar=*-*-* 03:30:00
+AccuracySec=1h
+Persistent=true
+#Unit=lbk_backup.service
+
+[Install]
+WantedBy=timers.target
+

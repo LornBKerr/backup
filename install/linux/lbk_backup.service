@@ -1,0 +1,10 @@
+[Unit]
+Description=Run the Backup Program daily
+
+[Service]
+Type=simple
+ExecStart=/home/larry/bin/backup
+
+[Install]
+WantedBy=default.target
+
