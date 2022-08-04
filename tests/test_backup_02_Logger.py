@@ -13,57 +13,56 @@ if src_path not in sys.path:
 import pytest
 from lbk_library import Dbal  # IniFileParser
 
-# from build_filesystem import (
+from build_filesystem import (
 #    add_files,
 #    additional_files,
 #    directories,
-#    filesystem,
+    filesystem,
 #    get_test_config,
 #    load_directory_set,
-# )
+)
 from logger import Logger
 from result_codes import ResultCodes
 
 
-def test_Logger_01():
+def test_Logger_01(filesystem):
     """
     Testing Backup.Logger.__init__()
 
     Test the the object is really a Logger class
     """
-    path = "./test_log.db"  # dummy path which gets removed at end
+    source, dest = filesystem
+    path = dest / "./test_log.db"  # temp location
     logger = Logger(path)
     assert isinstance(logger, Logger)
-    os.remove("./test_log.db")
     # end test_Logger_01()
 
 
-def test_Logger_02():
+def test_Logger_02(filesystem):
     """
     Testing Backup.Logger.close_log()
 
     The database should be closed after the call
     """
-    path = "./test_log.db"  # dummy path which gets removed at end
+    source, dest = filesystem
+    path = dest / "./test_log.db"  # temp location
     logger = Logger(path)
     assert logger.log_db
     assert logger.log_db.sql_is_connected()
     logger.close_log()
     assert not logger.log_db.sql_is_connected()
-    os.remove("./test_log.db")
-
     # end test_Logger_02()
 
 
-def test_Logger_03():
+def test_Logger_03(filesystem):
     """
     Testing Backup.Logger.create_log_database()
 
     Call with empty path. Should raise a FileNotFound exception.
     """
-    path = "./test_log.db"  # dummy path which gets removed
+    source, dest = filesystem
+    path = dest / "./test_log.db"
     logger = Logger(path)
-    os.remove("./test_log.db")
 
     with pytest.raises(FileNotFoundError) as pytest_wrapped_e:
         logger.create_log_database("")
@@ -72,21 +71,21 @@ def test_Logger_03():
     # end test_Logger_03()
 
 
-def test_Logger_04():
+def test_Logger_04(filesystem):
     """
     Testing Backup.Logger.create_log_database()
 
     Call with a temp file name. Check for table presence. Check for
     empty table. Check for columns in table.
     """
-    path = "./test_log.db"  # dummy path which gets removed.
+    source, dest = filesystem
+    path = dest / "./test_log.db"
     logger = Logger(path)
-    os.remove("./test_log.db")
 
     # does path to db exist
-    path = "./test_log2.db"
+    path = dest / "./test_log.db"
     logger.create_log_database(path)
-    assert os.path.exists("./test_log2.db")
+    assert os.path.exists(path)
     assert logger.log_path == path
 
     # does table exist
@@ -118,19 +117,18 @@ def test_Logger_04():
         assert db_row["type"] == row["type"]
 
     logger.close_log()
-    os.remove("./test_log2.db")
-
     # end test_Logger_04()
 
 
-def test_logger_05():
+def test_logger_05(filesystem):
     """
     Test Backup.dd_log_entry()
 
     Generate a valid log entry, write to database, cheek the resulting
     row
     """
-    path = "./test_log.db"  # dummy path which gets removed.
+    source, dest = filesystem
+    path = dest / "./test_log.db"
     logger = Logger(path)
     assert logger.log_db.sql_is_connected()
     time = 1000000
@@ -148,7 +146,6 @@ def test_logger_05():
     assert data["result"] == result_code
     assert data["description"] == description
     logger.close_log()
-    os.remove("./test_log.db")
     # end test_logger_05()
 
 
