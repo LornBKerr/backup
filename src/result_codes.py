@@ -24,4 +24,7 @@ class ResultCodes:
     """ During file backup to External Storage, a file failed to copy. """
 
     NO_SOURCE_OR_DESTINATION = 5
-    """ Need to specify both the source and destination directories """
+    """ In Config, need to specify both the source and destination directories """
+
+    NO_EXTERNAL_STORAGE = 6
+    """ Could not access the Extrernal Stroage Drive """
