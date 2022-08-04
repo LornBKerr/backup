@@ -52,11 +52,9 @@ class ExternalStorage:
         self.logger: Logger = logger
         """ The result logger for the database. """
         if (
-            self.config["general"]["base_dir"] != ""
-            and self.config["general"]["backup_dir"] != ""
+            self.config["general"]["base_dir"] == ""
+            and self.config["general"]["backup_dir"] == ""
         ):
-            self.backup()
-        else:
             self.logger.add_log_entry(
                 {
                     "timestamp": int(time.time()),
@@ -64,6 +62,17 @@ class ExternalStorage:
                     "description": " Need to specify both the source and destination directories. ",
                 }
             )
+        
+        elif not os.path.exists(self.config["general"]["backup_dir"]): # check for destination existence
+            self.logger.add_log_entry(
+                {
+                    "timestamp": int(time.time()),
+                    "result": ResultCodes.NO_EXTERNAL_STORAGE,
+                    "description": " No external storage drive found. ",
+                }
+            )
+        else:
+            self.backup()
 
         self.logger.add_log_entry(
             {
@@ -121,6 +130,9 @@ class ExternalStorage:
         destination = self.config["general"]["backup_dir"]
 
         # make sure the base destination directory exists
+        #
+        # >>> TODO <<< make this a try block with logged exit failure if couldn't make directory
+        #
         if not os.path.isdir(destination):
             os.mkdir(destination)
 
