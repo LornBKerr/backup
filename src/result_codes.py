@@ -27,4 +27,4 @@ class ResultCodes:
     """ In Config, need to specify both the source and destination directories """
 
     NO_EXTERNAL_STORAGE = 6
-    """ Could not access the Extrernal Stroage Drive """
+    """ Could not access the External Storage Drive """
