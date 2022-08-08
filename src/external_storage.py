@@ -139,7 +139,6 @@ class ExternalStorage:
             # walk the base directory and all subdirectories.
         for current_dir, subdirs, fileset in os.walk(source):
             self.directories_checked += 1
-            print(current_dir)
             if self.actions["verbose"]:
                 if self.directories_checked % 1000 == 0:
                     print(self.directories_checked, "directories processsed")
