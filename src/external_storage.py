@@ -51,6 +51,7 @@ class ExternalStorage:
         """ The count of the fresh files actually backed up """
         self.logger: Logger = logger
         """ The result logger for the database. """
+
         if (
             self.config["general"]["base_dir"] == ""
             and self.config["general"]["backup_dir"] == ""
@@ -60,15 +61,6 @@ class ExternalStorage:
                     "timestamp": int(time.time()),
                     "result": ResultCodes.NO_SOURCE_OR_DESTINATION,
                     "description": " Need to specify both the source and destination directories. ",
-                }
-            )
-        
-        elif not os.path.exists(self.config["general"]["backup_dir"]): # check for destination existence
-            self.logger.add_log_entry(
-                {
-                    "timestamp": int(time.time()),
-                    "result": ResultCodes.NO_EXTERNAL_STORAGE,
-                    "description": " No external storage drive found. ",
                 }
             )
         else:
@@ -130,15 +122,24 @@ class ExternalStorage:
         destination = self.config["general"]["backup_dir"]
 
         # make sure the base destination directory exists
-        #
-        # >>> TODO <<< make this a try block with logged exit failure if couldn't make directory
-        #
-        if not os.path.isdir(destination):
-            os.mkdir(destination)
+        try:
+            if not os.path.isdir(destination):
+                os.makedirs(destination)
+        except Exception as exc:
+            self.logger.add_log_entry(
+                {
+                    "timestamp": int(time.time()),
+                    "result": ResultCodes.NO_EXTERNAL_STORAGE,
+                    "description": " Could not access the Extrernal Storage Drive ",
+                }
+            )
+
+            sys.exit(ResultCodes.NO_EXTERNAL_STORAGE)
 
             # walk the base directory and all subdirectories.
         for current_dir, subdirs, fileset in os.walk(source):
             self.directories_checked += 1
+            print(current_dir)
             if self.actions["verbose"]:
                 if self.directories_checked % 1000 == 0:
                     print(self.directories_checked, "directories processsed")
@@ -205,7 +206,13 @@ class ExternalStorage:
             return  # skip broken links
 
             # if file is newer than backup file, back it up
-        if int(os.stat(current_path).st_mtime) > self.config["general"]["last_backup"]:
+        if (
+            not os.path.exists(destination_path)
+            or int(os.stat(current_path).st_mtime)
+            > self.config["general"]["last_backup"]
+            or int(os.stat(current_path).st_mtime)
+            > int(os.stat(destination_path).st_mtime)
+        ):
             try:
                 shutil.copy2(current_path, destination_path, follow_symlinks=False)
                 shutil.copystat(current_path, destination_path, follow_symlinks=False)
