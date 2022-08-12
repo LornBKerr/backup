@@ -2,14 +2,14 @@
 
 # ############################
 # install the backup program in the bin dirctory, then enable automatic 
-# backuo using systemd
+# backup using systemd
 # ############################
 
 # copy the backup file to the 'bin' directory
 cp ~/development/backup/dist/backup ~/bin/backup
 
 # copy systemd files to systemd config directory
-# build directories if they dont exist
+# build directories if they don't exist
 if [[ ! -d "$HOME/.config/systemd" ]]; then
     mkdir ~/.config/systemd
 fi
