@@ -1,3 +1,14 @@
+# ############################
+#
+# Enable a systemd service to run the backup program daily.
+#
+# File:       lbk_backup.service
+# Author:     Lorn B Kerr
+# Copyright:  (c) 2022 Lorn B Kerr
+# License:    see file LICENSE
+#
+# ############################
+
 [Unit]
 Description=Run the Backup Program daily
 

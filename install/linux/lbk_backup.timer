@@ -1,11 +1,22 @@
+# ############################
+#
+# Enable a systemd timer to run the backup program daily.
+#
+# File:       lbk_backup.timer
+# Author:     Lorn B Kerr
+# Copyright:  (c) 2022 Lorn B Kerr
+# License:    see file LICENSE
+#
+# ############################
+
 [Unit]
 Description="Run the Backup Program daily"
 
 [Timer]
+#Before=systemd-suspend.service # >>> backup before the system goes to sleep.
 OnCalendar=*-*-* 03:30:00
 AccuracySec=1h
 Persistent=true
-#Unit=lbk_backup.service
 
 [Install]
 WantedBy=timers.target
