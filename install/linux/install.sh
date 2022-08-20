@@ -1,8 +1,14 @@
 #! /bin/bash
 
 # ############################
-# install the backup program in the bin dirctory, then enable automatic 
+# Install the backup program in the user's bin dirctory, then enable automatic
 # backup using systemd
+#
+# File:       install.sh
+# Author:     Lorn B Kerr
+# Copyright:  (c) 2022 Lorn B Kerr
+# License:    see file LICENSE
+#
 # ############################
 
 # copy the backup file to the 'bin' directory
