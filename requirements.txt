@@ -10,5 +10,5 @@ pytest
 pytest_cover
 coverage
 tox
-
+PyInstaller
 
