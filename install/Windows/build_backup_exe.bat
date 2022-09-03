@@ -10,6 +10,6 @@
 ::
 :: ############################
 
-
-pyinstaller --onefile C:\Users\kerrl\development\backup\src\backup.py
+:: Make the executable as one file and no console window.
+pyinstaller --onefile --noconsole C:\Users\kerrl\development\backup\src\backup.py
 
