@@ -1,5 +1,15 @@
-# Requirements file for Backup virtual environment
+# ########################################################
+#
+# Requirements file for Backup program virtual environment
+#
+# File:       requirements.txt
+# Author:     Lorn B Kerr
+# Copyright:  (c) 2022 Lorn B Kerr
+# License:    see file LICENSE
+#
+# ########################################################
 
+# Test PyPi url
 --extra-index-url https://test.pypi.org/simple/
 
 # local project library
