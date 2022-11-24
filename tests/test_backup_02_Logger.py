@@ -22,7 +22,7 @@ def test_Logger_01(filesystem):
     Test the the object is really a Logger class
     """
     source, dest = filesystem
-    path = dest / "./test_log.db"  # temp location
+    path = dest / "test_log.db"  # temp location
     logger = Logger(path)
     assert isinstance(logger, Logger)
     # end test_Logger_01()
@@ -35,7 +35,7 @@ def test_Logger_02(filesystem):
     The database should be closed after the call
     """
     source, dest = filesystem
-    path = dest / "./test_log.db"  # temp location
+    path = dest / "test_log.db"  # temp location
     logger = Logger(path)
     assert logger.log_db
     assert logger.log_db.sql_is_connected()
@@ -51,7 +51,7 @@ def test_Logger_03(filesystem):
     Call with empty path. Should raise a FileNotFound exception.
     """
     source, dest = filesystem
-    path = dest / "./test_log.db"
+    path = dest / "test_log.db"
     logger = Logger(path)
 
     with pytest.raises(FileNotFoundError) as pytest_wrapped_e:
@@ -69,11 +69,11 @@ def test_Logger_04(filesystem):
     empty table. Check for columns in table.
     """
     source, dest = filesystem
-    path = dest / "./test_log.db"
+    path = dest / "test_log.db"
     logger = Logger(path)
 
     # does path to db exist
-    path = dest / "./test_log.db"
+    path = dest / "test_log.db"
     logger.create_log_database(path)
     assert os.path.exists(path)
     assert logger.log_path == path
@@ -118,7 +118,7 @@ def test_logger_05(filesystem):
     row
     """
     source, dest = filesystem
-    path = dest / "./test_log.db"
+    path = dest / "test_log.db"
     logger = Logger(path)
     assert logger.log_db.sql_is_connected()
     time = 1000000

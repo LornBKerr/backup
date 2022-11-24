@@ -9,10 +9,6 @@ import time
 import pytest
 from lbk_library import IniFileParser
 
-#
-# if "/home/larry/development/backup/src" not in sys.path:
-#    sys.path.append("/home/larry/development/backup/src")
-
 # Directories for Windows and Linux
 directories = [
     ".config",
