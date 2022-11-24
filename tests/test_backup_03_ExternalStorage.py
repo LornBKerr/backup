@@ -32,7 +32,7 @@ def test_ExternalStorage_01(filesystem):
         "verbose": True,
     }
     source, dest = filesystem
-    path = dest / "./test_log.db"  # temp location
+    path = dest / "test_log.db"  # temp location
     logger = Logger(path)
     bes = ExternalStorage(test_config, logger, actions)
     assert isinstance(bes, ExternalStorage)
