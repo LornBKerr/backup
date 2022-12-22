@@ -21,7 +21,7 @@ default_config = {
         # generally 'E:' or greater.
         "backup_dir": "",
         # Do we want to backup to external storage, True if so, False if not
-        "external_storage": True,
+        "external_storage": False,
         # Do we want to backup to cloud storage, True if so, False if not,
         # Specific config options for cloud storage are in the
         # 'cloud_backup_options' section below
@@ -82,27 +82,4 @@ default_config = {
     # Cloud backup options TBD
     "cloud_backup_options": {},
 }
-
-# #######
-# Standard Locations From Qt5.15 documentation
-# Data Location
-#   macOS:  "~/Library/Application Support/<APPNAME>",
-#           "/Library/Application Support/<APPNAME>".
-#           "<APPDIR>/../Resources"
-#   Windows:"C:/Users/<USER>/AppData/Local/<APPNAME>",
-#           "C:/ProgramData/<APPNAME>",
-#           "<APPDIR>",
-#           "<APPDIR>/data",
-#           "<APPDIR>/data/<APPNAME>"
-#   Linux:  "~/.local/share/<APPNAME>",
-#           "/usr/local/share/<APPNAME>",
-#           "/usr/share/<APPNAME>"
-#
-#
-# In the table above, <APPNAME> is usually the organization name, the
-# application name, or both, or a unique name generated at packaging.
-# Similarly, <APPROOT> is the location where this application is installed
-# (often a sandbox). <APPDIR> is the directory containing the application
-# executable.
-# The first path is the writable path (unless noted). Other, additional paths,
-# if any, represent non-writable locations.
+# end default_config
