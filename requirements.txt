@@ -9,16 +9,25 @@
 #
 # ########################################################
 
+# local project library
+-e ../../development/lbk_library
+
+
 # Test PyPi url
---extra-index-url https://test.pypi.org/simple/
+#--extra-index-url https://test.pypi.org/simple/
 
 # local project library
 lbk_library
 
 # Testing Requirements
+black
+coverage
+flake8
+isort
+pydocstyle
 pytest
 pytest_cover
-coverage
-tox
 PyInstaller
+PyQt6
+tox
 
