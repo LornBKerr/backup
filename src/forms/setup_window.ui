@@ -1,0 +1,1246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SetupWindow</class>
+ <widget class="QMainWindow" name="SetupWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>540</width>
+    <height>765</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Setup</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>520</width>
+      <height>700</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string/>
+    </property>
+    <property name="currentIndex">
+     <number>3</number>
+    </property>
+    <widget class="QWidget" name="general_tab">
+     <property name="toolTip">
+      <string>Determine the general parameters of the backup.</string>
+     </property>
+     <attribute name="title">
+      <string>General</string>
+     </attribute>
+     <attribute name="toolTip">
+      <string>Determine the general parameters of the backup.</string>
+     </attribute>
+     <widget class="QLabel" name="lbl_general_header">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>476</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>General conditions that apply in all cases</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_general_next">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>610</y>
+        <width>75</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Move to the next active page</string>
+      </property>
+      <property name="text">
+       <string>Next</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_start_dir">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>182</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Directory to Backup:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_start_dir">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>40</y>
+        <width>300</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>What is the base directory to start scanning for changed files.
+By default, it is the 'user_id' dir, '/home/{user_id}' on Linux
+or 'C:Users\{user_id}' on Windows.</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_external_storage">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>182</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Backup to External Drive:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_backup_dir">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>110</y>
+        <width>182</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Backup Destination</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_backup_dir">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>110</y>
+        <width>300</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Where is the external storage? For a usb drive, Fedora Linux is
+'/run/media/*backup_directory*', Windows will be a drive letter,
+generally 'E:' or greater.</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkbx_external_storage">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>80</y>
+        <width>30</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Check if you want to backup to an external
+storage drive, usually a connected USB drive.</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkbx_cloud_storage">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>160</y>
+        <width>30</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Check if you want to backup to cloud storage.
+Cloud storage will be configured on the
+Cloud Storage page.</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_config_filename">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>235</y>
+        <width>182</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Config File Name:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="value_config_filename">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>235</y>
+        <width>274</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The backup program configuration subdirectory in the system config directory (not changeable)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>a file name</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_config_dir_subdir">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>260</y>
+        <width>182</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Configuration Directory:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="indent">
+       <number>-1</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="value_config_dir">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>260</y>
+        <width>274</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The configuration file name (not changeable)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>a directory name</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_log_filename">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>285</y>
+        <width>182</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Log Filename:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="value_log_filename">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>285</y>
+        <width>274</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The backup logfile name (not changeable)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>a file name</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_cloud_storage">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>160</y>
+        <width>182</width>
+        <height>37</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Backup to Cloud Storage:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_last_backup">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>210</y>
+        <width>182</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Last Backup Time/Date:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="value_last_backup">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>210</y>
+        <width>274</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The backup program configuration subdirectory in the system config directory (not changeable)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>0</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="exclusions_tab">
+     <attribute name="title">
+      <string>Excluded Items</string>
+     </attribute>
+     <widget class="QLabel" name="lbl_excluded_description">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>10</y>
+        <width>460</width>
+        <height>110</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>What directories and files do we want to exclude from the backup?
+
+ In general operation, areas like the various cache and trash
+directories are volatile and probably don't need backup. Other
+ specific directories can also be specified.
+</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_excld_common_dir">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>120</y>
+        <width>400</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Common Directories to Exclude</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::PlainText</enum>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkbx_excld_cache_dir">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>140</y>
+        <width>170</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>If Checked, any directory name containing &quot;cache&quot; will be excluded from the backup.</string>
+      </property>
+      <property name="text">
+       <string>Cache Directories</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkbx_excld_trash_dir">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>140</y>
+        <width>170</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>If Checked, any directory name containing &quot;trash&quot;, &quot;recycle bin&quot; or similar  will be excluded from the backup.</string>
+      </property>
+      <property name="text">
+       <string>Trash Directories</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_excld_specific_dir">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>210</y>
+        <width>400</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Specific Directories to Exclude</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_dir_excld_1">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>240</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_dir_excld_2">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>240</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_dir_excld_3">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>240</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_dir_excld_4">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>280</y>
+        <width>146</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_dir_excld_5">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>280</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_dir_excld_6">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>280</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_dir_excld_7">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>320</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_dir_excld_8">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>320</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_dir_excld_9">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>320</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_excld_previous">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>610</y>
+        <width>75</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Go back to the General Tab</string>
+      </property>
+      <property name="text">
+       <string>Previous</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_excld_next">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>610</y>
+        <width>75</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Go Forward to the Included Items Tab</string>
+      </property>
+      <property name="text">
+       <string>Next</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_excld_common_file">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>380</y>
+        <width>400</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Common Files to Exclude</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::PlainText</enum>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_file_excld_5">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>510</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_file_excld_2">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>470</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkbx_excld_backup_files">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>405</y>
+        <width>170</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>If Checked, any file name containing &quot;trash&quot;, &quot;recycle bin&quot; or similar will be excluded from the backup.</string>
+      </property>
+      <property name="text">
+       <string>Backup Files</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_file_excld_9">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>550</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lbl_excld_specific_file">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>440</y>
+        <width>400</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Specific Files to Exclude</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_file_excld_1">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>470</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chkbx_excld_cache_file">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>405</y>
+        <width>170</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>If Checked, any file name containing &quot;cache&quot; will be excluded from the backup.</string>
+      </property>
+      <property name="text">
+       <string>Cache Files</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_file_excld_3">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>470</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_file_excld_4">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>510</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_file_excld_6">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>510</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_file_excld_7">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>550</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_specific_file_excld_8">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>550</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="chk_excld_download_dir">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>170</y>
+        <width>171</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Download Directories</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>170</y>
+        <width>201</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>System Volume Info</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="inclusions_tab">
+     <attribute name="title">
+      <string>Included Items</string>
+     </attribute>
+     <widget class="QLabel" name="lbl_inclusion_header">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>10</y>
+        <width>460</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Specify the directories and files we want to include in the backup
+ that would otherwise be excluded?</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_dir_incld_9">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>180</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_dir_incld_1">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>100</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>75</y>
+        <width>400</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Specific Directories to Include</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_dir_incld_3">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>100</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_dir_incld_6">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>140</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_dir_incld_2">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>100</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_dir_incld_8">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>180</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_dir_incld_4">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>140</y>
+        <width>146</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_dir_incld_7">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>180</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_dir_incld_5">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>140</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_incld_items_previous">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>610</y>
+        <width>75</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Previous</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_incld_items_next">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>610</y>
+        <width>75</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Next</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_file_incld_8">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>345</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_file_incld_2">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>265</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_file_incld_3">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>265</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_file_incld_4">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>305</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_file_incld_7">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>345</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_file_incld_9">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>345</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_file_incld_1">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>265</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_file_incld_6">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>305</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>240</y>
+        <width>400</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Specific Files to Include</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="edit_file_incld_5">
+      <property name="geometry">
+       <rect>
+        <x>185</x>
+        <y>305</y>
+        <width>145</width>
+        <height>36</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="cloud_storage_tab">
+     <attribute name="title">
+      <string>Cloud Storage</string>
+     </attribute>
+     <widget class="QLabel" name="cloud_storage_header">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>10</y>
+        <width>471</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Set the options for the Cloud Storage</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="cld_store_prev">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>610</y>
+        <width>75</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Previous</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="cs_select_provider_label">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>60</y>
+        <width>211</width>
+        <height>36</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Select Cloud Storage Provider:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="ccs_select_provider_combo">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>60</y>
+        <width>250</width>
+        <height>37</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QWidget" name="widget_local_storage" native="true">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>120</y>
+        <width>491</width>
+        <height>171</height>
+       </rect>
+      </property>
+      <widget class="QLabel" name="local_storage_src_dir">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>30</y>
+         <width>200</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Starting Directory for storage:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_local_storage">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>161</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Local Storage</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_local_storage_dest_dir">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>70</y>
+         <width>200</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Destination Directory:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="local_storage_edit">
+       <property name="geometry">
+        <rect>
+         <x>230</x>
+         <y>30</y>
+         <width>250</width>
+         <height>36</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="lbl_local_store_password">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>110</y>
+         <width>200</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Password:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="local_storage_dest_dir_edit">
+       <property name="geometry">
+        <rect>
+         <x>230</x>
+         <y>70</y>
+         <width>250</width>
+         <height>36</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="local_storage_password_edit">
+       <property name="geometry">
+        <rect>
+         <x>230</x>
+         <y>110</y>
+         <width>250</width>
+         <height>36</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="save_cancel_button_bar">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>710</y>
+      <width>531</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <widget class="QPushButton" name="cancel_button">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>81</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Close the form</string>
+     </property>
+     <property name="text">
+      <string>Cancel</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="save_new_button">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>10</y>
+       <width>103</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Save the item, then clear form</string>
+     </property>
+     <property name="text">
+      <string>Save / Cont</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="save_done_button">
+     <property name="geometry">
+      <rect>
+       <x>420</x>
+       <y>10</y>
+       <width>103</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Save the Item and close</string>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::RightToLeft</enum>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Save / Exit</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>edit_start_dir</tabstop>
+  <tabstop>chkbx_external_storage</tabstop>
+  <tabstop>edit_backup_dir</tabstop>
+  <tabstop>chkbx_cloud_storage</tabstop>
+  <tabstop>btn_general_next</tabstop>
+  <tabstop>chkbx_excld_cache_dir</tabstop>
+  <tabstop>chkbx_excld_trash_dir</tabstop>
+  <tabstop>edit_specific_dir_excld_1</tabstop>
+  <tabstop>edit_specific_dir_excld_2</tabstop>
+  <tabstop>edit_specific_dir_excld_3</tabstop>
+  <tabstop>edit_specific_dir_excld_4</tabstop>
+  <tabstop>edit_specific_dir_excld_5</tabstop>
+  <tabstop>edit_specific_dir_excld_6</tabstop>
+  <tabstop>edit_specific_dir_excld_7</tabstop>
+  <tabstop>edit_specific_dir_excld_8</tabstop>
+  <tabstop>edit_specific_dir_excld_9</tabstop>
+  <tabstop>chkbx_excld_cache_file</tabstop>
+  <tabstop>chkbx_excld_backup_files</tabstop>
+  <tabstop>edit_specific_file_excld_1</tabstop>
+  <tabstop>edit_specific_file_excld_2</tabstop>
+  <tabstop>edit_specific_file_excld_3</tabstop>
+  <tabstop>edit_specific_file_excld_4</tabstop>
+  <tabstop>edit_specific_file_excld_5</tabstop>
+  <tabstop>edit_specific_file_excld_6</tabstop>
+  <tabstop>edit_specific_file_excld_7</tabstop>
+  <tabstop>edit_specific_file_excld_8</tabstop>
+  <tabstop>edit_specific_file_excld_9</tabstop>
+  <tabstop>btn_excld_next</tabstop>
+  <tabstop>btn_excld_previous</tabstop>
+  <tabstop>save_new_button</tabstop>
+  <tabstop>save_done_button</tabstop>
+  <tabstop>cancel_button</tabstop>
+  <tabstop>tabWidget</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
