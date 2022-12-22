@@ -10,12 +10,12 @@ if src_path not in sys.path:
     sys.path.append(src_path)
 
 import pytest
-from backup import Backup
+from do_backup import Backup
 from build_filesystem import filesystem
 from external_storage import ExternalStorage
 from lbk_library import IniFileParser
 from result_codes import ResultCodes
-from setup_dialog import SetupDialog
+from setup_window import SetupWindow
 
 
 def test_Backup_01(filesystem):
@@ -55,7 +55,6 @@ def test_Backup_02(filesystem):
     action_list = [
         "-b",
     ]
-    backup = Backup(action_list, config_dir)
     # actions should have backup set to True and everything else set to False
     actions = backup.set_required_actions(action_list)
     assert actions["backup"]
@@ -68,7 +67,6 @@ def test_Backup_02(filesystem):
     action_list = [
         "-s",
     ]
-    backup = Backup(action_list, config_dir)
     # actions should have everything set to False
     actions = backup.set_required_actions(action_list)
     assert not actions["backup"]
@@ -80,25 +78,6 @@ def test_Backup_02(filesystem):
 
 
 def test_Backup_03(filesystem):
-    """
-    Testing the call to the Setup Dialog.
-
-    The Setup Dialog is tested by test_Backup_01_SetupDialog so all we need
-    is to ensure we are actually calling the correct class.
-    """
-    source, dest = filesystem
-    config_dir = source / ".config"
-
-    action_list = []
-    backup = Backup(action_list, config_dir)
-    assert not backup.setup_dialog
-
-    action_list = ["-s"]
-    backup = Backup(action_list, config_dir)
-    assert isinstance(backup.setup_dialog, SetupDialog)
-
-
-def test_Backup_04(filesystem):
     """
     Testing the get_config_file() method
 
@@ -129,7 +108,7 @@ def test_Backup_04(filesystem):
     assert len(config_file["dir_exclude"]["specific_dirs"]) == 2
 
 
-def test_Backup_05(filesystem, capsys):
+def test_Backup_04(filesystem, capsys):
     """
     Test the action when no config file is present.
 
@@ -148,7 +127,7 @@ def test_Backup_05(filesystem, capsys):
     # end test_Backup_05()
 
 
-def test_Backup_06(filesystem):
+def test_Backup_05(filesystem):
     """
     Test the call to ExternalStorage.
 
