@@ -24,10 +24,11 @@ black
 coverage
 flake8
 isort
+PyInstaller
 pydocstyle
 pytest
 pytest_cover
-PyInstaller
+pytest_qt
 PyQt6
 tox
 
