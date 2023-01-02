@@ -48,13 +48,13 @@ default_config = {
         # needed.
         "download_dir": True,
         # Don't save the Windows 'System Volume Information'.
-        # Restoring this MAY lead to interesting and unnerving
-        # results with Windows.
+        # This backup program is not designed to backup the system os
+        # files so this should not ba copied.
         "sysvolinfo_dir": True,
         # Specific directories can be noted for exclusion as desired.
         "specific_dirs": [
-            "venv",  # python virtual environment dir should be regenerated,
-            "tox",  # the tox directory should not be backed up
+            "venv",  # python virtual environment should be regenerated,
+            "tox",   # tox directories  should be regenerated as needed
         ],
     },
     # What specific files do we want to exclude from backup.
