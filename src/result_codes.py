@@ -18,7 +18,7 @@ class ResultCodes:
     """ The current action completed successfully """
 
     NO_CONFIG_FILE = 3
-    """ The configuration file could not be found, run setup (-s or --setup) """
+    """ The configuration file could not be found, run setup (--setup) """
 
     FILE_NOT_COPIED = 4
     """ During file backup to External Storage, a file failed to copy. """
