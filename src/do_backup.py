@@ -48,7 +48,7 @@ class Backup:
     Parameters:
         action_list (list[str]):  the set of requested actions.
             Actions defined (all optional) are:
-            -s, --setup
+            --setup
                 Run the setup portion to configure the program
             -b, --backup
                 Run the backup portion (default if no other option is
@@ -68,7 +68,7 @@ class Backup:
     Errors:
         Exits  with error code 3 and with an error message if no
         configuration file is present and the program is executed without
-        the '-s' or '--setup' action flag.
+        the '--setup' action flag.
     """
 
     def __init__(self, action_list: list[str] = [], config_dir: str = "") -> None:
@@ -102,7 +102,7 @@ class Backup:
             print(
                 "\n\tERROR! No Configuration File:",
                 "\n\tCannot run the backup program until setup is completed",
-                "\n\tPlease use 'backup -s' or 'backup --setup'\n",
+                "\n\tPlease use 'backup --setup'\n",
             )
             sys.exit(ResultCodes.NO_CONFIG_FILE)  # Error 3: No Config File, Run Setup.
 
@@ -200,7 +200,7 @@ class Backup:
             for action in args:
                 if action == "-b" or action == "--backup":
                     actions["backup"] = True
-                elif action == "-s" or action == "--setup":
+                elif action == "--setup":
                     actions["setup"] = True
                 #                elif action == "-r" or action == "--restore":
                 #                    actions["restore"] = True
@@ -248,7 +248,7 @@ class Backup:
 
     def do_setup(self, args) -> int:
         self.app.setApplicationName("Setup")
-        self.setup_window = SetupWindow(self.app, self.config, self.config_handler)
+        self.setup_window = SetupWindow(self.config, self.config_handler)
         self.config = self.get_config_file()
         return self.app.exec()
         # end do_setup()
