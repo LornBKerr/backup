@@ -249,6 +249,7 @@ class Backup:
     def do_setup(self, args) -> int:
         self.app.setApplicationName("Setup")
         self.setup_window = SetupWindow(self.config, self.config_handler)
+        self.setup_window.setWindowTitle("Set Up the Backup Program Configuration")
         self.config = self.get_config_file()
         return self.app.exec()
         # end do_setup()
