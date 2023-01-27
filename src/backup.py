@@ -12,8 +12,6 @@ License:    MIT, see file LICENSE
 
 import sys
 
-from PyQt6.QtWidgets import QApplication, QMainWindow
-
 from do_backup import Backup
 
 if __name__ == "__main__":
@@ -21,4 +19,3 @@ if __name__ == "__main__":
     args = sys.argv
     args.pop(0)  # discard the program name
     Backup(args)
-
