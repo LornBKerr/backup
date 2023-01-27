@@ -3,8 +3,8 @@ Define the default configuration for the Backup Program on Linux.
 
 File:       default_config.py
 Author:     Lorn B Kerr
-Copyright:  (c) 2022 Lorn B Kerr
-License:    see License.txt
+Copyright:  (c) 2022,2023 Lorn B Kerr
+License:    MIT, see License.txt
 """
 
 default_config = {
@@ -54,7 +54,7 @@ default_config = {
         # Specific directories can be noted for exclusion as desired.
         "specific_dirs": [
             "venv",  # python virtual environment should be regenerated,
-            "tox",   # tox directories  should be regenerated as needed
+            "tox",  # tox directories should be regenerated as needed
         ],
     },
     # What specific files do we want to exclude from backup.
