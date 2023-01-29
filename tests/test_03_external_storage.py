@@ -21,7 +21,7 @@ from external_storage import ExternalStorage
 from logger import Logger
 
 
-def test_ExternalStorage_01(filesystem):
+def test_03_01(filesystem):
     """
     Testing Backup.ExternalStorage.__init__()
 
@@ -39,7 +39,7 @@ def test_ExternalStorage_01(filesystem):
     # end test_ExternalStorage_01()
 
 
-def test_ExternalStorage_02(filesystem):
+def test_03_02(filesystem):
     """
     Testing ExternalStorage.dir_exclude_list() with no exclusions.
 
@@ -62,7 +62,7 @@ def test_ExternalStorage_02(filesystem):
     # end test_ExternalStorage_02()
 
 
-def test_ExternalStorage_03(filesystem):
+def test_03_03(filesystem):
     """
     Testing ExternalStorage.dir_exclude_list() for excluding specific directories.
 
@@ -85,7 +85,7 @@ def test_ExternalStorage_03(filesystem):
     # end test_ExternalStorage_03()
 
 
-def test_ExternalStorage_04(filesystem):
+def test_03_04(filesystem):
     """
     Testing ExternalStorage.dir_exclude_list() for excluding 'cache' directories.
 
@@ -109,7 +109,7 @@ def test_ExternalStorage_04(filesystem):
     # end test_ExternalStorage_04()
 
 
-def test_ExternalStorage_05(filesystem):
+def test_03_05(filesystem):
     """
     Testing ExternalStorage.dir_exclude_list() for excluding 'trash' directories.
 
@@ -133,7 +133,7 @@ def test_ExternalStorage_05(filesystem):
     # end test_ExternalStorage_05()
 
 
-def test_ExternalStorage_06(filesystem):
+def test_03_06(filesystem):
     """
     Testing ExternalStorage.dir_exclude_list() for excluding 'download' directories.
 
@@ -155,7 +155,7 @@ def test_ExternalStorage_06(filesystem):
     # end test_ExternalStorage_06()
 
 
-def test_ExternalStorage_07(filesystem):
+def test_03_07(filesystem):
     """
     Testing ExternalStorage.dir_exclude_list() for excluding 'SysVolInfo' directories.
 
@@ -177,7 +177,7 @@ def test_ExternalStorage_07(filesystem):
     # end test_ExternalStorage_07()
 
 
-def test_ExternalStorage_08(filesystem):
+def test_03_08(filesystem):
     """
     Testing ExternalStorage.dir_include_list() for directories.
 
@@ -206,7 +206,7 @@ def test_ExternalStorage_08(filesystem):
     # end test_ExternalStorage_08()
 
 
-def test_ExternalStorage_09(filesystem):
+def test_03_09(filesystem):
     """
     Testing ExternalStorage.file_exclude_list() for not excluding any files.
 
@@ -229,7 +229,7 @@ def test_ExternalStorage_09(filesystem):
     # end test_ExternalStorage_09()
 
 
-def test_ExternalStorage_10(filesystem):
+def test_03_10(filesystem):
     """
     Testing ExternalStorage.file_exclude_list() for excluding specific files.
 
@@ -252,7 +252,7 @@ def test_ExternalStorage_10(filesystem):
     # end test_ExternalStorage_10()
 
 
-def test_ExternalStorage_11(filesystem):
+def test_03_11(filesystem):
     """
     Testing ExternalStorage.file_exclude_list() for excluding backup files.
 
@@ -276,7 +276,7 @@ def test_ExternalStorage_11(filesystem):
     # end test_ExternalStorage_11()
 
 
-def test_ExternalStorage_12(filesystem):
+def test_03_12(filesystem):
     """
     Testing ExternalStorage.file_exclude_list() for excluding 'cache' files.
 
@@ -300,7 +300,7 @@ def test_ExternalStorage_12(filesystem):
     # end test_ExternalStorage_12()
 
 
-def test_ExternalStorage_13(filesystem):
+def test_03_13(filesystem):
     """
     Testing the ExternalStorage.file_include_list() method.
 
@@ -339,7 +339,7 @@ def test_ExternalStorage_13(filesystem):
     # end test_ExternalStorage_13()
 
 
-def test_ExternalStorage_14(filesystem):
+def test_03_14(filesystem):
     """
     Test the results of the ExternalStorage.process_file() method.
 
@@ -373,7 +373,7 @@ def test_ExternalStorage_14(filesystem):
     # end test_ExternalStorage_14()
 
 
-def test_ExternalStorage_15(filesystem):
+def test_03_15(filesystem):
     """
     Test the results of the ExternalStorage.process_file() method.
 
@@ -407,7 +407,7 @@ def test_ExternalStorage_15(filesystem):
     # test_ExternalStorage_15()
 
 
-def test_ExternalStorage_16(filesystem):
+def test_03_16(filesystem):
     """
     Test the results of the ExternalStorage.process_dir_files() method.
 
@@ -432,7 +432,7 @@ def test_ExternalStorage_16(filesystem):
     # end test_ExternalStorage_16()
 
 
-def test_ExternalStorage_17(filesystem):
+def test_03_17(filesystem):
     """
     Test the results of the ExternalStorage.process_dir_files() method.
 
@@ -461,7 +461,7 @@ def test_ExternalStorage_17(filesystem):
     # end test_ExternalStorage_17()
 
 
-def test_ExternalStorage_18(filesystem):
+def test_03_18(filesystem):
     """
     Test the results of the ExternalStorage.process_dir_files() method.
 
@@ -490,7 +490,7 @@ def test_ExternalStorage_18(filesystem):
     # end test_ExternalStorage_18()
 
 
-def test_ExternalStorage_19(filesystem):
+def test_03_19(filesystem):
     """
     Test the results of the ExternalStorage.process_dir_files() method.
 
@@ -520,7 +520,7 @@ def test_ExternalStorage_19(filesystem):
     # end test_ExternalStorage_19()
 
 
-def test_ExternalStorage_20(filesystem):
+def test_03_20(filesystem):
     """
     Test the overall program with a base config file.
 
@@ -550,7 +550,7 @@ def test_ExternalStorage_20(filesystem):
     # end test_ExternalStorage_20()
 
 
-def test_ExternalStorage_21(filesystem):
+def test_03_21(filesystem):
     """
     Test the overall program excluding cache directories.
 

@@ -15,7 +15,7 @@ from logger import Logger
 from result_codes import ResultCodes
 
 
-def test_Logger_01(filesystem):
+def test_02_01(filesystem):
     """
     Testing Backup.Logger.__init__()
 
@@ -28,7 +28,7 @@ def test_Logger_01(filesystem):
     # end test_Logger_01()
 
 
-def test_Logger_02(filesystem):
+def test_02_02(filesystem):
     """
     Testing Backup.Logger.close_log()
 
@@ -44,7 +44,7 @@ def test_Logger_02(filesystem):
     # end test_Logger_02()
 
 
-def test_Logger_03(filesystem):
+def test_02_03(filesystem):
     """
     Testing Backup.Logger.create_log_database()
 
@@ -61,7 +61,7 @@ def test_Logger_03(filesystem):
     # end test_Logger_03()
 
 
-def test_Logger_04(filesystem):
+def test_02_04(filesystem):
     """
     Testing Backup.Logger.create_log_database()
 
@@ -110,7 +110,7 @@ def test_Logger_04(filesystem):
     # end test_Logger_04()
 
 
-def test_logger_05(filesystem):
+def test_02_05(filesystem):
     """
     Test Backup.dd_log_entry()
 
