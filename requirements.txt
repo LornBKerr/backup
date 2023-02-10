@@ -9,12 +9,8 @@
 #
 # ########################################################
 
-# local project library
--e ../../development/lbk_library
-
-
 # Test PyPi url
-#--extra-index-url https://test.pypi.org/simple/
+--extra-index-url https://test.pypi.org/simple/
 
 # local project library
 lbk_library
@@ -28,7 +24,4 @@ PyInstaller
 pydocstyle
 pytest
 pytest_cover
-pytest_qt
-PyQt6
-#tox
 
