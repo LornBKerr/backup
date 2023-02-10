@@ -19,9 +19,11 @@ lbk_library
 black
 coverage
 flake8
+flake8-pyproject
 isort
 PyInstaller
 pydocstyle
+pydocstyle[toml]
 pytest
 pytest_cover
 
