@@ -160,6 +160,14 @@ def add_files(file_list, dir):
     # end add_files()
 
 
+def build_config_file(source, dest):
+    # set the config file
+    config_handler = IniFileParser(
+        "backup.ini", "backup", source / ".config/lbk_software"
+    )
+    config_handler.write_config(get_test_config(source, dest))
+
+
 @pytest.fixture
 def filesystem(tmp_path):
     """
@@ -192,8 +200,7 @@ def filesystem(tmp_path):
         load_links(links, link_source_dir)
 
     # set the config file
-    config_handler = IniFileParser("backup.ini", "LBKBackup", source / ".config")
-    config_handler.write_config(get_test_config(source, dest))
+    build_config_file(source, dest)
 
     return source, dest
     # end filesystem()
