@@ -2,5 +2,5 @@
 
 # Build the backup executable file
 
-pyinstaller --onefile ~.development/backup/src/backup.py
+pyinstaller --onefile ~/development/backup/src/backup.py
 
