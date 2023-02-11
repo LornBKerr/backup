@@ -26,7 +26,7 @@ License:    MIT, see file LICENSE
 
 import sys
 
-from do_backup import Backup
+from main import Backup
 
 if __name__ == "__main__":
     # get the command line arguments
