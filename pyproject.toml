@@ -16,3 +16,6 @@ inherit = false
 match = '*.py'
 match-dir='./src/*'
 
+[tool.black]
+force-exclude = "src/default_config.py"
+
