@@ -55,4 +55,5 @@ class SetupWindow:
         elif sys.platform.startswith("win"):
             self.config["general"]["backup_dir"] = "E:\\Windows11"
         self.config["general"]["last_backup"] = 0
+        self.config["general"]["external_storage"] = True
         config_handler.write_config(self.config)
