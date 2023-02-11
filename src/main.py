@@ -89,7 +89,6 @@ class Backup:
         self.config = self.get_config_file()
 
         self.actions = self.set_required_actions(action_list)
-        print(self.actions)
 
         if not self.config and not self.actions["setup"]:
             print(
