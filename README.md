@@ -16,9 +16,9 @@ stop times, elapsed time, and any errors occurring. Adding the verbose
 option also sets the logging to verbose mode adding more information on
 files and directories backed up and errors.
 
-The program is written in Python and is tested on Fedora Linux and
-Windows 11 using Python versions 3.9, 3.10 and 3.11(beta4) with no
-errors and approximately 95% coverage.
+The program is written in Python and is tested on Fedora Linux and Windows 11
+using Python versions 3.9, 3.10 and 3.11 with no errors and approximately
+95% coverage.
 
 ### Part 1: Backup to external storage
 
@@ -47,7 +47,8 @@ Arguments (all are optional, -b is default if none are given):
 -   --setup`: (*Partially Implemented)* Run the setup portion to
     configure the program. Currently sets the file source and
     destination directories to default values and enables backup to the
-    external storage device.
+    external storage device. Note that these are specific to my system and will
+    need to be changed for other systems.
 
 -   `-b`, `--backup`: Run the backup portion. This is the default if no other
     option is included, required if backup is desired when other options
