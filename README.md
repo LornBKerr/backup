@@ -44,7 +44,7 @@ At the command prompt, enter backup \[args\].
 
 Arguments (all are optional, -b is default if none are given):
 
--   `-s`, `--setup`: (*Partially Implemented)* Run the setup portion to
+-   --setup`: (*Partially Implemented)* Run the setup portion to
     configure the program. Currently sets the file source and
     destination directories to default values and enables backup to the
     external storage device.
@@ -71,12 +71,12 @@ Arguments (all are optional, -b is default if none are given):
 Will run the backup program with the previously stored configuration
 file.
 
-\[<me@thebes>\]$ backup -s
+\[<me@thebes>\]$ backup --setup
 
 Will run the backup program opening the configuration window. When the
 configuration window is closed, the program will be terminated.
 
-\[<me@thebes>\]\> backup -s -b
+\[<me@thebes>\]\> backup --setup -b
 
 Will first open the configuration window then, when the window is
 closed, runs the backup.
