@@ -1,6 +1,6 @@
 # ########################################################
 #
-# Requirements file for Backup program virtual environment
+# Requirements for Backup program virtual environment
 #
 # File:       requirements.txt
 # Author:     Lorn B Kerr
