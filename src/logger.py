@@ -23,7 +23,10 @@ class Logger:
 
     def __init__(self, log_path: str) -> None:
         """
-        Setup the path to the log file and open the log database.
+        Set the path to the log file and open the log database.
+
+        Parameters:
+            log_path (str): the path to the log file.
         """
         self.log_db: Dbal
         """ the log database """
@@ -66,9 +69,7 @@ class Logger:
     # end add_log_entry()
 
     def close_log(self) -> None:
-        """
-        Close the connection to the log database if open.
-        """
+        """Close connection to the log database if open."""
         if self.log_db:
             self.log_db.sql_close()
 

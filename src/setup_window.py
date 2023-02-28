@@ -15,7 +15,6 @@ License:    MIT, see LICENSE file
 
 import os
 import sys
-import time
 from typing import Any
 
 from default_config import default_config
@@ -23,9 +22,7 @@ from lbk_library import IniFileParser
 
 
 class SetupWindow:
-    """
-    Setup the configuration file for the backup.
-    """
+    """Setup the configuration file for the backup."""
 
     def __init__(
         self, config_handler: IniFileParser, config: dict[Any, Any] = {}

@@ -1,6 +1,8 @@
 """
-Backup the selected file system to the backup storage and to cloud
-storage.
+Backup the selected file system.
+
+Depending on the configuration settings, backup to the external backup
+storage and to cloud storage.
 
 File:       main.py
 Author:     Lorn B Kerr
@@ -241,7 +243,7 @@ class Backup:
 
     def do_setup(self, args) -> int:
         """
-        Setup initial configuration file.
+        Set up initial configuration file.
 
         Temporary fix while waiting for GUI to be developed and released.
         """

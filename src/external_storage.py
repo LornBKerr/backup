@@ -60,7 +60,10 @@ class ExternalStorage:
                 {
                     "timestamp": int(time.time()),
                     "result": ResultCodes.NO_SOURCE_OR_DESTINATION,
-                    "description": " Need to specify both the source and destination directories. ",
+                    "description": (
+                        " Need to specify both the source"
+                        " and destination directories. "
+                    ),
                 }
             )
         else:
@@ -109,9 +112,10 @@ class ExternalStorage:
 
     def backup(self) -> None:
         """
-        Scan the directories to be backed up and copy changed/new,
-        not excluded files to external storage. Then check for any
-        specifically included directories and files.
+        Scan and backup the directories.
+
+        Copy changed/new, not excluded files to external storage. Then
+        check for any specifically included directories and files.
 
         As the directories are scanned, the destination is checked to
         ensure the destination is present prior to tring to copy a
@@ -163,8 +167,9 @@ class ExternalStorage:
         self, current_dir: str, destination_dir: str, fileset: list[str]
     ) -> None:
         """
-        Step through the fileset for the current directory and backup
-        the new/changed files that are not otherwise excluded.
+        Step through the the current directory.
+
+        Backup the new/changed files that are not otherwise excluded.
 
         Parameters:
             current_dir: (str) the directory being read
@@ -186,6 +191,8 @@ class ExternalStorage:
         self, current_dir: str, destination_dir: str, filename: str
     ) -> None:
         """
+        Backup the current file if necessary.
+
         If the file has been modified since the last backup, copy it to
         the external storage directory. If the file is a link and is
         broken, skip the link.

@@ -11,9 +11,9 @@ if src_path not in sys.path:
 
 import pytest
 from build_filesystem import build_config_file, filesystem, get_test_config
-from do_backup import Backup
 from external_storage import ExternalStorage
 from lbk_library import IniFileParser
+from main import Backup
 from result_codes import ResultCodes
 from setup_window import SetupWindow
 

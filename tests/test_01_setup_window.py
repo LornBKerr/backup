@@ -10,15 +10,10 @@ src_path = os.path.join(os.path.realpath("."), "src")
 if src_path not in sys.path:
     sys.path.append(src_path)
 
-# from build_filesystem import filesystem
-import pytest
 from default_config import default_config
 from lbk_library import IniFileParser
-from PyQt6.QtWidgets import QApplication, QMainWindow  # QFileDialog, QLineEdit, QStyle
-from pytestqt import qtbot
 from setup_window import SetupWindow
 
-# config_handler = IniFileParser("backup.ini", "backup", config_dir)
 config_handler = IniFileParser("backup.ini", "backup")
 config_file = default_config
 
