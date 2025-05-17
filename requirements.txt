@@ -9,14 +9,11 @@
 #
 # ########################################################
 
-# Test PyPi url
---extra-index-url https://test.pypi.org/simple/
-
 # Run time requirements
-PyQt5
+PySide6
 
 # local project library
-lbk_library
+-e ../lbk_library/
 
 # Testing Requirements
 black
