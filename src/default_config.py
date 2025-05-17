@@ -4,7 +4,8 @@ Define the default configuration for the Backup Program on Linux.
 File:       default_config.py
 Author:     Lorn B Kerr
 Copyright:  (c) 2022,2023 Lorn B Kerr
-License:    MIT, see License.txt
+License:    MIT, see file LICENSE
+Version:    1.0.1
 """
 
 default_config = {
@@ -22,14 +23,6 @@ default_config = {
         "backup_dir": "",
         # Do we want to backup to external storage, True if so, False if not
         "external_storage": False,
-        # Do we want to backup to cloud storage, True if so, False if not,
-        # Specific config options for cloud storage are in the
-        # 'cloud_backup_options' section below
-        "cloud_storage": False,
-        # The backup program configuration subdirectory in the system config dir
-        "config_dir": "LBKBackup",
-        # the config file name
-        "config_file": "backup.ini",
         # The backup log file name
         "log_file": "backup_log.db",
     },
@@ -79,7 +72,4 @@ default_config = {
     "file_include": {
         "specific_files": [],
     },
-    # Cloud backup options TBD
-    "cloud_backup_options": {},
 }
-# end default_config
