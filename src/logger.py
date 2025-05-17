@@ -10,7 +10,7 @@ License:    see LICENSE file
 import os
 from typing import Any
 
-from lbk_library import Dbal
+from lbk_library import DataFile
 
 
 class Logger:
@@ -28,7 +28,7 @@ class Logger:
         Parameters:
             log_path (str): the path to the log file.
         """
-        self.log_db: Dbal
+        self.log_db: DataFile
         """ the log database """
         self.log_path = log_path
         """ The full path to the logging database """
@@ -45,7 +45,7 @@ class Logger:
             self.create_log_database(self.log_path)
 
         # Open the database file.
-        self.log_db = Dbal()
+        self.log_db = DataFile()
         self.log_db.sql_connect(self.log_path)
 
     # end __init__()
@@ -100,7 +100,7 @@ class Logger:
             raise FileNotFoundError("Log Database path cannot be empty.")
 
         self.log_path = log_path
-        dbref = Dbal()
+        dbref = DataFile()
         dbref.sql_connect(log_path)
         dbref.sql_query("DROP TABLE IF EXISTS " + self.table)
         create_table = "CREATE TABLE IF NOT EXISTS " + self.table + " ("
