@@ -1,5 +1,11 @@
 """
-Provide common support functionality for several test files.
+Provide common support functionality for the test files.
+
+File:       test_02_logger.py
+Author:     Lorn B Kerr
+Copyright:  (c) 2022 - 2025 Lorn B Kerr
+License:    MIT, see file LICENSE
+Version:    1.0.1
 """
 
 import os
