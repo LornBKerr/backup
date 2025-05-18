@@ -1,5 +1,12 @@
-# command --> pytest --cov-report term-missing --cov=backup ./tests/
-#   run from parent directory for 'src' and 'tests'.
+"""
+Test the Backup class functionality.
+
+File:       test_02_logger.py
+Author:     Lorn B Kerr
+Copyright:  (c) 2022 - 2025 Lorn B Kerr
+License:    MIT, see file LICENSE
+Version:    1.0.1
+"""
 
 import os
 import sys
@@ -78,8 +85,6 @@ def test_04_03_required_actions(filesystem):
     actions = backup.set_required_actions(action_list)
     assert actions["backup"]
     assert not actions["setup"]
-    assert not actions["restore"]
-    assert not actions["test"]
     assert not actions["verbose"]
 
     # Do action list for backup only
@@ -90,8 +95,6 @@ def test_04_03_required_actions(filesystem):
     actions = backup.set_required_actions(action_list)
     assert actions["backup"]
     assert not actions["setup"]
-    assert not actions["restore"]
-    assert not actions["test"]
     assert not actions["verbose"]
 
     # do action list with setup only; all except setup should be False.
@@ -102,8 +105,6 @@ def test_04_03_required_actions(filesystem):
     actions = backup.set_required_actions(action_list)
     assert not actions["backup"]
     assert actions["setup"]
-    assert not actions["restore"]
-    assert not actions["test"]
     assert not actions["verbose"]
 
     # do action list with multiple settings;
@@ -118,8 +119,6 @@ def test_04_03_required_actions(filesystem):
     actions = backup.set_required_actions(action_list)
     assert not actions["backup"]
     assert actions["setup"]
-    assert actions["restore"]
-    assert actions["test"]
     assert actions["verbose"]
     assert actions["version"]
 

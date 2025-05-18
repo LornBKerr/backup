@@ -2,14 +2,14 @@
 Backup the selected file system.
 
 Depending on the configuration settings, backup to the external backup
-storage and to cloud storage.
+storage.
 
 File:       main.py
 Author:     Lorn B Kerr
 Copyright:  (c) 2022, 2023 Lorn B Kerr
 License:    MIT, see file LICENSE
+Version:    1.0.1
 """
-
 
 import datetime
 import os
@@ -52,13 +52,6 @@ class Backup:
                 -b, --backup
                     Run the backup portion (default if no other option
                     is included, required if other options are used.
-                -r, --restore
-                    (Not Implemented) Restore the previously saved
-                    cloud backup
-                 -t, --test
-                    (Not Implemented) Run the backup portion showing
-                    what would be accomplished without actually
-                    saving anything.
                 -v, --verbose
                     Show the steps being accomplished.
                 --version
@@ -183,8 +176,6 @@ class Backup:
         actions = {
             "backup": False,  # Do backup?
             "setup": False,  # Do the setup?
-            "restore": False,  # do restore?
-            "test": False,  # do test actions?
             "verbose": False,  # show progress on terminal
             "version": False,  # show program version and exit
         }
@@ -200,10 +191,6 @@ class Backup:
                     actions["backup"] = True
                 elif action == "--setup":
                     actions["setup"] = True
-                elif action == "-r" or action == "--restore":
-                    actions["restore"] = True
-                elif action == "-t" or action == "--test":
-                    actions["test"] = True
                 elif action == "-v" or action == "--verbose":
                     actions["verbose"] = True
                 elif action == "--version":
