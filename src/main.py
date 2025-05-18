@@ -1,14 +1,13 @@
 """
 Backup the selected file system.
 
-Depending on the configuration settings, backup to the external backup
-storage.
+Backup a set of files to the external backup storage.
 
 File:       main.py
 Author:     Lorn B Kerr
 Copyright:  (c) 2022, 2023 Lorn B Kerr
 License:    MIT, see file LICENSE
-Version:    1.0.1
+Version:    1.1.0
 """
 
 import datetime
@@ -18,8 +17,10 @@ import sys
 import time
 from typing import Any
 
+from PySide6.QtCore import QSettings
+
+from default_config import default_config
 from external_storage import ExternalStorage
-from lbk_library import IniFileParser
 from logger import Logger
 from result_codes import ResultCodes
 from setup_window import SetupWindow
@@ -40,13 +41,13 @@ class Backup:
     files are copied to the store.
     """
 
-    def __init__(self, action_list: list[str] = [], config_dir: str = "") -> None:
+    def __init__(self, action_list: list[str] = []) -> None:
         """
         Initialize and run the backup program based on the action list.
 
         Parameters:
             action_list (list[str]):  the set of requested actions.
-                Actions defined (all optional) are:
+               Actions defined (all optional) are:
                 --setup
                     Run the setup portion to configure the program
                 -b, --backup
@@ -57,10 +58,6 @@ class Backup:
                 --version
                     Show the version of the program.
 
-            config_dir (str): override the default system config path,
-                default is empty string to use the default system
-                location.
-
         Errors:
             Exits  with error code 3 and with an error message if no
             configuration file is present and the program is executed
@@ -68,10 +65,8 @@ class Backup:
         """
         self.actions: dict[str, bool]
         """ The set of requested actions """
-        self.config: dict[str, Any] = {}
-        """ The configuration File (dict)"""
-        self.config_handler: IniFileParser
-        """ Config file reader/writer """
+        self.config = QSettings("Unnamed Branch", "Backup")
+        """The configuration setup."""
         self.external_storage: ExternalStorage
         """ Handle the backup to the external storage drive """
         self.logger: Logger
@@ -79,9 +74,9 @@ class Backup:
 
         start_time = time.time()  # Get the starting timestamp
 
-        # get the configuration
-        self.config_handler = IniFileParser("backup.ini", "backup", config_dir)
-        self.config = self.get_config_file()
+        # set configuration
+        if not len(self.config.allKeys()):
+            self.initialize_config_file()
 
         self.actions = self.set_required_actions(action_list)
         print(self.actions)
@@ -198,35 +193,17 @@ class Backup:
 
         return actions
 
-    def get_config_file(self) -> dict[str, Any]:
+    def initialize_config_file(self) -> None:
         """
-        Read the config file.
-
-        The raw config file values are all strings. Before returning the
-        config file, convert the boolean, integer and list string values
-        to actual boolean, integer and list entities.
-
-        Returns:
-            (dict[str, Any]) the set of configuration values.
+        If there is no stored QSettings entries, then this supplies a
+        default set of values. The default values are found in the
+        file 'backup/src/default_config.py'.
         """
-        config = self.config_handler.read_config()
-        for section in config:
-            for option in config[section]:
-                if config[section][option] in ["True", "true"]:
-                    config[section][option] = True
-                elif config[section][option] in ["False", "false"]:
-                    config[section][option] = False
-                elif re.match(r"\d+", config[section][option]):
-                    config[section][option] = int(config[section][option])
-                elif re.match(r"\[.*\]", config[section][option]):
-                    dir_list = config[section][option][1:-1]
-                    if len(dir_list) == 0:  # empty list
-                        config[section][option] = []
-                    else:
-                        dir_list = dir_list.replace("'", "")
-                        dir_list = dir_list.replace(" ", "")
-                        config[section][option] = dir_list.split(",")
-        return config
+        for heading in default_config:
+            self.config.beginGroup(heading)
+            for key in default_config[heading]:
+                self.config.setValue(key, default_config[heading][key])
+            self.config.endGroup()
 
     def do_setup(self, args) -> int:
         """
