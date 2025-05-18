@@ -1,5 +1,12 @@
-# command --> pytest --cov-report term-missing --cov=backup ./tests/
-#   run from parent directory for 'src' and 'tests'.
+"""
+Test the Logger class functionality.
+
+File:       test_02_logger.py
+Author:     Lorn B Kerr
+Copyright:  (c) 2022 - 2025 Lorn B Kerr
+License:    MIT, see file LICENSE
+Version:    1.0.1
+"""
 
 import os
 import sys
@@ -10,7 +17,7 @@ if src_path not in sys.path:
 
 import pytest
 from build_filesystem import filesystem
-from lbk_library import Dbal
+from lbk_library import DataFile
 from logger import Logger
 from result_codes import ResultCodes
 
@@ -79,7 +86,7 @@ def test_02_04(filesystem):
     assert logger.log_path == path
 
     # does table exist
-    dbref = Dbal()
+    dbref = DataFile()
     dbref.sql_connect(path)
     # check table exists
     sql = (
@@ -127,7 +134,7 @@ def test_02_05(filesystem):
     entry = {"timestamp": time, "result": result_code, "description": description}
     logger.add_log_entry(entry)
     # test results
-    dbref = Dbal()
+    dbref = DataFile()
     dbref.sql_connect(path)
     sql = "SELECT * FROM " + logger.table
     result = dbref.sql_query(sql, {})
