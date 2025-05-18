@@ -1,5 +1,12 @@
-# command --> pytest --cov-report term-missing --cov=backup ./tests/
-#   run from parent directory for 'src' and 'tests'.
+"""
+Test the ExternalStorage class functionality.
+
+File:       test_02_external_storage.py
+Author:     Lorn B Kerr
+Copyright:  (c) 2022 - 2025 Lorn B Kerr
+License:    MIT, see file LICENSE
+Version:    1.0.1
+"""
 
 import os
 import sys
