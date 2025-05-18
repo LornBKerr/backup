@@ -108,8 +108,6 @@ class ExternalStorage:
             print(self.files_files_checked, "files checked.")
             print(self.files_backed_up, "files backed up to external storage.")
 
-    # end __init__()
-
     def backup(self) -> None:
         """
         Scan and backup the directories.
@@ -161,8 +159,6 @@ class ExternalStorage:
                     os.mkdir(destination_dir)
                 self.process_dir_files(current_dir, destination_dir, fileset)
 
-    # end backup()
-
     def process_dir_files(
         self, current_dir: str, destination_dir: str, fileset: list[str]
     ) -> None:
@@ -184,8 +180,6 @@ class ExternalStorage:
                 or bool([ele for ele in self.file_exclude_list if (ele in filename)])
             ):
                 self.process_file(current_dir, destination_dir, filename)
-
-    # end process_dir_files()
 
     def process_file(
         self, current_dir: str, destination_dir: str, filename: str
@@ -235,8 +229,6 @@ class ExternalStorage:
                 )
                 if self.actions["verbose"]:
                     print("Backup of file", current_path, "failed.")
-
-    # end process_file()
 
     @property
     def dir_exclude_list(self) -> list[str]:
@@ -309,6 +301,3 @@ class ExternalStorage:
         inclusion_list = deepcopy(self.config["file_include"]["specific_files"])
         return inclusion_list
         # end set_file_include_list()
-
-
-# end class BackupExternalStorage
