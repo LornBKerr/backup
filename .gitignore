@@ -5,8 +5,9 @@ enviroment_list.*
 github_token
 *~
 *.bak
-
 pending*/
+*/*form.py
+*/*.ui
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
