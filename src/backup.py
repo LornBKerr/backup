@@ -17,11 +17,17 @@ File:       backup.py
 Author:     Lorn B Kerr
 Copyright:  (c) 2022 - 2025 Lorn B Kerr
 License:    MIT, see file LICENSE
+Version:    1.1.0
 """
 
 import sys
 
 from main import Backup
+
+file_name = "backup.py"
+file_version = "1.1.0"
+
+changes = {"1.0.0": "Initial release", "1.1.0": "file version info."}
 
 if __name__ == "__main__":
     # get the command line arguments
