@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Setup</class>
+ <widget class="QDialog" name="Setup">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>765</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Setup</string>
+  </property>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>550</width>
+     <height>695</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="common_tab">
+    <property name="toolTip">
+     <string/>
+    </property>
+    <attribute name="title">
+     <string>Common</string>
+    </attribute>
+    <attribute name="toolTip">
+     <string>Determine the general parameters of the backup.</string>
+    </attribute>
+    <widget class="QLabel" name="lbl_general_header">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>476</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>General conditions that apply in all cases</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="common_next_button">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>610</y>
+       <width>75</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>Next</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_start_dir">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>182</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Directory to Backup:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="start_dir">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>40</y>
+       <width>300</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_backup_location">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>182</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Backup to:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="backup_location">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>90</y>
+       <width>300</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_log_filename">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>160</y>
+       <width>182</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Log Filename:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="value_log_filename">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>160</y>
+       <width>274</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_last_backup">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>135</y>
+       <width>182</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Last Backup Time/Date:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="last_backup">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>135</y>
+       <width>274</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="exclusions_tab">
+    <attribute name="title">
+     <string>Excluded Items</string>
+    </attribute>
+    <widget class="QLabel" name="lbl_exclude_description">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>10</y>
+       <width>491</width>
+       <height>110</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>What directories and files do we want to exclude from the backup?
+
+In general operation, areas like the various cache, download and
+trash directories and files are volatile and probably don't need
+backup. Other  specific directories and files can also be specified.
+</string>
+     </property>
+     <property name="textInteractionFlags">
+      <set>Qt::TextInteractionFlag::NoTextInteraction</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="exclude_previous_button">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>610</y>
+       <width>75</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>Previous</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="exclude_next_button">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>610</y>
+       <width>75</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>Next</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="exclude_dirs_list">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>250</y>
+       <width>255</width>
+       <height>345</height>
+      </rect>
+     </property>
+     <property name="midLineWidth">
+      <number>1</number>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="exclude_files_list">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>250</y>
+       <width>250</width>
+       <height>345</height>
+      </rect>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+    </widget>
+    <widget class="QLabel" name="lbl_exclude_common_file">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>120</y>
+       <width>181</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Common Files to Exclude:</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::TextFormat::PlainText</enum>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="exclude_cache_files">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>140</y>
+       <width>170</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>Cache Files</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="exclude_backup_files">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>165</y>
+       <width>170</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>Backup Files</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_exclude_common_dir">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>120</y>
+       <width>221</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Common Directories to Exclude:</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::TextFormat::PlainText</enum>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="exclude_cache_dir">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>140</y>
+       <width>170</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>Cache Directories</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="exclude_trash_dir">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>165</y>
+       <width>170</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>Trash Directories</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="exclude_download_dir">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>190</y>
+       <width>171</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Download Directories</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_exclude_specific_dir">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>220</y>
+       <width>221</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Specific Directories to Exclude:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_exclude_specific_file">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>220</y>
+       <width>171</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Specific Files to Exclude:</string>
+     </property>
+    </widget>
+    <widget class="Line" name="line">
+     <property name="geometry">
+      <rect>
+       <x>265</x>
+       <y>125</y>
+       <width>16</width>
+       <height>471</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="inclusions_tab">
+    <attribute name="title">
+     <string>Included Items</string>
+    </attribute>
+    <widget class="QLabel" name="lbl_inclusion_header">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>10</y>
+       <width>471</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Specify the directories and files we want to include in the backup
+ that would otherwise be excluded?</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_dir_include">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>75</y>
+       <width>221</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Specific Directories to Include:</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="include_previous_button">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>610</y>
+       <width>75</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Previous</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="include_files_list">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>100</y>
+       <width>250</width>
+       <height>345</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="include_dirs_list">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>250</width>
+       <height>345</height>
+      </rect>
+     </property>
+     <property name="midLineWidth">
+      <number>1</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lbl_incld_files_list">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>75</y>
+       <width>181</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Specific Files to Include:</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="save_cancel_button_bar">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>715</y>
+     <width>551</width>
+     <height>36</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Shape::NoFrame</enum>
+   </property>
+   <widget class="QPushButton" name="cancel_button">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>103</width>
+      <height>36</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string/>
+    </property>
+    <property name="text">
+     <string>Cancel</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="save_continue_button">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>0</y>
+      <width>103</width>
+      <height>36</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string/>
+    </property>
+    <property name="text">
+     <string>Save / Cont</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="save_exit_button">
+    <property name="geometry">
+     <rect>
+      <x>443</x>
+      <y>0</y>
+      <width>103</width>
+      <height>36</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string/>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LayoutDirection::RightToLeft</enum>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="text">
+     <string>Save / Exit</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>start_dir</tabstop>
+  <tabstop>backup_location</tabstop>
+  <tabstop>common_next_button</tabstop>
+  <tabstop>exclude_cache_dir</tabstop>
+  <tabstop>exclude_trash_dir</tabstop>
+  <tabstop>exclude_cache_files</tabstop>
+  <tabstop>exclude_backup_files</tabstop>
+  <tabstop>exclude_next_button</tabstop>
+  <tabstop>exclude_previous_button</tabstop>
+  <tabstop>save_continue_button</tabstop>
+  <tabstop>save_exit_button</tabstop>
+  <tabstop>cancel_button</tabstop>
+  <tabstop>tabWidget</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
