@@ -1,16 +1,19 @@
 """
-Initialize the configuration settings for the Backup program.
+Edit the configuration file for the backup program.
 
-For now, it just uses the default configuration settings plus setting the
-source and destination directories.
+This configuration file provides the criteria for what is saved to the
+backup file. The criteria are set as categories of files such as 'cache'
+files and 'trash' files along with other settings.
 
-Eventually this will be a nice gui dialog to set and change all the
-configuration options.
+The first time the program is run, a set of default settings are loaded
+into the dialog. These can be accepted or modified as desired.then saved
+to be used for future runs.
 
 File:       setup.py
 Author:     Lorn B Kerr
 Copyright:  (c) 2022, 2023 Lorn B Kerr
-License:    MIT, see LICENSE file
+License:    MIT see file LICENSE
+Version:    1.0.0
 """
 
 import os
@@ -21,7 +24,7 @@ from default_config import default_config
 from lbk_library import IniFileParser
 
 
-class SetupWindow:
+class Setup:
     """Setup the configuration file for the backup."""
 
     def __init__(
