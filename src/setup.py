@@ -155,7 +155,7 @@ class Setup(Dialog, Ui_Setup):
 
         self.set_tooltips()
         self.initial_config = self.initial_setup()
-#        self.fill_dialog_fields()
+        self.fill_dialog_fields()
 #
 #        self.start_dir.editingFinished.connect(self.action_start_dir)
 #        self.start_dir_action.triggered.connect(self.action_start_dir)
@@ -180,9 +180,9 @@ class Setup(Dialog, Ui_Setup):
 #        self.cancel_button.clicked.connect(self.action_cancel_button)
 #        self.save_continue_button.clicked.connect(self.action_save_continue_button)
 #        self.save_exit_button.clicked.connect(self.action_save_exit_button)
-#
-#        self.show()
-#
+
+        self.show()
+
 #    def save_config(self) -> None:
 #        """ Save the entered configuration values to the config.file."""
 #        
@@ -309,16 +309,16 @@ class Setup(Dialog, Ui_Setup):
 #        )
 #        if len(new_dir):
 #            edit_box.setText(new_dir)
-#
-#    def fill_dialog_fields(self) -> None:
-#        """
-#        Fill the Dialog fields from the initial config file.
-#
-#        The dialog entries will be filled from the default config file
-#        if no config file has been stored.
-#        """
-#        self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.common_tab))
-#        self.fill_common_tab()
+
+    def fill_dialog_fields(self) -> None:
+        """
+        Fill the Dialog fields from the initial config file.
+
+        The dialog entries will be filled from the default config file
+        if no config file has been stored.
+        """
+        self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.common_tab))
+        self.fill_common_tab()
 #        self.fill_exclude_items_tab()
 #        self.fill_include_items_tab()
 #
@@ -390,23 +390,23 @@ class Setup(Dialog, Ui_Setup):
 #            self.change_made = self.change_made  | self.entry_changed[config_name]
 #        else:
 #            self.change_made = self.change_made & ~self.entry_changed[config_name]
-#        
-#    def fill_common_tab(self) -> None:
-#        """Initialize the General Settings page of the dialog."""
-#        self.set_start_directory()
-#        self.set_backup_location()
-#        self.set_info_values()
-#
-#    def set_info_values(self) -> None:
-#        """Fill the info fields on the 'common' tab of the dialog"""
-#        last_backup = self.initial_config["last_backup"]
-#        if last_backup not in ("", "-", "0", 0):
-#            self.last_backup.setText(
-#                datetime.fromtimestamp(int(last_backup)).strftime("%H:%M, %b %d, %Y")
-#            )
-#        else:
-#            self.last_backup.setText("0")
-#        self.value_log_filename.setText(self.initial_config["log_file"])
+        
+    def fill_common_tab(self) -> None:
+        """Initialize the General Settings page of the dialog."""
+        self.set_start_directory()
+        self.set_backup_location()
+        self.set_info_values()
+
+    def set_info_values(self) -> None:
+        """Fill the info fields on the 'common' tab of the dialog"""
+        last_backup = self.initial_config["last_backup"]
+        if last_backup not in ("", "-", "0", 0):
+            self.last_backup.setText(
+                datetime.fromtimestamp(int(last_backup)).strftime("%H:%M, %b %d, %Y")
+            )
+        else:
+            self.last_backup.setText("0")
+        self.value_log_filename.setText(self.initial_config["log_file"])
 
     def set_backup_location(self) -> None:
         """
