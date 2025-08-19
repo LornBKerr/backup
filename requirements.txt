@@ -9,11 +9,11 @@
 #
 # ########################################################
 
-# Run time requirements
-PySide6
-
 # local project library
 -e ../lbk_library/
+
+# Run time requirements
+PySide6
 
 # Testing Requirements
 black
