@@ -18,7 +18,7 @@ if src_path not in sys.path:
 
 from lbk_library.gui import Settings
 from lbk_library.testing_support import filesystem
-from PySide6.QtCore import QCoreApplication, QSettings  # , QObject, Qt
+from PySide6.QtCore import QCoreApplication, QSettings, Qt  # , QObject
 from PySide6.QtWidgets import (  # ; ; ; QApplication,; QMainWindow,; QTableWidget,
 #    QCheckBox,
     QDialog,
@@ -78,7 +78,6 @@ def test_01_01_Setup(qtbot, tmp_path):
     setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
     assert isinstance(setup, Setup)
     assert isinstance(setup, QDialog)
-    assert setup.change_made == 0
     close_window(setup)
 
 
@@ -238,218 +237,219 @@ def test_01_07_fill_common_tab(qtbot, tmp_path):
     close_window(setup)
 
 
-#def test_01_08_initialize_checkbox(qtbot, tmp_path):
-#    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
-#
-#    setup.change_made = 0
-#    setup.config.setValue("exclude_cache_dir", True)
-#    setup.initialize_checkbox(setup.exclude_cache_dir, "exclude_cache_dir")
-#    assert setup.exclude_cache_dir.isChecked()
-#    assert setup.change_made == 0
-#    print(bin(setup.change_made))
-#
-#    setup.change_made = 0
-#    setup.config.setValue("exclude_cache_dir", False)
-#    setup.initialize_checkbox(setup.exclude_cache_dir, "exclude_cache_dir")
-#    assert setup.exclude_cache_dir.isChecked()
-#    assert setup.change_made > 0
-#
-#
-#def test_01_09_initialize_checkboxes(qtbot, tmp_path):
-#    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
-#
-#    setup.change_made = 0
-#    setup.config.setValue("exclude_cache_dir", True)
-#    setup.initialize_checkboxes()
-#    assert setup.exclude_cache_dir.isChecked()
-#    assert setup.change_made > 0
-#    print(bin(setup.change_made))
-#
-#    setup.change_made = 0
-#    setup.config.setValue("exclude_cache_dir", False)
-#    setup.initialize_checkboxes()
-#    assert setup.exclude_cache_dir.isChecked()
-#    assert setup.change_made > 0
-#    close_window(setup)
-#
-#
-#def test_01_10_fill_table(qtbot, tmp_path):
-#    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
-#
-#    setup.fill_table(setup.exclude_dirs_list, [])
-#    assert setup.exclude_dirs_list.rowCount() == 1
-#
-#    new_list = ["A", "B", "c"]
-#    setup.fill_table(setup.exclude_dirs_list, new_list)
-#    assert setup.exclude_dirs_list.rowCount() == 4
-#    assert (
-#        setup.exclude_dirs_list.item(0, 0).data(Qt.ItemDataRole.EditRole)
-#        == new_list[0]
-#    )
-#    assert (
-#        setup.exclude_dirs_list.item(1, 0).data(Qt.ItemDataRole.EditRole)
-#        == new_list[1]
-#    )
-#    assert (
-#        setup.exclude_dirs_list.item(2, 0).data(Qt.ItemDataRole.EditRole)
-#        == new_list[2]
-#    )
-#    assert setup.exclude_dirs_list.item(3, 0) == None
-#    close_window(setup)
-#
-#
-#def test_01_11_fill_exclude_dirs_table(qtbot, tmp_path):
-#    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
-#
-#    setup.initial_config["exclude_specific_dirs"] = []
-#    setup.fill_exclude_dirs_table()
-#    assert setup.exclude_dirs_list.rowCount() == len(setup.initial_config["exclude_specific_dirs"]) + 1
-#
-#    new_list = ["A", "B", "C"]
-#    setup.initial_config["exclude_specific_dirs"] = new_list
-#    setup.fill_exclude_dirs_table()
-#    assert setup.exclude_dirs_list.rowCount() == len(new_list) + 1
-#    for i in range(len(new_list)):
-#        assert (
-#            setup.exclude_dirs_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
-#            == new_list[i]
-#        )
-#    close_window(setup)
-#
-#
-#def test_01_12_fill_exclude_files_table(qtbot, tmp_path):
-#    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
-#
-#    setup.initial_config["exclude_specific_files"] = []
-#    setup.fill_exclude_files_table()
-#    assert setup.exclude_files_list.rowCount() == len(setup.initial_config["exclude_specific_files"]) + 1
-#
-#    new_list = ["A", "B", "C"]
-#    setup.initial_config["exclude_specific_files"] = new_list
-#    setup.fill_exclude_files_table()
-#    assert setup.exclude_files_list.rowCount() == len(new_list) + 1
-#    for i in range(len(new_list)):
-#        assert (
-#            setup.exclude_files_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
-#            == new_list[i]
-#        )
-#    close_window(setup)
-#
-#
-#def test_01_13_fill_exclude_items_tab(qtbot, tmp_path):
-#    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
-#
-#    new_list = ["A", "B", "C"]
-#    setup.initial_config["exclude_specific_dirs"] = new_list
-#    setup.initial_config["exclude_specific_files"] = new_list
-#
-#    setup.fill_exclude_items_tab()
-#    assert setup.exclude_cache_dir.isChecked()
-#    assert setup.exclude_trash_dir.isChecked()
-#    assert setup.exclude_download_dir.isChecked()
-#    assert setup.exclude_cache_files.isChecked()
-#    assert setup.exclude_backup_files.isChecked()
-#    assert setup.exclude_dirs_list.rowCount() == len(new_list) + 1
-#    for i in range(len(new_list)):
-#        assert (
-#            setup.exclude_dirs_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
-#            == new_list[i]
-#        )
-#    assert setup.exclude_files_list.rowCount() == len(new_list) + 1
-#    for i in range(len(new_list)):
-#        assert (
-#            setup.exclude_files_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
-#            == new_list[i]
-#        )
-#    close_window(setup)
-#
-#
-#def test_01_14_fill_include_dirs_table(qtbot, tmp_path):
-#    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
-#
-#    setup.initial_config["include_specific_dirs"] = []
-#    setup.fill_include_dirs_table()
-#    assert setup.include_dirs_list.rowCount() == len(setup.initial_config["include_specific_dirs"]) + 1
-#
-#    new_list = ["A", "B", "C"]
-#    setup.initial_config["include_specific_dirs"] = new_list
-#    setup.fill_include_dirs_table()
-#    assert setup.include_dirs_list.rowCount() == len(new_list) + 1
-#    for i in range(len(new_list)):
-#        assert (
-#            setup.include_dirs_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
-#            == new_list[i]
-#        )
-#    close_window(setup)
-#
-#
-#def test_01_15_fill_include_files_table(qtbot, tmp_path):
-#    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
-#
-#    setup.initial_config["include_specific_files"] = []
-#    setup.fill_include_files_table()
-#    assert setup.include_files_list.rowCount() == len(setup.initial_config["include_specific_files"]) + 1
-#
-#    new_list = ["A", "B", "C"]
-#    setup.initial_config["include_specific_files"] = new_list
-#    setup.fill_include_files_table()
-#    assert setup.include_files_list.rowCount() == len(new_list) + 1
-#    for i in range(len(new_list)):
-#        assert (
-#            setup.include_files_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
-#            == new_list[i]
-#        )
-#    close_window(setup)
-#
-#
-#def test_01_16_fill_include_items_tab(qtbot, tmp_path):
-#    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
-#
-#    setup.fill_include_items_tab()
-#    assert setup.include_dirs_list.rowCount() == len(setup.initial_config["include_specific_dirs"]) + 1
-#    assert setup.include_files_list.rowCount() == len(setup.initial_config["include_specific_files"]) + 1
-#
-#    new_list = ["A", "B", "C"]
-#    setup.initial_config["include_specific_dirs"] = new_list
-#    setup.initial_config["include_specific_files"] = new_list
-#    setup.fill_include_items_tab()
-#    assert setup.include_dirs_list.rowCount() == len(new_list) + 1
-#    for i in range(len(new_list)):
-#        assert (
-#            setup.include_dirs_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
-#            == new_list[i]
-#        )
-#    assert setup.include_files_list.rowCount() == len(new_list) + 1
-#    for i in range(len(new_list)):
-#        assert (
-#            setup.include_files_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
-#            == new_list[i]
-#        )
-#    close_window(setup)
-#
-#
-#def test_01_17_fill_dialog_fields(qtbot, tmp_path):
-#    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
-#    assert setup.tabWidget.currentIndex() == setup.tabWidget.indexOf(
-#        setup.common_tab
-#    )
-#    assert setup.start_dir.text() == default_config["start_dir"]
-#    assert setup.backup_location.text() == default_config["backup_location"]
-#    assert setup.last_backup.text() == default_config["last_backup"]
-#    assert setup.value_log_filename.text() == default_config["log_file"]
-#
-#    assert setup.exclude_cache_dir.isChecked()
-#    assert setup.exclude_trash_dir.isChecked()
-#    assert setup.exclude_download_dir.isChecked()
-#    assert setup.exclude_cache_files.isChecked()
-#    assert setup.exclude_backup_files.isChecked()
-#    assert setup.exclude_dirs_list.rowCount() == len(default_config["exclude_specific_dirs"]) + 1
-#    assert setup.exclude_files_list.rowCount() == len(default_config["exclude_specific_files"]) + 1
-#    assert setup.exclude_files_list.rowCount() == len(setup.initial_config["exclude_specific_files"]) + 1
-#    assert setup.include_dirs_list.rowCount() == len(setup.initial_config["include_specific_dirs"]) + 1
-#    assert setup.include_files_list.rowCount() == len(setup.initial_config["include_specific_files"]) + 1
-#
-#
+def test_01_08_initialize_checkbox(qtbot, tmp_path):
+    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.change_made = 0
+    setup.config.setValue("exclude_cache_dir", True)
+    setup.initialize_checkbox(setup.exclude_cache_dir, "exclude_cache_dir")
+    assert setup.exclude_cache_dir.isChecked()
+    assert setup.change_made == 0
+    print(bin(setup.change_made))
+
+    setup.change_made = 0
+    setup.config.setValue("exclude_cache_dir", False)
+    setup.initialize_checkbox(setup.exclude_cache_dir, "exclude_cache_dir")
+    assert setup.exclude_cache_dir.isChecked()
+    assert setup.change_made > 0
+
+
+def test_01_09_initialize_checkboxes(qtbot, tmp_path):
+    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.change_made = 0
+    setup.config.setValue("exclude_cache_dir", True)
+    setup.initialize_checkboxes()
+    assert setup.exclude_cache_dir.isChecked()
+    assert setup.change_made > 0
+    print(bin(setup.change_made))
+
+    setup.change_made = 0
+    setup.config.setValue("exclude_cache_dir", False)
+    setup.initialize_checkboxes()
+    assert setup.exclude_cache_dir.isChecked()
+    assert setup.change_made > 0
+    close_window(setup)
+
+
+def test_01_10_fill_table(qtbot, tmp_path):
+    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.fill_table(setup.exclude_dirs_list, [])
+    assert setup.exclude_dirs_list.rowCount() == 1
+
+    new_list = ["A", "B", "c"]
+    setup.fill_table(setup.exclude_dirs_list, new_list)
+    assert setup.exclude_dirs_list.rowCount() == 4
+    assert (
+        setup.exclude_dirs_list.item(0, 0).data(Qt.ItemDataRole.EditRole)
+        == new_list[0]
+    )
+    assert (
+        setup.exclude_dirs_list.item(1, 0).data(Qt.ItemDataRole.EditRole)
+        == new_list[1]
+    )
+    assert (
+        setup.exclude_dirs_list.item(2, 0).data(Qt.ItemDataRole.EditRole)
+        == new_list[2]
+    )
+    assert setup.exclude_dirs_list.item(3, 0) == None
+    close_window(setup)
+
+
+def test_01_11_fill_exclude_dirs_table(qtbot, tmp_path):
+    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.initial_config["exclude_specific_dirs"] = []
+    setup.fill_exclude_dirs_table()
+    assert setup.exclude_dirs_list.rowCount() == len(setup.initial_config["exclude_specific_dirs"]) + 1
+
+    new_list = ["A", "B", "C"]
+    setup.initial_config["exclude_specific_dirs"] = new_list
+    setup.fill_exclude_dirs_table()
+    assert setup.exclude_dirs_list.rowCount() == len(new_list) + 1
+    for i in range(len(new_list)):
+        assert (
+            setup.exclude_dirs_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
+            == new_list[i]
+        )
+    close_window(setup)
+
+
+def test_01_12_fill_exclude_files_table(qtbot, tmp_path):
+    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.initial_config["exclude_specific_files"] = []
+    setup.fill_exclude_files_table()
+    assert setup.exclude_files_list.rowCount() == len(setup.initial_config["exclude_specific_files"]) + 1
+
+    new_list = ["A", "B", "C"]
+    setup.initial_config["exclude_specific_files"] = new_list
+    setup.fill_exclude_files_table()
+    assert setup.exclude_files_list.rowCount() == len(new_list) + 1
+    for i in range(len(new_list)):
+        assert (
+            setup.exclude_files_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
+            == new_list[i]
+        )
+    close_window(setup)
+
+
+def test_01_13_fill_exclude_items_tab(qtbot, tmp_path):
+    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    new_list = ["A", "B", "C"]
+    setup.initial_config["exclude_specific_dirs"] = new_list
+    setup.initial_config["exclude_specific_files"] = new_list
+
+    setup.fill_exclude_items_tab()
+    assert setup.exclude_cache_dir.isChecked()
+    assert setup.exclude_trash_dir.isChecked()
+    assert setup.exclude_download_dir.isChecked()
+    assert setup.exclude_cache_files.isChecked()
+    assert setup.exclude_backup_files.isChecked()
+    assert setup.exclude_dirs_list.rowCount() == len(new_list) + 1
+    for i in range(len(new_list)):
+        assert (
+            setup.exclude_dirs_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
+            == new_list[i]
+        )
+    assert setup.exclude_files_list.rowCount() == len(new_list) + 1
+    for i in range(len(new_list)):
+        assert (
+            setup.exclude_files_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
+            == new_list[i]
+        )
+    close_window(setup)
+
+
+def test_01_14_fill_include_dirs_table(qtbot, tmp_path):
+    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.initial_config["include_specific_dirs"] = []
+    setup.fill_include_dirs_table()
+    assert setup.include_dirs_list.rowCount() == len(setup.initial_config["include_specific_dirs"]) + 1
+
+    new_list = ["A", "B", "C"]
+    setup.initial_config["include_specific_dirs"] = new_list
+    setup.fill_include_dirs_table()
+    assert setup.include_dirs_list.rowCount() == len(new_list) + 1
+    for i in range(len(new_list)):
+        assert (
+            setup.include_dirs_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
+            == new_list[i]
+        )
+    close_window(setup)
+
+
+def test_01_15_fill_include_files_table(qtbot, tmp_path):
+    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.initial_config["include_specific_files"] = []
+    setup.fill_include_files_table()
+    assert setup.include_files_list.rowCount() == len(setup.initial_config["include_specific_files"]) + 1
+
+    new_list = ["A", "B", "C"]
+    setup.initial_config["include_specific_files"] = new_list
+    setup.fill_include_files_table()
+    assert setup.include_files_list.rowCount() == len(new_list) + 1
+    for i in range(len(new_list)):
+        assert (
+            setup.include_files_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
+            == new_list[i]
+        )
+    close_window(setup)
+
+
+def test_01_16_fill_include_items_tab(qtbot, tmp_path):
+    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.fill_include_items_tab()
+    assert setup.include_dirs_list.rowCount() == len(setup.initial_config["include_specific_dirs"]) + 1
+    assert setup.include_files_list.rowCount() == len(setup.initial_config["include_specific_files"]) + 1
+
+    new_list = ["A", "B", "C"]
+    setup.initial_config["include_specific_dirs"] = new_list
+    setup.initial_config["include_specific_files"] = new_list
+    setup.fill_include_items_tab()
+    assert setup.include_dirs_list.rowCount() == len(new_list) + 1
+    for i in range(len(new_list)):
+        assert (
+            setup.include_dirs_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
+            == new_list[i]
+        )
+    assert setup.include_files_list.rowCount() == len(new_list) + 1
+    for i in range(len(new_list)):
+        assert (
+            setup.include_files_list.item(i, 0).data(Qt.ItemDataRole.EditRole)
+            == new_list[i]
+        )
+    close_window(setup)
+
+
+def test_01_17_fill_dialog_fields(qtbot, tmp_path):
+    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
+    assert setup.tabWidget.currentIndex() == setup.tabWidget.indexOf(
+        setup.common_tab
+    )
+    assert setup.start_dir.text() == default_config["start_dir"]
+    assert setup.backup_location.text() == default_config["backup_location"]
+    assert setup.last_backup.text() == default_config["last_backup"]
+    assert setup.value_log_filename.text() == default_config["log_file"]
+
+    assert setup.exclude_cache_dir.isChecked()
+    assert setup.exclude_trash_dir.isChecked()
+    assert setup.exclude_download_dir.isChecked()
+    assert setup.exclude_cache_files.isChecked()
+    assert setup.exclude_backup_files.isChecked()
+    assert setup.exclude_dirs_list.rowCount() == len(default_config["exclude_specific_dirs"]) + 1
+    assert setup.exclude_files_list.rowCount() == len(default_config["exclude_specific_files"]) + 1
+    assert setup.exclude_files_list.rowCount() == len(setup.initial_config["exclude_specific_files"]) + 1
+    assert setup.include_dirs_list.rowCount() == len(setup.initial_config["include_specific_dirs"]) + 1
+    assert setup.include_files_list.rowCount() == len(setup.initial_config["include_specific_files"]) + 1
+    close_window(setup)
+
+
 #def test_01_17_open_dir_dialog(qtbot, tmp_path, mocker):
 #    setup, start_dir, dest_dir = build_window(qtbot, tmp_path)
 #

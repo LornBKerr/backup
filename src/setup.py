@@ -26,15 +26,15 @@ from lbk_library.gui import Dialog, Settings
 
 # from PySide6.QtCore import QSettings
 from PySide6.QtGui import QIcon, QPixmap
-#from PySide6.QtWidgets import (  # QMainWindow QApplication, QHeaderView,;
-#    QCheckBox,
+from PySide6.QtWidgets import (  # QMainWindow QApplication, QHeaderView,;
+    QCheckBox,
 #    QDialog,
 #    QFileDialog,
 #    QLineEdit,
 #    QMessageBox,
-#    QTableWidget,
-#    QTableWidgetItem,
-#)
+    QTableWidget,
+    QTableWidgetItem,
+)
 
 from default_config import default_config
 from setup_form import Ui_Setup
@@ -319,77 +319,77 @@ class Setup(Dialog, Ui_Setup):
         """
         self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.common_tab))
         self.fill_common_tab()
-#        self.fill_exclude_items_tab()
-#        self.fill_include_items_tab()
-#
-#    def fill_include_items_tab(self) -> None:
-#        """
-#        Initialize and modify the current included directories and files
-#        configuration settings.
-#        """
-#        self.fill_include_dirs_table()
-#        self.fill_include_files_table()
-#
-#    def fill_include_files_table(self) -> None:
-#        """fill the excluded directories table."""
-#        listing = self.initial_config["include_specific_files"]
-#        self.fill_table(self.include_files_list, listing)
-#
-#    def fill_include_dirs_table(self) -> None:
-#        """fill the included directories table."""
-#        listing = self.initial_config["include_specific_dirs"]
-#        self.fill_table(self.include_dirs_list, listing)
-#
-#    def fill_exclude_items_tab(self) -> None:
-#        """
-#        Initialize and modify the current excluded directories and files
-#        configuration settings.
-#        """
-#        self.initialize_checkboxes()
-#        self.fill_exclude_dirs_table()
-#        self.fill_exclude_files_table()
-#
-#    def fill_exclude_files_table(self) -> None:
-#        """fill the excluded files table."""
-#        listing = self.initial_config["exclude_specific_files"]
-#        self.fill_table(self.exclude_files_list, listing)
-#
-#    def fill_exclude_dirs_table(self) -> None:
-#        """fill the excluded directories table."""
-#        listing = self.initial_config["exclude_specific_dirs"]
-#        self.fill_table(self.exclude_dirs_list, listing)
-#
-#    def fill_table(self, table_widget: QTableWidget, list_contents: list[str]) -> None:
-#        table_widget.setRowCount(len(list_contents) + 1)
-#        table_widget.setColumnCount(1)
-#        table_widget.horizontalHeader().hide()
-#        table_widget.verticalHeader().hide()
-#        table_widget.horizontalHeader().setStretchLastSection(True)
-#        for i in range(len(list_contents)):
-#            table_widget.setItem(i, 0, QTableWidgetItem(list_contents[i]))
-#        table_widget.setItem(len(list_contents) + 1, 0, QTableWidgetItem(""))
-#
-#    def initialize_checkboxes(self) -> None:
-#        """Initialize the checkboxes on the excluded page."""
-#        self.initialize_checkbox(self.exclude_cache_dir, "exclude_cache_dir")
-#        self.initialize_checkbox(self.exclude_trash_dir, "exclude_trash_dir")
-#        self.initialize_checkbox(self.exclude_download_dir, "exclude_download_dir")
-#        self.initialize_checkbox(self.exclude_cache_files, "exclude_cache_files")
-#        self.initialize_checkbox(self.exclude_backup_files, "exclude_backup_files")
-#
-#    def initialize_checkbox(self, box: QCheckBox, config_name: str) -> None:
-#        """
-#        Initialize a specific dialog check box.
-#        
-#        Parameteres:
-#            box (QCheckBox) - The checkbox being initialized.
-#            config_name str) - the config entry name.
-#        """
-#        box.setChecked(self.initial_config[config_name])
-#        if box.isChecked() != self.config.value(config_name):
-#            self.change_made = self.change_made  | self.entry_changed[config_name]
-#        else:
-#            self.change_made = self.change_made & ~self.entry_changed[config_name]
+        self.fill_exclude_items_tab()
+        self.fill_include_items_tab()
+
+    def fill_include_items_tab(self) -> None:
+        """
+        Initialize and modify the current included directories and files
+        configuration settings.
+        """
+        self.fill_include_dirs_table()
+        self.fill_include_files_table()
+
+    def fill_include_files_table(self) -> None:
+        """fill the excluded directories table."""
+        listing = self.initial_config["include_specific_files"]
+        self.fill_table(self.include_files_list, listing)
+
+    def fill_include_dirs_table(self) -> None:
+        """fill the included directories table."""
+        listing = self.initial_config["include_specific_dirs"]
+        self.fill_table(self.include_dirs_list, listing)
+
+    def fill_exclude_items_tab(self) -> None:
+        """
+        Initialize and modify the current excluded directories and files
+        configuration settings.
+        """
+        self.initialize_checkboxes()
+        self.fill_exclude_dirs_table()
+        self.fill_exclude_files_table()
+
+    def fill_exclude_files_table(self) -> None:
+        """fill the excluded files table."""
+        listing = self.initial_config["exclude_specific_files"]
+        self.fill_table(self.exclude_files_list, listing)
+
+    def fill_exclude_dirs_table(self) -> None:
+        """fill the excluded directories table."""
+        listing = self.initial_config["exclude_specific_dirs"]
+        self.fill_table(self.exclude_dirs_list, listing)
+
+    def fill_table(self, table_widget: QTableWidget, list_contents: list[str]) -> None:
+        table_widget.setRowCount(len(list_contents) + 1)
+        table_widget.setColumnCount(1)
+        table_widget.horizontalHeader().hide()
+        table_widget.verticalHeader().hide()
+        table_widget.horizontalHeader().setStretchLastSection(True)
+        for i in range(len(list_contents)):
+            table_widget.setItem(i, 0, QTableWidgetItem(list_contents[i]))
+        table_widget.setItem(len(list_contents) + 1, 0, QTableWidgetItem(""))
+
+    def initialize_checkboxes(self) -> None:
+        """Initialize the checkboxes on the excluded page."""
+        self.initialize_checkbox(self.exclude_cache_dir, "exclude_cache_dir")
+        self.initialize_checkbox(self.exclude_trash_dir, "exclude_trash_dir")
+        self.initialize_checkbox(self.exclude_download_dir, "exclude_download_dir")
+        self.initialize_checkbox(self.exclude_cache_files, "exclude_cache_files")
+        self.initialize_checkbox(self.exclude_backup_files, "exclude_backup_files")
+
+    def initialize_checkbox(self, box: QCheckBox, config_name: str) -> None:
+        """
+        Initialize a specific dialog check box.
+        
+        Parameteres:
+            box (QCheckBox) - The checkbox being initialized.
+            config_name str) - the config entry name.
+        """
+        box.setChecked(self.initial_config[config_name])
+        if box.isChecked() != self.config.value(config_name):
+            self.change_made = self.change_made  | self.entry_changed[config_name]
+        else:
+            self.change_made = self.change_made & ~self.entry_changed[config_name]
         
     def fill_common_tab(self) -> None:
         """Initialize the General Settings page of the dialog."""
