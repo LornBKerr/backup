@@ -44,7 +44,6 @@ from setup_form import Ui_Setup
 #    "1.0.0": "Initial release",
 #}
 
-
 class Setup(Dialog, Ui_Setup):
     """Define the configuration parameters for the backup program."""
 
@@ -156,7 +155,7 @@ class Setup(Dialog, Ui_Setup):
         self.set_tooltips()
         self.initial_config = self.initial_setup()
         self.fill_dialog_fields()
-#
+
 #        self.start_dir.editingFinished.connect(self.action_start_dir)
 #        self.start_dir_action.triggered.connect(self.action_start_dir)
 #        self.backup_location_action.triggered.connect(
@@ -299,7 +298,7 @@ class Setup(Dialog, Ui_Setup):
 #        """
 #        current_dir = edit_box.text()
 #        if current_dir is None or not os.path.isdir(current_dir):
-#            current_dir = os.path.expanduser("~")
+#           current_dir = os.path.expanduser("~")
 #
 #        new_dir = QFileDialog.getExistingDirectory(
 #            edit_box,
@@ -371,25 +370,19 @@ class Setup(Dialog, Ui_Setup):
 
     def initialize_checkboxes(self) -> None:
         """Initialize the checkboxes on the excluded page."""
-        self.initialize_checkbox(self.exclude_cache_dir, "exclude_cache_dir")
-        self.initialize_checkbox(self.exclude_trash_dir, "exclude_trash_dir")
-        self.initialize_checkbox(self.exclude_download_dir, "exclude_download_dir")
-        self.initialize_checkbox(self.exclude_cache_files, "exclude_cache_files")
-        self.initialize_checkbox(self.exclude_backup_files, "exclude_backup_files")
-
-    def initialize_checkbox(self, box: QCheckBox, config_name: str) -> None:
-        """
-        Initialize a specific dialog check box.
-        
-        Parameteres:
-            box (QCheckBox) - The checkbox being initialized.
-            config_name str) - the config entry name.
-        """
-        box.setChecked(self.initial_config[config_name])
-        if box.isChecked() != self.config.value(config_name):
-            self.change_made = self.change_made  | self.entry_changed[config_name]
-        else:
-            self.change_made = self.change_made & ~self.entry_changed[config_name]
+        chkboxes = [
+            (self.exclude_cache_dir, "exclude_cache_dir"),
+            (self.exclude_trash_dir, "exclude_trash_dir"),
+            (self.exclude_download_dir, "exclude_download_dir"),
+            (self.exclude_cache_files, "exclude_cache_files"),
+            (self.exclude_backup_files, "exclude_backup_files"),
+        ]
+        for box, config_name in chkboxes:
+            box.setChecked(self.initial_config[config_name])
+            if box.isChecked() != self.config.value(config_name):
+                self.change_made = self.change_made  | self.entry_changed[config_name]
+            else:
+                self.change_made = self.change_made & ~self.entry_changed[config_name]
         
     def fill_common_tab(self) -> None:
         """Initialize the General Settings page of the dialog."""
@@ -502,4 +495,4 @@ class Setup(Dialog, Ui_Setup):
         dir_open_pixmap.loadFromData(base64.b64decode(Setup.icon_folder))
         return QIcon(dir_open_pixmap)
 
-
+#
