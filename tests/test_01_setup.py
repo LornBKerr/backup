@@ -23,7 +23,7 @@ from PySide6.QtCore import QCoreApplication, QSettings, Qt  # , QObject
 from PySide6.QtWidgets import (  # ; ; ; QApplication,; QMainWindow,; QTableWidget,
 #    QCheckBox,
     QDialog,
-#    QFileDialog,
+    QFileDialog,
 #    QTableWidgetItem,
 )
 
@@ -444,74 +444,76 @@ def test_01_16_fill_dialog_fields(qtbot, tmp_path):
     close_window(setup)
 
 
-#def test_01_17_open_dir_dialog(qtbot, tmp_path, mocker):
-#    setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
-#
-#    setup.start_dir.setText(None)
-#    mocker.patch.object(QFileDialog, "getExistingDirectory")
-#    QFileDialog.getExistingDirectory.return_value = os.path.expanduser("~")
-#    setup.open_dir_dialog(setup.start_dir)
-#    assert setup.start_dir.text() == os.path.expanduser("~")
-#
-#    setup.start_dir.setText("")
-#    QFileDialog.getExistingDirectory.return_value = ""
-#    setup.open_dir_dialog(setup.start_dir)
-#    assert setup.start_dir.text() == ""
-#
-#    setup.start_dir.setText(os.path.expanduser("~"))
-#    QFileDialog.getExistingDirectory.return_value = os.path.expanduser("~") + "/Pictures"
-#    setup.open_dir_dialog(setup.start_dir)
-#    assert setup.start_dir.text() == os.path.expanduser("~") + "/Pictures"
-#    close_window(setup)
-#
-#
-#def test_01_18_start_dir_dialog(qtbot, tmp_path, mocker):
-#    setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
-#
-#    setup.change_made = 0
-#    setup.start_dir.setText(setup.initial_config["start_dir"])
-#    mocker.patch.object(QFileDialog, "getExistingDirectory")
-#    QFileDialog.getExistingDirectory.return_value = setup.initial_config["start_dir"]
-#    setup.action_start_dir()
-#    assert setup.change_made == 0
-#
-#    setup.start_dir.setText(setup.initial_config["start_dir"])
-#    mocker.patch.object(QFileDialog, "getExistingDirectory")
-#    QFileDialog.getExistingDirectory.return_value = setup.initial_config["start_dir"] + "/Downloads"
-#    setup.action_start_dir()
-#    assert setup.change_made == setup.entry_changed["start_dir"]
-#
-#
-#def test_01_19_backup_location_dir_dialog(qtbot, tmp_path, mocker):
-#    setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
-#
-#    setup.change_made = 0
-#    setup.backup_location.setText(setup.initial_config["backup_location"])
-#    mocker.patch.object(QFileDialog, "getExistingDirectory")
-#    QFileDialog.getExistingDirectory.return_value = setup.initial_config["backup_location"]
-#    setup.action_backup_location()
-#    assert setup.change_made == 0
-#
-#    setup.backup_location.setText(setup.initial_config["backup_location"])
-#    mocker.patch.object(QFileDialog, "getExistingDirectory")
-#    QFileDialog.getExistingDirectory.return_value = setup.initial_config["backup_location"] + "/Downloads"
-#    setup.action_backup_location()
-#    assert setup.change_made == setup.entry_changed["backup_location"]
-#
-#
-#def test_01_20_action_common_next_button_clicked(qtbot, tmp_path):
-#    setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
-#
-#    assert setup.tabWidget.currentIndex() == setup.tabWidget.indexOf(
-#        setup.common_tab
-#    )
-#    setup.common_next_button.click()
-#    assert setup.tabWidget.currentIndex() == setup.tabWidget.indexOf(
-#        setup.exclusions_tab
-#    )
-#    close_window(setup)
-#
-#
+def test_01_17_open_dir_dialog(qtbot, tmp_path, mocker):
+    setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.start_dir.setText(None)
+    mocker.patch.object(QFileDialog, "getExistingDirectory")
+    QFileDialog.getExistingDirectory.return_value = os.path.expanduser("~")
+    setup.open_dir_dialog(setup.start_dir)
+    assert setup.start_dir.text() == os.path.expanduser("~")
+
+    setup.start_dir.setText("")
+    QFileDialog.getExistingDirectory.return_value = ""
+    setup.open_dir_dialog(setup.start_dir)
+    assert setup.start_dir.text() == ""
+
+    setup.start_dir.setText(os.path.expanduser("~"))
+    QFileDialog.getExistingDirectory.return_value = os.path.expanduser("~") + "/Pictures"
+    setup.open_dir_dialog(setup.start_dir)
+    assert setup.start_dir.text() == os.path.expanduser("~") + "/Pictures"
+    close_window(setup)
+
+
+def test_01_18_action_start_dir(qtbot, tmp_path, mocker):
+    setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.change_made = 0
+    setup.start_dir.setText(setup.initial_config["start_dir"])
+    mocker.patch.object(QFileDialog, "getExistingDirectory")
+    QFileDialog.getExistingDirectory.return_value = setup.initial_config["start_dir"]
+    setup.action_start_dir()
+    assert setup.change_made == 0
+
+    setup.start_dir.setText(setup.initial_config["start_dir"])
+    mocker.patch.object(QFileDialog, "getExistingDirectory")
+    QFileDialog.getExistingDirectory.return_value = setup.initial_config["start_dir"] + "/Downloads"
+    setup.action_start_dir()
+    assert setup.change_made == setup.entry_changed["start_dir"]
+    close_window(setup)
+
+
+def test_01_19_action_backup_location(qtbot, tmp_path, mocker):
+    setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.change_made = 0
+    setup.backup_location.setText(setup.initial_config["backup_location"])
+    mocker.patch.object(QFileDialog, "getExistingDirectory")
+    QFileDialog.getExistingDirectory.return_value = setup.initial_config["backup_location"]
+    setup.action_backup_location()
+    assert setup.change_made == 0
+
+    setup.backup_location.setText(setup.initial_config["backup_location"])
+    mocker.patch.object(QFileDialog, "getExistingDirectory")
+    QFileDialog.getExistingDirectory.return_value = setup.initial_config["backup_location"] + "/Downloads"
+    setup.action_backup_location()
+    assert setup.change_made == setup.entry_changed["backup_location"]
+    close_window(setup)
+
+
+def test_01_20_action_common_next_button_clicked(qtbot, tmp_path):
+    setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    assert setup.tabWidget.currentIndex() == setup.tabWidget.indexOf(
+        setup.common_tab
+    )
+    setup.common_next_button.click()
+    assert setup.tabWidget.currentIndex() == setup.tabWidget.indexOf(
+        setup.exclusions_tab
+    )
+    close_window(setup)
+
+
 #def test_01_21_checkbox_click(qtbot, tmp_path):
 #    setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 #

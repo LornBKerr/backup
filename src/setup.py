@@ -17,7 +17,7 @@ Version:    1.1.0
 """
 
 import base64
-#import os
+import os
 from copy import deepcopy
 #from datetime import datetime
 from typing import Any
@@ -29,8 +29,8 @@ from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (  # QMainWindow QApplication, QHeaderView,;
     QCheckBox,
 #    QDialog,
-#    QFileDialog,
-#    QLineEdit,
+    QFileDialog,
+    QLineEdit,
 #    QMessageBox,
     QTableWidget,
     QTableWidgetItem,
@@ -156,17 +156,15 @@ class Setup(Dialog, Ui_Setup):
         self.initial_config = self.initial_setup()
         self.fill_dialog_fields()
 
-#        self.start_dir.editingFinished.connect(self.action_start_dir)
-#        self.start_dir_action.triggered.connect(self.action_start_dir)
-#        self.backup_location_action.triggered.connect(
-#            lambda: self.action_open_dir_dialog(self.backup_location)
-#        )
+        self.start_dir_action.triggered.connect(self.action_start_dir)
+        self.backup_location_action.triggered.connect(self.action_backup_location)
+
 #        self.exclude_dirs_list.cellChanged.connect(self.action_exclude_dirs_list)
 #        self.exclude_files_list.cellChanged.connect(self.action_exclude_files_list)
 #        self.include_dirs_list.cellChanged.connect(self.action_include_dirs_list)
 #        self.include_files_list.cellChanged.connect(self.action_include_files_list)
-#
-#        self.common_next_button.clicked.connect(self.action_common_next_button_clicked)
+
+        self.common_next_button.clicked.connect(self.action_common_next_button_clicked)
 #        self.exclude_previous_button.clicked.connect(
 #            self.action_exclude_previous_button_clicked
 #        )
@@ -273,41 +271,47 @@ class Setup(Dialog, Ui_Setup):
 #    def action_exclude_next_button_clicked(self) -> None:
 #        """Move to the 'Included Items' tab."""
 #        self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.inclusions_tab))
-#
-#    def action_common_next_button_clicked(self) -> None:
-#        """Move to the 'Excluded Items' tab."""
-#        self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.exclusions_tab))
-#
-#    def action_start_dir(self) -> None:
-#        """Handle a change in the starting directory location."""
-#        print(bin(self.change_made))
-#        self.open_dir_dialog(self.start_dir)
-#        if self.start_dir.text() != self.initial_config["start_dir"]:
-#            self.change_made = self.change_made | self.entry_changed["start_dir"]
-#        else:
-#            self.change_made = self.change_made & ~self.entry_changed["start_dir"]
-#        print(bin(self.change_made))
-#
-#    def open_dir_dialog(self, edit_box: QLineEdit) -> None:
-#        """
-#        Select a directory from the file dialog.
-#
-#        Parameters:
-#            edit_box (QLineEdit): the line edit box to hold the selected
-#                directory.
-#        """
-#        current_dir = edit_box.text()
-#        if current_dir is None or not os.path.isdir(current_dir):
-#           current_dir = os.path.expanduser("~")
-#
-#        new_dir = QFileDialog.getExistingDirectory(
-#            edit_box,
-#            "Get a Directory Name",
-#            current_dir,
-#            QFileDialog.Option.ShowDirsOnly | QFileDialog.Option.DontResolveSymlinks,
-#        )
-#        if len(new_dir):
-#            edit_box.setText(new_dir)
+
+    def action_common_next_button_clicked(self) -> None:
+        """Move to the 'Excluded Items' tab."""
+        self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.exclusions_tab))
+
+    def action_backup_location(self) -> None:
+        """Handle a change in the starting directory location."""
+        self.open_dir_dialog(self.backup_location)
+        if self.backup_location.text() != self.initial_config["backup_location"]:
+            self.change_made = self.change_made | self.entry_changed["backup_location"]
+        else:
+            self.change_made = self.change_made & ~self.entry_changed["backup_location"]
+
+    def action_start_dir(self) -> None:
+        """Handle a change in the starting directory location."""
+        self.open_dir_dialog(self.start_dir)
+        if self.start_dir.text() != self.initial_config["start_dir"]:
+            self.change_made = self.change_made | self.entry_changed["start_dir"]
+        else:
+            self.change_made = self.change_made & ~self.entry_changed["start_dir"]
+
+    def open_dir_dialog(self, edit_box: QLineEdit) -> None:
+        """
+        Select a directory from the file dialog.
+
+        Parameters:
+            edit_box (QLineEdit): the line edit box to hold the selected
+                directory.
+        """
+        current_dir = edit_box.text()
+        if current_dir is None or not os.path.isdir(current_dir):
+           current_dir = os.path.expanduser("~")
+
+        new_dir = QFileDialog.getExistingDirectory(
+            edit_box,
+            "Get a Directory Name",
+            current_dir,
+            QFileDialog.Option.ShowDirsOnly | QFileDialog.Option.DontResolveSymlinks,
+        )
+        if len(new_dir):
+            edit_box.setText(new_dir)
 
     def fill_dialog_fields(self) -> None:
         """
