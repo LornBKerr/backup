@@ -14,7 +14,9 @@ file_name = "default_config.py"
 file_version = "1.1.0"
 changes = {
     "1.0.0": "Initial release",
-    "1.1.0": "Removed unused cloud options and config values; Removed unnecessary section headers to make a single level dict; Corrected 'base_dir' to 'start_dir'.",
+    "1.1.0": "Removed unused cloud options and config values;"
+    + "Removed unnecessary section headers to make a single level dict;"
+    + "Corrected 'base_dir' to 'start_dir'.",
 }
 
 default_config = {
