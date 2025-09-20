@@ -19,30 +19,34 @@ Version:    1.1.0
 import base64
 import os
 from copy import deepcopy
-#from datetime import datetime
+
+from datetime import datetime
 from typing import Any
 
+from default_config import default_config
 from lbk_library.gui import Dialog, Settings
 
-# from PySide6.QtCore import QSettings
+#from PySide6.QtCore import QSettings
 from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtWidgets import (  # QMainWindow QApplication, QHeaderView,;
+from PySide6.QtWidgets import (
     QCheckBox,
-#    QDialog,
     QFileDialog,
+#    QMainWindow,
+#    QApplication,
+#    QHeaderView,
+#    QDialog,
+    QMessageBox,
     QLineEdit,
-#    QMessageBox,
     QTableWidget,
     QTableWidgetItem,
 )
-
-from default_config import default_config
 from setup_form import Ui_Setup
 
-#file_version = "1.0.0"
-#changes = {
-#    "1.0.0": "Initial release",
-#}
+file_version = "1.0.0"
+changes = {
+    "1.0.0": "Initial release",
+}
+
 
 class Setup(Dialog, Ui_Setup):
     """Define the configuration parameters for the backup program."""
@@ -89,7 +93,7 @@ class Setup(Dialog, Ui_Setup):
         "backup_location": "The location to save the backup to. Click"
         + " the icon to select a different file location.",
         "last_backup": "This is the last time the system was backed up.",
-        "value_log_filename": "This file contains the log of the backup actions.",
+        "log_file": "This file contains the log of the backup actions.",
         "common_next_button": "Move to the 'Excluded Items' tab.",
         "exclude_cache_dir": "Cache directories can generally be excluded\n"
         + "and usually have the form '*/*cache*/'.",
@@ -98,7 +102,7 @@ class Setup(Dialog, Ui_Setup):
         "exclude_download_dir": "Download directories are freqently "
         + "transient; download something\nand then put it where it belongs,"
         + "so no backup is needed.",
-        "exclude_dirs_list": "Specific directories can be noted for exclusion "
+        "exclude_specific_dirs": "Specific directories can be noted for exclusion "
         + "as desired. By default,\npython '*venv' (virtual environment) "
         + "directories and python 'tox'\n directories are excluded and should "
         + "be regenerated as needed.\nThis can be changed.",
@@ -106,12 +110,12 @@ class Setup(Dialog, Ui_Setup):
         + "'cache' rather than a directory. Exclude these files if True.",
         "exclude_backup_files": "Don't need standard backup files generated\n"
         + "by various programs with signatures like '*~' and '*.bak'",
-        "exclude_files_list": "Specific files can be noted for exclusion as desired,",
+        "exclude_specific_files": "Specific files can be noted for exclusion as desired,",
         "exclude_previous_button": "Move to the 'Common' tab.",
         "exclude_next_button": "Move to the 'Included Items' tab.",
-        "include_dirs_list": "Specific directories  that would otherwise be\n"
+        "include_specific_dirs": "Specific directories  that would otherwise be\n"
         + "excluded should be specified. Directory names or patterns may be used.",
-        "include_files_list": "Specific files that would otherwise be\n"
+        "include_specific_files": "Specific files that would otherwise be\n"
         + "excluded should be specified. File names or patterns may be used.",
         "include_previous_button": "Move to the 'Excluded Items' tab.",
         "cancel_button": "Close the form. All unsaved changes will be lost.",
@@ -126,7 +130,7 @@ class Setup(Dialog, Ui_Setup):
 
         Parameters:
             config (dict): the current configuration settings,
-                default is None. If there is no config, the config is 
+                default is None. If there is no config, the config is
                 initialized to the default config settings,
         """
         super().__init__(None, None, None)
@@ -145,12 +149,25 @@ class Setup(Dialog, Ui_Setup):
             "exclude_download_dir": 16,
             "exclude_cache_files": 32,
             "exclude_backup_files": 64,
-            "exclude_dirs_list": 128,
-            "exclude_files_list": 256,
-            "include_dirs_list": 512,
-            "include_files_list": 1024,
+            "exclude_specific_dirs": 128,
+            "exclude_specific_files": 256,
+            "include_specific_dirs": 512,
+            "include_specific_files": 1024,
         }
         """The binary value in self.change_made for a change to the form entries,"""
+        self.config_arrays = [
+                "exclude_specific_dirs",
+                "exclude_specific_files",
+                "include_specific_dirs",
+                "include_specific_files",
+        ]
+        self.config_bools = [
+                "exclude_cache_dir",
+                "exclude_trash_dir",
+                "exclude_download_dir",
+                "exclude_cache_files",
+                "exclude_backup_files",
+        ]
 
         self.set_tooltips()
         self.initial_config = self.initial_setup()
@@ -159,120 +176,189 @@ class Setup(Dialog, Ui_Setup):
         self.start_dir_action.triggered.connect(self.action_start_dir)
         self.backup_location_action.triggered.connect(self.action_backup_location)
 
-#        self.exclude_dirs_list.cellChanged.connect(self.action_exclude_dirs_list)
-#        self.exclude_files_list.cellChanged.connect(self.action_exclude_files_list)
-#        self.include_dirs_list.cellChanged.connect(self.action_include_dirs_list)
-#        self.include_files_list.cellChanged.connect(self.action_include_files_list)
+        self.exclude_cache_dir.clicked.connect(lambda: self.action_checkbox_clicked(self.exclude_cache_dir, "exclude_cache_dir"))
+        self.exclude_trash_dir.clicked.connect(lambda: self.action_checkbox_clicked(self.exclude_trash_dir, "exclude_trash_dir"))
+        self.exclude_download_dir.clicked.connect(lambda: self.action_checkbox_clicked(self.exclude_download_dir, "exclude_download_dir"))
+        self.exclude_cache_files.clicked.connect(lambda: self.action_checkbox_clicked(self.exclude_cache_files, "exclude_cache_files"))
+        self.exclude_backup_files.clicked.connect(lambda: self.action_checkbox_clicked(self.exclude_backup_files, "exclude_backup_files"))
 
-        self.common_next_button.clicked.connect(self.action_common_next_button_clicked)
-#        self.exclude_previous_button.clicked.connect(
-#            self.action_exclude_previous_button_clicked
-#        )
-#        self.exclude_next_button.clicked.connect(
-#            self.action_exclude_next_button_clicked
-#        )
-#        self.include_previous_button.clicked.connect(
-#            self.action_include_previous_button_clicked
-#        )
-#        self.cancel_button.clicked.connect(self.action_cancel_button)
-#        self.save_continue_button.clicked.connect(self.action_save_continue_button)
-#        self.save_exit_button.clicked.connect(self.action_save_exit_button)
+        self.exclude_specific_dirs.cellChanged.connect(self.action_exclude_specific_dirs)
+        self.exclude_specific_files.cellChanged.connect(self.action_exclude_specific_files)
+        self.include_specific_dirs.cellChanged.connect(self.action_include_specific_dirs)
+        self.include_specific_files.cellChanged.connect(self.action_include_specific_files)
+
+        self.common_next_button.clicked.connect(self.action_common_next_button)
+        self.exclude_previous_button.clicked.connect(
+            self.action_exclude_previous_button
+        )
+        self.exclude_next_button.clicked.connect(
+            self.action_exclude_next_button
+        )
+        self.include_previous_button.clicked.connect(
+            self.action_include_previous_button
+        )
+        self.save_continue_button.clicked.connect(self.action_save_continue_button)
+        self.save_exit_button.clicked.connect(self.action_save_exit_button)
+        self.cancel_button.clicked.connect(self.action_cancel_button)
 
         self.show()
+        
+    def action_cancel_button(self) -> None:
+        """
+        Cancel the actions on the form and exit.
 
-#    def save_config(self) -> None:
-#        """ Save the entered configuration values to the config.file."""
-#        
-#    def action_cancel_button(self) -> None:
-#        """
-#        Cancel the actions on the form and exit.
-#        
-#        If there are changes entered, check that the user wants to save 
-#        the changes before closing.
-#        """
-#        changes = self.change_made
-#        if changes:
-#            result = self.message_box_exec(self.message_question_changed_close("The form Data has "))
-#            if result == QMessageBox.StandardButton.Yes:
-#                # Save than close
-#                self.save_config()
-#                self.exit()
-#
-#            elif result == QMessageBox.StandardButton.No:
-#                # Don't save, just close
-#                pass
-#
-#            elif result == QMessageBox.StandardButton.Cancel:
-#                # close dialog and return to form.
-#                pass
-#
-#    def action_include_previous_button_clicked(self) -> None:
-#        """Move to the 'Excluded Items' tab."""
-#        self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.exclusions_tab))
-#
-#    def action_include_files_list(self, row: int, column: int)-> None:
-#        """
-#        One of the cells in the list has changed.
-#
-#        If this is the last row in the list, then append an empty row.
-#
-#        Parameters:
-#            row (int) - The row of the cell
-#            column (int) - The column of the cell.
-#        """
-#        if row == self.include_files_list.rowCount() - 1:
-#            self.include_files_list.insertRow(self.include_files_list.rowCount())
-#
-#    def action_include_dirs_list(self, row: int, column: int)-> None:
-#        """
-#        One of the cells in the list has changed.
-#
-#        If this is the last row in the list, then append an empty row;
-#        otherwise just ignore.
-#
-#        Parameters:
-#            row (int) - The row of the cell
-#            column (int) - The column of the cell.
-#        """
-#        if row == self.include_dirs_list.rowCount() - 1:
-#            self.include_dirs_list.insertRow(self.include_dirs_list.rowCount())
-#
-#    def action_exclude_files_list(self, row: int, column: int) -> None:
-#        """
-#        One of the cells in the list has changed.
-#
-#        If this is the last row in the list, then append an empty row.
-#
-#        Parameters:
-#            row (int) - The row of the cell
-#            column (int) - The column of the cell.
-#        """
-#        if row == self.exclude_files_list.rowCount() - 1:
-#            self.exclude_files_list.insertRow(self.exclude_files_list.rowCount())
-#
-#    def action_exclude_dirs_list(self, row: int, column: int) -> None:
-#        """
-#        One of the cells in the list has changed.
-#
-#        If this is the last row in the list, then append an empty row;
-#        otherwise just ignore.
-#
-#        Parameters:
-#            row (int) - The row of the cell
-#            column (int) - The column of the cell.
-#        """
-#        if row == self.exclude_dirs_list.rowCount() - 1:
-#            self.exclude_dirs_list.insertRow(self.exclude_dirs_list.rowCount())
-#
-#    def action_exclude_previous_button_clicked(self) -> None:
-#        """Move to the 'Common Items' tab."""
-#        self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.common_tab))
-#
-#    def action_exclude_next_button_clicked(self) -> None:
-#        """Move to the 'Included Items' tab."""
-#        self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.inclusions_tab))
+        If there are changes entered, check that the user wants to save
+        the changes before closing.
+        """
+        if self.change_made:
+            msg_box = self.message_question_changed_close("The form entries have ")
+            result = self.message_box_exec(msg_box)
+            if result == QMessageBox.StandardButton.Yes:
+                # Save than close
+                self.save_config()
+                self.close()
 
-    def action_common_next_button_clicked(self) -> None:
+            elif result == QMessageBox.StandardButton.No:
+                # Don't save, just close
+                self.close()
+
+            elif result == QMessageBox.StandardButton.Cancel:
+                # close dialog and return to form.
+                pass
+        else:
+            self.close()
+
+    def action_save_exit_button(self):
+        """
+        Handle the save/exit button click.
+        
+        Save the current state of the dialog, then close the dialog.
+        """
+        self.save_config()
+        self.close()
+
+
+    def action_save_continue_button(self):
+        """
+        Handle the save/continue button click.
+        
+        Save the current state of the dialog, then continue with filling the
+        dialog. The dialog stays open.
+        """
+        self.save_config()
+
+
+    def save_config(self) -> None:
+        """ Save the entered configuration values to the config.file."""
+        self.config.setValue("start_dir", self.start_dir.text())
+        self.config.setValue("backup_location", self.backup_location.text())
+        self.config.set_bool_value("exclude_cache_dir", self.exclude_cache_dir.isChecked())
+        self.config.set_bool_value("exclude_trash_dir", self.exclude_trash_dir.isChecked()) 
+        self.config.set_bool_value("exclude_download_dir", self.exclude_download_dir.isChecked()) 
+        self.config.set_bool_value("exclude_cache_files", self.exclude_cache_files.isChecked()) 
+        self.config.set_bool_value("exclude_backup_files", self.exclude_backup_files.isChecked()) 
+        self.config.write_list("exclude_specific_dirs", self.get_table_list(self.exclude_specific_dirs))
+        self.config.write_list("exclude_specific_files", self.get_table_list(self.exclude_specific_files))
+        self.config.write_list("include_specific_dirs", self.get_table_list(self.include_specific_dirs))
+        self.config.write_list("include_specific_files", self.get_table_list(self.include_specific_files))
+        self.config.sync()
+
+    def get_table_list(self, a_table) -> list[str]:
+        """Extract a list on entries in a table widget."""
+        table_list = []
+        for row in range(a_table.rowCount()):
+            item = a_table.item(row, 0)
+            if (item):
+                table_list.append(item.text())
+        return table_list
+
+    def action_include_previous_button(self) -> None:
+        """Move to the 'Excluded Items' tab."""
+        self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.exclusions_tab))
+
+    def action_include_specific_files(self, row: int, column: int)-> None:
+        """
+        One of the cells in the list has changed.
+
+        If this is the last row in the list, then append an empty row.
+
+        Parameters:
+            row (int) - The row of the cell
+            column (int) - The column of the cell.
+        """
+        print(self.initial_config)
+        if row == self.include_specific_files.rowCount() - 1:
+            self.include_specific_files.insertRow(self.include_specific_files.rowCount())
+            self.change_made = self.change_made | self.entry_changed["include_specific_files"]
+
+        elif not self.include_specific_files.item(row, 0).text() in  self.initial_config["include_specific_files"]:
+            self.change_made = self.change_made | self.entry_changed["include_specific_files"]
+
+        print(self.change_made & ~self.entry_changed["include_specific_files"])
+
+    def action_include_specific_dirs(self, row: int, column: int)-> None:
+        """
+        One of the cells in the list has changed.
+
+        If this is the last row in the list, then append an empty row;
+        otherwise just ignore.
+
+        Parameters:
+            row (int) - The row of the cell
+            column (int) - The column of the cell.
+        """
+        if row == self.include_specific_dirs.rowCount() - 1:
+            self.include_specific_dirs.insertRow(self.include_specific_dirs.rowCount())
+
+    def action_exclude_specific_files(self, row: int, column: int) -> None:
+        """
+        One of the cells in the list has changed.
+
+        If this is the last row in the list, then append an empty row.
+
+        Parameters:
+            row (int) - The row of the cell
+            column (int) - The column of the cell.
+        """
+        if row == self.exclude_specific_files.rowCount() - 1:
+            self.exclude_specific_files.insertRow(self.exclude_specific_files.rowCount())
+
+    def action_exclude_specific_dirs(self, row: int, column: int) -> None:
+        """
+        One of the cells in the list has changed.
+
+        If this is the last row in the list, then append an empty row;
+        otherwise just ignore.
+
+        Parameters:
+            row (int) - The row of the cell
+            column (int) - The column of the cell.
+        """
+        if row == self.exclude_specific_dirs.rowCount() - 1:
+            self.exclude_specific_dirs.insertRow(self.exclude_specific_dirs.rowCount())
+
+    def action_exclude_previous_button(self) -> None:
+        """Move to the 'Common Items' tab."""
+        self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.common_tab))
+
+    def action_exclude_next_button(self) -> None:
+        """Move to the 'Included Items' tab."""
+        self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.inclusions_tab))
+
+    def action_checkbox_clicked(self, checkbox: QCheckBox, checkbox_name: str) -> None:
+        """
+        Handle the check boxes on the 'Excluded Items' tab.
+
+        Parameters:
+            checkbox (QCheckBox) - The chackbox that has been clicked.
+            checkbox_name (str) - The name of the checkbox.
+        """
+        if checkbox.isChecked() != self.initial_config[checkbox_name]:
+            self.change_made = self.change_made | self.entry_changed[checkbox_name]
+        else:
+            self.change_made = self.change_made & ~self.entry_changed[checkbox_name]
+
+    def action_common_next_button(self) -> None:
         """Move to the 'Excluded Items' tab."""
         self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.exclusions_tab))
 
@@ -302,7 +388,7 @@ class Setup(Dialog, Ui_Setup):
         """
         current_dir = edit_box.text()
         if current_dir is None or not os.path.isdir(current_dir):
-           current_dir = os.path.expanduser("~")
+            current_dir = os.path.expanduser("~")
 
         new_dir = QFileDialog.getExistingDirectory(
             edit_box,
@@ -336,12 +422,12 @@ class Setup(Dialog, Ui_Setup):
     def fill_include_files_table(self) -> None:
         """fill the excluded directories table."""
         listing = self.initial_config["include_specific_files"]
-        self.fill_table(self.include_files_list, listing)
+        self.fill_table(self.include_specific_files, listing)
 
     def fill_include_dirs_table(self) -> None:
         """fill the included directories table."""
         listing = self.initial_config["include_specific_dirs"]
-        self.fill_table(self.include_dirs_list, listing)
+        self.fill_table(self.include_specific_dirs, listing)
 
     def fill_exclude_items_tab(self) -> None:
         """
@@ -355,12 +441,12 @@ class Setup(Dialog, Ui_Setup):
     def fill_exclude_files_table(self) -> None:
         """fill the excluded files table."""
         listing = self.initial_config["exclude_specific_files"]
-        self.fill_table(self.exclude_files_list, listing)
+        self.fill_table(self.exclude_specific_files, listing)
 
     def fill_exclude_dirs_table(self) -> None:
         """fill the excluded directories table."""
         listing = self.initial_config["exclude_specific_dirs"]
-        self.fill_table(self.exclude_dirs_list, listing)
+        self.fill_table(self.exclude_specific_dirs, listing)
 
     def fill_table(self, table_widget: QTableWidget, list_contents: list[str]) -> None:
         table_widget.setRowCount(len(list_contents) + 1)
@@ -384,10 +470,10 @@ class Setup(Dialog, Ui_Setup):
         for box, config_name in chkboxes:
             box.setChecked(self.initial_config[config_name])
             if box.isChecked() != self.config.value(config_name):
-                self.change_made = self.change_made  | self.entry_changed[config_name]
+                self.change_made = self.change_made | self.entry_changed[config_name]
             else:
                 self.change_made = self.change_made & ~self.entry_changed[config_name]
-        
+
     def fill_common_tab(self) -> None:
         """Initialize the General Settings page of the dialog."""
         self.set_start_directory()
@@ -397,13 +483,13 @@ class Setup(Dialog, Ui_Setup):
     def set_info_values(self) -> None:
         """Fill the info fields on the 'common' tab of the dialog"""
         last_backup = self.initial_config["last_backup"]
-        if last_backup not in ("", "-", "0", 0):
+        if last_backup not in ("", "-", "0", 0, None):
             self.last_backup.setText(
                 datetime.fromtimestamp(int(last_backup)).strftime("%H:%M, %b %d, %Y")
             )
         else:
             self.last_backup.setText("0")
-        self.value_log_filename.setText(self.initial_config["log_file"])
+        self.log_file.setText(self.initial_config["log_file"])
 
     def set_backup_location(self) -> None:
         """
@@ -415,7 +501,7 @@ class Setup(Dialog, Ui_Setup):
             self.backup_location.ActionPosition.TrailingPosition,
         )
         if self.backup_location.text() != self.config.value("backup_location"):
-            self.change_made = self.change_made  | self.entry_changed["backup_location"]
+            self.change_made = self.change_made | self.entry_changed["backup_location"]
         else:
             self.change_made = self.change_made & ~self.entry_changed["backup_location"]
 
@@ -427,17 +513,17 @@ class Setup(Dialog, Ui_Setup):
             self.start_dir.ActionPosition.TrailingPosition,
         )
         if self.start_dir.text() != self.config.value("start_dir"):
-            self.change_made = self.change_made  | self.entry_changed["start_dir"]
+            self.change_made = self.change_made | self.entry_changed["start_dir"]
         else:
             self.change_made = self.change_made & ~self.entry_changed["start_dir"]
 
     def initial_setup(self) -> dict[str, Any]:
         """
-        Set initial configuration from provided config file or default 
+        Set initial configuration from provided config file or default
         config.
 
         Returns:
-            dict[str, Any] - The initials set of config settings.
+            dict[str, Any] - The initial set of config settings.
         """
         initial_config = {}
         if len(self.config.allKeys()) == 0:
@@ -445,15 +531,11 @@ class Setup(Dialog, Ui_Setup):
             initial_config = deepcopy(default_config)
         else:
             # copy the current config to the initial_config
-            config_arrays = [
-                "exclude_specific_dirs",
-                "exclude_specific_files",
-                "include_specific_dirs",
-                "include_specific_files",
-            ]
             for key in default_config.keys():
-                if key in config_arrays:
+                if key in self.config_arrays:
                     initial_config[key] = self.config.read_list(key)
+                elif key in self.config_bools:
+                    initial_config[key] = self.config.bool_value(key)
                 else:
                     initial_config[key] = self.config.value(key)
         return initial_config
@@ -463,23 +545,23 @@ class Setup(Dialog, Ui_Setup):
         self.start_dir.setToolTip(self.TOOLTIPS["start_dir"])
         self.backup_location.setToolTip(self.TOOLTIPS["backup_location"])
         self.last_backup.setToolTip(self.TOOLTIPS["last_backup"])
-        self.value_log_filename.setToolTip(self.TOOLTIPS["value_log_filename"])
+        self.log_file.setToolTip(self.TOOLTIPS["log_file"])
         self.common_next_button.setToolTip(self.TOOLTIPS["common_next_button"])
 
         self.exclude_cache_dir.setToolTip(self.TOOLTIPS["exclude_cache_dir"])
         self.exclude_trash_dir.setToolTip(self.TOOLTIPS["exclude_trash_dir"])
         self.exclude_download_dir.setToolTip(self.TOOLTIPS["exclude_download_dir"])
-        self.exclude_dirs_list.setToolTip(self.TOOLTIPS["exclude_dirs_list"])
         self.exclude_cache_files.setToolTip(self.TOOLTIPS["exclude_cache_files"])
         self.exclude_backup_files.setToolTip(self.TOOLTIPS["exclude_backup_files"])
-        self.exclude_files_list.setToolTip(self.TOOLTIPS["exclude_files_list"])
+        self.exclude_specific_dirs.setToolTip(self.TOOLTIPS["exclude_specific_dirs"])
+        self.exclude_specific_files.setToolTip(self.TOOLTIPS["exclude_specific_files"])
         self.exclude_previous_button.setToolTip(
             self.TOOLTIPS["exclude_previous_button"]
         )
         self.exclude_next_button.setToolTip(self.TOOLTIPS["exclude_next_button"])
 
-        self.include_dirs_list.setToolTip(self.TOOLTIPS["include_dirs_list"])
-        self.include_files_list.setToolTip(self.TOOLTIPS["include_files_list"])
+        self.include_specific_dirs.setToolTip(self.TOOLTIPS["include_specific_dirs"])
+        self.include_specific_files.setToolTip(self.TOOLTIPS["include_specific_files"])
         self.include_previous_button.setToolTip(
             self.TOOLTIPS["include_previous_button"]
         )
@@ -498,5 +580,6 @@ class Setup(Dialog, Ui_Setup):
         dir_open_pixmap = QPixmap()
         dir_open_pixmap.loadFromData(base64.b64decode(Setup.icon_folder))
         return QIcon(dir_open_pixmap)
+
 
 #
