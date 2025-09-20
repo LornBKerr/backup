@@ -26,7 +26,7 @@
     <string/>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="common_tab">
     <property name="toolTip">
@@ -144,7 +144,7 @@
       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="value_log_filename">
+    <widget class="QLabel" name="log_file">
      <property name="geometry">
       <rect>
        <x>200</x>
@@ -247,7 +247,7 @@ backup. Other  specific directories and files can also be specified.
       <string>Next</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="exclude_dirs_list">
+    <widget class="QTableWidget" name="exclude_specific_dirs">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -260,7 +260,7 @@ backup. Other  specific directories and files can also be specified.
       <number>1</number>
      </property>
     </widget>
-    <widget class="QTableWidget" name="exclude_files_list">
+    <widget class="QTableWidget" name="exclude_specific_files">
      <property name="geometry">
       <rect>
        <x>280</x>
@@ -466,7 +466,7 @@ backup. Other  specific directories and files can also be specified.
       <string>Previous</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="include_files_list">
+    <widget class="QTableWidget" name="include_specific_files">
      <property name="geometry">
       <rect>
        <x>280</x>
@@ -476,7 +476,7 @@ backup. Other  specific directories and files can also be specified.
       </rect>
      </property>
     </widget>
-    <widget class="QTableWidget" name="include_dirs_list">
+    <widget class="QTableWidget" name="include_specific_dirs">
      <property name="geometry">
       <rect>
        <x>10</x>
