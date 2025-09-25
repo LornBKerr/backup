@@ -11,8 +11,6 @@ Version:    1.1.0
 import os
 import sys
 
-# import time
-
 src_path = os.path.join(os.path.realpath("."), "src")
 if src_path not in sys.path:
     sys.path.append(src_path)
@@ -21,15 +19,7 @@ from default_config import default_config
 from lbk_library.gui import Settings
 from lbk_library.testing_support import filesystem
 from PySide6.QtCore import QCoreApplication, QSettings, Qt
-from PySide6.QtWidgets import (
-    QCheckBox,
-    QDialog,
-    QFileDialog,
-#    QApplication,
-#    QMainWindow,
-#    QTableWidget,
-    QTableWidgetItem,
-)
+from PySide6.QtWidgets import QDialog, QFileDialog, QTableWidgetItem
 from setup import Setup
 
 file_version = "1.1.0"
@@ -95,7 +85,7 @@ def test_01_02_initial_setup(qtbot, tmp_path):
         assert initial_config[key] == default_config[key]
 
     setup.config.setValue("last_backup", "10000")
-    setup.config.write_list( "exclude_specific_dirs", ["x", "y", "z"])
+    setup.config.write_list("exclude_specific_dirs", ["x", "y", "z"])
     initial_config = setup.initial_setup()
     for key in initial_config.keys():
         if key == "last_backup":
@@ -120,19 +110,29 @@ def test_01_03_set_tooltips(qtbot, tmp_path):
     assert (
         setup.exclude_download_dir.toolTip() == setup.TOOLTIPS["exclude_download_dir"]
     )
-    assert setup.exclude_specific_dirs.toolTip() == setup.TOOLTIPS["exclude_specific_dirs"]
+    assert (
+        setup.exclude_specific_dirs.toolTip() == setup.TOOLTIPS["exclude_specific_dirs"]
+    )
     assert setup.exclude_cache_files.toolTip() == setup.TOOLTIPS["exclude_cache_files"]
     assert (
         setup.exclude_backup_files.toolTip() == setup.TOOLTIPS["exclude_backup_files"]
     )
-    assert setup.exclude_specific_files.toolTip() == setup.TOOLTIPS["exclude_specific_files"]
+    assert (
+        setup.exclude_specific_files.toolTip()
+        == setup.TOOLTIPS["exclude_specific_files"]
+    )
     assert (
         setup.exclude_previous_button.toolTip()
         == setup.TOOLTIPS["exclude_previous_button"]
     )
     assert setup.exclude_next_button.toolTip() == setup.TOOLTIPS["exclude_next_button"]
-    assert setup.include_specific_dirs.toolTip() == setup.TOOLTIPS["include_specific_dirs"]
-    assert setup.include_specific_files.toolTip() == setup.TOOLTIPS["include_specific_files"]
+    assert (
+        setup.include_specific_dirs.toolTip() == setup.TOOLTIPS["include_specific_dirs"]
+    )
+    assert (
+        setup.include_specific_files.toolTip()
+        == setup.TOOLTIPS["include_specific_files"]
+    )
     assert (
         setup.include_previous_button.toolTip()
         == setup.TOOLTIPS["include_previous_button"]
@@ -251,13 +251,16 @@ def test_01_09_fill_table(qtbot, tmp_path):
     setup.fill_table(setup.exclude_specific_dirs, new_list)
     assert setup.exclude_specific_dirs.rowCount() == 4
     assert (
-        setup.exclude_specific_dirs.item(0, 0).data(Qt.ItemDataRole.EditRole) == new_list[0]
+        setup.exclude_specific_dirs.item(0, 0).data(Qt.ItemDataRole.EditRole)
+        == new_list[0]
     )
     assert (
-        setup.exclude_specific_dirs.item(1, 0).data(Qt.ItemDataRole.EditRole) == new_list[1]
+        setup.exclude_specific_dirs.item(1, 0).data(Qt.ItemDataRole.EditRole)
+        == new_list[1]
     )
     assert (
-        setup.exclude_specific_dirs.item(2, 0).data(Qt.ItemDataRole.EditRole) == new_list[2]
+        setup.exclude_specific_dirs.item(2, 0).data(Qt.ItemDataRole.EditRole)
+        == new_list[2]
     )
     assert setup.exclude_specific_dirs.item(3, 0) == None
     close_window(setup)
@@ -533,7 +536,7 @@ def test_01_21_action_checkbox_clicked(qtbot, tmp_path):
         (setup.exclude_trash_dir, "exclude_trash_dir"),
         (setup.exclude_download_dir, "exclude_download_dir"),
         (setup.exclude_cache_files, "exclude_cache_files"),
-        (setup.exclude_backup_files, "exclude_backup_files")
+        (setup.exclude_backup_files, "exclude_backup_files"),
     ]:
         setup.change_made = 0
         assert check_box.isChecked() == setup.initial_config[name]
@@ -578,16 +581,12 @@ def test_01_24_action_exclude_previous_button(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
     load_test_config(setup)
 
-    setup.tabWidget.setCurrentIndex(
-        setup.tabWidget.indexOf(setup.exclusions_tab)
-    )
+    setup.tabWidget.setCurrentIndex(setup.tabWidget.indexOf(setup.exclusions_tab))
     assert setup.tabWidget.currentIndex() == setup.tabWidget.indexOf(
         setup.exclusions_tab
     )
     setup.exclude_previous_button.click()
-    assert setup.tabWidget.currentIndex() == setup.tabWidget.indexOf(
-        setup.common_tab
-    )
+    assert setup.tabWidget.currentIndex() == setup.tabWidget.indexOf(setup.common_tab)
     close_window(setup)
 
 
@@ -595,9 +594,7 @@ def test_01_25_action_exclude_next_button(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
     load_test_config(setup)
 
-    setup.tabWidget.setCurrentIndex(
-        setup.tabWidget.indexOf(setup.exclusions_tab)
-    )
+    setup.tabWidget.setCurrentIndex(setup.tabWidget.indexOf(setup.exclusions_tab))
     assert setup.tabWidget.currentIndex() == setup.tabWidget.indexOf(
         setup.exclusions_tab
     )
@@ -614,9 +611,9 @@ def test_01_26_action_include_specific_dirs(qtbot, tmp_path, mocker):
 
     new_list = ["A", "B", "C"]
     setup.fill_table(setup.include_specific_dirs, new_list)
-    assert setup.include_specific_dirs.rowCount() ==  len(new_list) + 1
+    assert setup.include_specific_dirs.rowCount() == len(new_list) + 1
     setup.include_specific_dirs.setItem(0, 0, QTableWidgetItem("YYY"))
-    assert setup.include_specific_dirs.rowCount() ==  len(new_list) + 1
+    assert setup.include_specific_dirs.rowCount() == len(new_list) + 1
     setup.include_specific_dirs.setItem(len(new_list), 0, QTableWidgetItem("YYY"))
     assert setup.include_specific_dirs.rowCount() == len(new_list) + 2
     close_window(setup)
@@ -628,9 +625,9 @@ def test_01_27_action_include_specific_files(qtbot, tmp_path, mocker):
 
     new_list = ["A", "B", "C"]
     setup.fill_table(setup.include_specific_files, new_list)
-    assert setup.include_specific_files.rowCount() ==  len(new_list) + 1
+    assert setup.include_specific_files.rowCount() == len(new_list) + 1
     setup.include_specific_files.setItem(0, 0, QTableWidgetItem("YYY"))
-    assert setup.include_specific_files.rowCount() ==  len(new_list) + 1
+    assert setup.include_specific_files.rowCount() == len(new_list) + 1
     setup.include_specific_files.setItem(len(new_list), 0, QTableWidgetItem("YYY"))
     assert setup.include_specific_files.rowCount() == len(new_list) + 2
     close_window(setup)
@@ -640,30 +637,28 @@ def test_01_29_action_include_previous_button(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
     load_test_config(setup)
 
-    setup.tabWidget.setCurrentIndex(
-        setup.tabWidget.indexOf(setup.inclusions_tab)
-    )
-    assert (
-        setup.tabWidget.currentIndex() ==
-        setup.tabWidget.indexOf(setup.inclusions_tab)
+    setup.tabWidget.setCurrentIndex(setup.tabWidget.indexOf(setup.inclusions_tab))
+    assert setup.tabWidget.currentIndex() == setup.tabWidget.indexOf(
+        setup.inclusions_tab
     )
     setup.include_previous_button.click()
-    assert (
-        setup.tabWidget.currentIndex() ==
-        setup.tabWidget.indexOf(setup.exclusions_tab)
+    assert setup.tabWidget.currentIndex() == setup.tabWidget.indexOf(
+        setup.exclusions_tab
     )
     close_window(setup)
+
 
 def test_01_29_get_table_list(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     new_list = ["A", "B", "C"]
     setup.fill_table(setup.include_specific_files, new_list)
-    assert setup.include_specific_files.rowCount() ==  len(new_list) + 1
+    assert setup.include_specific_files.rowCount() == len(new_list) + 1
     a_list = setup.get_table_list(setup.include_specific_files)
     assert len(a_list) == len(new_list)
     for i in range(0, len(new_list)):
         assert a_list[i] in new_list
+    close_window(setup)
 
 
 def test_01_30_save_config(qtbot, tmp_path):
@@ -671,20 +666,43 @@ def test_01_30_save_config(qtbot, tmp_path):
 
     new_list = ["A", "B", "C"]
     setup.backup_location.setText("zxy")
-    setup.fill_table(setup.include_specific_files, new_list)    
-    
+    setup.fill_table(setup.include_specific_files, new_list)
+
     setup.save_config()
     assert setup.config.value("start_dir") == setup.start_dir.text()
     assert setup.config.value("backup_location") == setup.backup_location.text()
-    assert setup.config.bool_value("exclude_cache_dir") == setup.exclude_cache_dir.isChecked()
-    assert setup.config.bool_value("exclude_trash_dir") == setup.exclude_trash_dir.isChecked()
-    assert setup.config.bool_value("exclude_download_dir") ==  setup.exclude_download_dir.isChecked()
-    assert setup.config.bool_value("exclude_cache_files") == setup.exclude_cache_files.isChecked()
-    assert setup.config.bool_value("exclude_backup_files") ==  setup.exclude_backup_files.isChecked()
-    assert setup.config.read_list("exclude_specific_dirs") ==  setup.get_table_list(setup.exclude_specific_dirs)
-    assert setup.config.read_list("exclude_specific_files") ==  setup.get_table_list(setup.exclude_specific_files)
-    assert setup.config.read_list("include_specific_dirs") ==  setup.get_table_list(setup.include_specific_dirs)
-    assert setup.config.read_list("include_specific_files") == setup.get_table_list(setup.include_specific_files)
+    assert (
+        setup.config.bool_value("exclude_cache_dir")
+        == setup.exclude_cache_dir.isChecked()
+    )
+    assert (
+        setup.config.bool_value("exclude_trash_dir")
+        == setup.exclude_trash_dir.isChecked()
+    )
+    assert (
+        setup.config.bool_value("exclude_download_dir")
+        == setup.exclude_download_dir.isChecked()
+    )
+    assert (
+        setup.config.bool_value("exclude_cache_files")
+        == setup.exclude_cache_files.isChecked()
+    )
+    assert (
+        setup.config.bool_value("exclude_backup_files")
+        == setup.exclude_backup_files.isChecked()
+    )
+    assert setup.config.read_list("exclude_specific_dirs") == setup.get_table_list(
+        setup.exclude_specific_dirs
+    )
+    assert setup.config.read_list("exclude_specific_files") == setup.get_table_list(
+        setup.exclude_specific_files
+    )
+    assert setup.config.read_list("include_specific_dirs") == setup.get_table_list(
+        setup.include_specific_dirs
+    )
+    assert setup.config.read_list("include_specific_files") == setup.get_table_list(
+        setup.include_specific_files
+    )
 
 
 def test_01_31_action_save_continue_button(qtbot, tmp_path):
@@ -692,20 +710,43 @@ def test_01_31_action_save_continue_button(qtbot, tmp_path):
 
     new_list = ["A", "B", "C"]
     setup.backup_location.setText("zxy")
-    setup.fill_table(setup.include_specific_files, new_list)    
+    setup.fill_table(setup.include_specific_files, new_list)
     setup.save_continue_button.click()
 
     assert setup.config.value("start_dir") == setup.start_dir.text()
     assert setup.config.value("backup_location") == setup.backup_location.text()
-    assert setup.config.bool_value("exclude_cache_dir") == setup.exclude_cache_dir.isChecked()
-    assert setup.config.bool_value("exclude_trash_dir") == setup.exclude_trash_dir.isChecked()
-    assert setup.config.bool_value("exclude_download_dir") ==  setup.exclude_download_dir.isChecked()
-    assert setup.config.bool_value("exclude_cache_files") == setup.exclude_cache_files.isChecked()
-    assert setup.config.bool_value("exclude_backup_files") ==  setup.exclude_backup_files.isChecked()
-    assert setup.config.read_list("exclude_specific_dirs") ==  setup.get_table_list(setup.exclude_specific_dirs)
-    assert setup.config.read_list("exclude_specific_files") ==  setup.get_table_list(setup.exclude_specific_files)
-    assert setup.config.read_list("include_specific_dirs") ==  setup.get_table_list(setup.include_specific_dirs)
-    assert setup.config.read_list("include_specific_files") == setup.get_table_list(setup.include_specific_files)
+    assert (
+        setup.config.bool_value("exclude_cache_dir")
+        == setup.exclude_cache_dir.isChecked()
+    )
+    assert (
+        setup.config.bool_value("exclude_trash_dir")
+        == setup.exclude_trash_dir.isChecked()
+    )
+    assert (
+        setup.config.bool_value("exclude_download_dir")
+        == setup.exclude_download_dir.isChecked()
+    )
+    assert (
+        setup.config.bool_value("exclude_cache_files")
+        == setup.exclude_cache_files.isChecked()
+    )
+    assert (
+        setup.config.bool_value("exclude_backup_files")
+        == setup.exclude_backup_files.isChecked()
+    )
+    assert setup.config.read_list("exclude_specific_dirs") == setup.get_table_list(
+        setup.exclude_specific_dirs
+    )
+    assert setup.config.read_list("exclude_specific_files") == setup.get_table_list(
+        setup.exclude_specific_files
+    )
+    assert setup.config.read_list("include_specific_dirs") == setup.get_table_list(
+        setup.include_specific_dirs
+    )
+    assert setup.config.read_list("include_specific_files") == setup.get_table_list(
+        setup.include_specific_files
+    )
 
 
 def test_01_32_action_save_exit_button(qtbot, tmp_path):
@@ -713,27 +754,42 @@ def test_01_32_action_save_exit_button(qtbot, tmp_path):
 
     new_list = ["A", "B", "C"]
     setup.backup_location.setText("zxy")
-    setup.fill_table(setup.include_specific_files, new_list)    
+    setup.fill_table(setup.include_specific_files, new_list)
     setup.save_exit_button.click()
 
     assert setup.config.value("start_dir") == setup.start_dir.text()
     assert setup.config.value("backup_location") == setup.backup_location.text()
-    assert setup.config.bool_value("exclude_cache_dir") == setup.exclude_cache_dir.isChecked()
-    assert setup.config.bool_value("exclude_trash_dir") == setup.exclude_trash_dir.isChecked()
-    assert setup.config.bool_value("exclude_download_dir") ==  setup.exclude_download_dir.isChecked()
-    assert setup.config.bool_value("exclude_cache_files") == setup.exclude_cache_files.isChecked()
-    assert setup.config.bool_value("exclude_backup_files") ==  setup.exclude_backup_files.isChecked()
-    assert setup.config.read_list("exclude_specific_dirs") ==  setup.get_table_list(setup.exclude_specific_dirs)
-    assert setup.config.read_list("exclude_specific_files") ==  setup.get_table_list(setup.exclude_specific_files)
-    assert setup.config.read_list("include_specific_dirs") ==  setup.get_table_list(setup.include_specific_dirs)
-    assert setup.config.read_list("include_specific_files") == setup.get_table_list(setup.include_specific_files)
+    assert (
+        setup.config.bool_value("exclude_cache_dir")
+        == setup.exclude_cache_dir.isChecked()
+    )
+    assert (
+        setup.config.bool_value("exclude_trash_dir")
+        == setup.exclude_trash_dir.isChecked()
+    )
+    assert (
+        setup.config.bool_value("exclude_download_dir")
+        == setup.exclude_download_dir.isChecked()
+    )
+    assert (
+        setup.config.bool_value("exclude_cache_files")
+        == setup.exclude_cache_files.isChecked()
+    )
+    assert (
+        setup.config.bool_value("exclude_backup_files")
+        == setup.exclude_backup_files.isChecked()
+    )
+    assert setup.config.read_list("exclude_specific_dirs") == setup.get_table_list(
+        setup.exclude_specific_dirs
+    )
+    assert setup.config.read_list("exclude_specific_files") == setup.get_table_list(
+        setup.exclude_specific_files
+    )
+    assert setup.config.read_list("include_specific_dirs") == setup.get_table_list(
+        setup.include_specific_dirs
+    )
+    assert setup.config.read_list("include_specific_files") == setup.get_table_list(
+        setup.include_specific_files
+    )
 
-    assert setup.isHidden() # dialogs are hidden waiting garbage collection.
-
-
-def test_01_33_action_cancel_button(qtbot, tmp_path):
-    setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
-
-    new_list = ["A", "B", "C"]
-
-
+    assert setup.isHidden()  # dialogs are hidden waiting garbage collection.

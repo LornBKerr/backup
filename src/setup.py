@@ -19,24 +19,17 @@ Version:    1.1.0
 import base64
 import os
 from copy import deepcopy
-
 from datetime import datetime
 from typing import Any
 
 from default_config import default_config
 from lbk_library.gui import Dialog, Settings
-
-#from PySide6.QtCore import QSettings
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
     QCheckBox,
     QFileDialog,
-#    QMainWindow,
-#    QApplication,
-#    QHeaderView,
-#    QDialog,
-    QMessageBox,
     QLineEdit,
+    QMessageBox,
     QTableWidget,
     QTableWidgetItem,
 )
@@ -67,24 +60,6 @@ class Setup(Dialog, Ui_Setup):
     )
     """Define a folder icon to use in the file text boxes."""
 
-#    icon_file = (
-#        b'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/I' +
-#        b'NwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIN' +
-#        b'SURBVBgZBcG/r55zGAfg6/4+z3va01NHlYgzEfE7MdCIGISFgS4Gk8ViYyM2' +
-#        b'Mdlsko4GSf8Do0FLRCIkghhYJA3aVBtEz3nP89wf11VJvPDepdd390+8Nso5' +
-#        b'nESBQoq0pfvXm9fzWf19453LF85vASqJlz748vInb517dIw6EyYBIIG49u+x' +
-#        b'i9/c9MdvR//99MPPZ7+4cP4IZhhTPbwzT2d+vGoaVRRp1rRliVvHq+cfvM3T' +
-#        b'D82+7mun0o/ceO7NT+/4/KOXjwZU1ekk0840bAZzMQ2mooqh0A72d5x/6sB9' +
-#        b'D5zYnff3PoYBoWBgFKPKqDKqjCpjKr//dcu9p489dra88cydps30KswACfNE' +
-#        b'KanSaxhlntjJ8Mv12Paie+vZ+0+oeSwwQ0Iw1xAR1CiFNJkGO4wu3ZMY1AAz' +
-#        b'BI0qSgmCNJsJUEOtJSMaCTBDLyQ0CknAGOgyTyFFiLI2awMzdEcSQgSAAKVU' +
-#        b'mAeNkxvWJWCGtVlDmgYQ0GFtgg4pNtOwbBcwQy/Rife/2yrRRVI0qYCEBly8' +
-#        b'Z+P4qMEMy7JaVw72N568e+iwhrXoECQkfH91kY7jwwXMsBx1L93ZruqrK6uu' +
-#        b'iAIdSnTIKKPLPFcvay8ww/Hh+ufeznTXu49v95IMoQG3784gYXdTqvRmqn/W' +
-#        b'pa/ADFX58MW3L71SVU9ETgEIQQQIOOzub+fhIvwPRDgeVjWDahIAAAAASUVO' +
-#        b'RK5CYII='
-#    )
-
     TOOLTIPS = {
         "start_dir": "Required: The directory to backup. The selected "
         + "directory\n and all sub-directories will be backed up to the"
@@ -110,7 +85,7 @@ class Setup(Dialog, Ui_Setup):
         + "'cache' rather than a directory. Exclude these files if True.",
         "exclude_backup_files": "Don't need standard backup files generated\n"
         + "by various programs with signatures like '*~' and '*.bak'",
-        "exclude_specific_files": "Specific files can be noted for exclusion as desired,",
+        "exclude_specific_files": "Specific files can be noted for exclusion,",
         "exclude_previous_button": "Move to the 'Common' tab.",
         "exclude_next_button": "Move to the 'Included Items' tab.",
         "include_specific_dirs": "Specific directories  that would otherwise be\n"
@@ -137,7 +112,7 @@ class Setup(Dialog, Ui_Setup):
         self.setupUi(self)
         self.config: Settings = config
         """The current configuration settings."""
-        self.initial_config: Dict[str, Any] = {}
+        self.initial_config: dict[str, Any] = {}
         """The initial configuration from either self.config  or default config."""
         self.change_made: int = 0
         """ Has a config entry change been made, initially false (all zeros)."""
@@ -156,17 +131,17 @@ class Setup(Dialog, Ui_Setup):
         }
         """The binary value in self.change_made for a change to the form entries,"""
         self.config_arrays = [
-                "exclude_specific_dirs",
-                "exclude_specific_files",
-                "include_specific_dirs",
-                "include_specific_files",
+            "exclude_specific_dirs",
+            "exclude_specific_files",
+            "include_specific_dirs",
+            "include_specific_files",
         ]
         self.config_bools = [
-                "exclude_cache_dir",
-                "exclude_trash_dir",
-                "exclude_download_dir",
-                "exclude_cache_files",
-                "exclude_backup_files",
+            "exclude_cache_dir",
+            "exclude_trash_dir",
+            "exclude_download_dir",
+            "exclude_cache_files",
+            "exclude_backup_files",
         ]
 
         self.set_tooltips()
@@ -176,24 +151,50 @@ class Setup(Dialog, Ui_Setup):
         self.start_dir_action.triggered.connect(self.action_start_dir)
         self.backup_location_action.triggered.connect(self.action_backup_location)
 
-        self.exclude_cache_dir.clicked.connect(lambda: self.action_checkbox_clicked(self.exclude_cache_dir, "exclude_cache_dir"))
-        self.exclude_trash_dir.clicked.connect(lambda: self.action_checkbox_clicked(self.exclude_trash_dir, "exclude_trash_dir"))
-        self.exclude_download_dir.clicked.connect(lambda: self.action_checkbox_clicked(self.exclude_download_dir, "exclude_download_dir"))
-        self.exclude_cache_files.clicked.connect(lambda: self.action_checkbox_clicked(self.exclude_cache_files, "exclude_cache_files"))
-        self.exclude_backup_files.clicked.connect(lambda: self.action_checkbox_clicked(self.exclude_backup_files, "exclude_backup_files"))
+        self.exclude_cache_dir.clicked.connect(
+            lambda: self.action_checkbox_clicked(
+                self.exclude_cache_dir, "exclude_cache_dir"
+            )
+        )
+        self.exclude_trash_dir.clicked.connect(
+            lambda: self.action_checkbox_clicked(
+                self.exclude_trash_dir, "exclude_trash_dir"
+            )
+        )
+        self.exclude_download_dir.clicked.connect(
+            lambda: self.action_checkbox_clicked(
+                self.exclude_download_dir, "exclude_download_dir"
+            )
+        )
+        self.exclude_cache_files.clicked.connect(
+            lambda: self.action_checkbox_clicked(
+                self.exclude_cache_files, "exclude_cache_files"
+            )
+        )
+        self.exclude_backup_files.clicked.connect(
+            lambda: self.action_checkbox_clicked(
+                self.exclude_backup_files, "exclude_backup_files"
+            )
+        )
 
-        self.exclude_specific_dirs.cellChanged.connect(self.action_exclude_specific_dirs)
-        self.exclude_specific_files.cellChanged.connect(self.action_exclude_specific_files)
-        self.include_specific_dirs.cellChanged.connect(self.action_include_specific_dirs)
-        self.include_specific_files.cellChanged.connect(self.action_include_specific_files)
+        self.exclude_specific_dirs.cellChanged.connect(
+            self.action_exclude_specific_dirs
+        )
+        self.exclude_specific_files.cellChanged.connect(
+            self.action_exclude_specific_files
+        )
+        self.include_specific_dirs.cellChanged.connect(
+            self.action_include_specific_dirs
+        )
+        self.include_specific_files.cellChanged.connect(
+            self.action_include_specific_files
+        )
 
         self.common_next_button.clicked.connect(self.action_common_next_button)
         self.exclude_previous_button.clicked.connect(
             self.action_exclude_previous_button
         )
-        self.exclude_next_button.clicked.connect(
-            self.action_exclude_next_button
-        )
+        self.exclude_next_button.clicked.connect(self.action_exclude_next_button)
         self.include_previous_button.clicked.connect(
             self.action_include_previous_button
         )
@@ -202,7 +203,7 @@ class Setup(Dialog, Ui_Setup):
         self.cancel_button.clicked.connect(self.action_cancel_button)
 
         self.show()
-        
+
     def action_cancel_button(self) -> None:
         """
         Cancel the actions on the form and exit.
@@ -231,36 +232,52 @@ class Setup(Dialog, Ui_Setup):
     def action_save_exit_button(self):
         """
         Handle the save/exit button click.
-        
+
         Save the current state of the dialog, then close the dialog.
         """
         self.save_config()
         self.close()
 
-
     def action_save_continue_button(self):
         """
         Handle the save/continue button click.
-        
+
         Save the current state of the dialog, then continue with filling the
         dialog. The dialog stays open.
         """
         self.save_config()
 
-
     def save_config(self) -> None:
-        """ Save the entered configuration values to the config.file."""
+        """Save the entered configuration values to the config.file."""
         self.config.setValue("start_dir", self.start_dir.text())
         self.config.setValue("backup_location", self.backup_location.text())
-        self.config.set_bool_value("exclude_cache_dir", self.exclude_cache_dir.isChecked())
-        self.config.set_bool_value("exclude_trash_dir", self.exclude_trash_dir.isChecked()) 
-        self.config.set_bool_value("exclude_download_dir", self.exclude_download_dir.isChecked()) 
-        self.config.set_bool_value("exclude_cache_files", self.exclude_cache_files.isChecked()) 
-        self.config.set_bool_value("exclude_backup_files", self.exclude_backup_files.isChecked()) 
-        self.config.write_list("exclude_specific_dirs", self.get_table_list(self.exclude_specific_dirs))
-        self.config.write_list("exclude_specific_files", self.get_table_list(self.exclude_specific_files))
-        self.config.write_list("include_specific_dirs", self.get_table_list(self.include_specific_dirs))
-        self.config.write_list("include_specific_files", self.get_table_list(self.include_specific_files))
+        self.config.set_bool_value(
+            "exclude_cache_dir", self.exclude_cache_dir.isChecked()
+        )
+        self.config.set_bool_value(
+            "exclude_trash_dir", self.exclude_trash_dir.isChecked()
+        )
+        self.config.set_bool_value(
+            "exclude_download_dir", self.exclude_download_dir.isChecked()
+        )
+        self.config.set_bool_value(
+            "exclude_cache_files", self.exclude_cache_files.isChecked()
+        )
+        self.config.set_bool_value(
+            "exclude_backup_files", self.exclude_backup_files.isChecked()
+        )
+        self.config.write_list(
+            "exclude_specific_dirs", self.get_table_list(self.exclude_specific_dirs)
+        )
+        self.config.write_list(
+            "exclude_specific_files", self.get_table_list(self.exclude_specific_files)
+        )
+        self.config.write_list(
+            "include_specific_dirs", self.get_table_list(self.include_specific_dirs)
+        )
+        self.config.write_list(
+            "include_specific_files", self.get_table_list(self.include_specific_files)
+        )
         self.config.sync()
 
     def get_table_list(self, a_table) -> list[str]:
@@ -268,7 +285,7 @@ class Setup(Dialog, Ui_Setup):
         table_list = []
         for row in range(a_table.rowCount()):
             item = a_table.item(row, 0)
-            if (item):
+            if item:
                 table_list.append(item.text())
         return table_list
 
@@ -276,7 +293,7 @@ class Setup(Dialog, Ui_Setup):
         """Move to the 'Excluded Items' tab."""
         self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.exclusions_tab))
 
-    def action_include_specific_files(self, row: int, column: int)-> None:
+    def action_include_specific_files(self, row: int, column: int) -> None:
         """
         One of the cells in the list has changed.
 
@@ -286,17 +303,23 @@ class Setup(Dialog, Ui_Setup):
             row (int) - The row of the cell
             column (int) - The column of the cell.
         """
-        print(self.initial_config)
         if row == self.include_specific_files.rowCount() - 1:
-            self.include_specific_files.insertRow(self.include_specific_files.rowCount())
-            self.change_made = self.change_made | self.entry_changed["include_specific_files"]
+            self.include_specific_files.insertRow(
+                self.include_specific_files.rowCount()
+            )
+            self.change_made = (
+                self.change_made | self.entry_changed["include_specific_files"]
+            )
 
-        elif not self.include_specific_files.item(row, 0).text() in  self.initial_config["include_specific_files"]:
-            self.change_made = self.change_made | self.entry_changed["include_specific_files"]
+        elif (
+            not self.include_specific_files.item(row, 0).text()
+            in self.initial_config["include_specific_files"]
+        ):
+            self.change_made = (
+                self.change_made | self.entry_changed["include_specific_files"]
+            )
 
-        print(self.change_made & ~self.entry_changed["include_specific_files"])
-
-    def action_include_specific_dirs(self, row: int, column: int)-> None:
+    def action_include_specific_dirs(self, row: int, column: int) -> None:
         """
         One of the cells in the list has changed.
 
@@ -321,7 +344,9 @@ class Setup(Dialog, Ui_Setup):
             column (int) - The column of the cell.
         """
         if row == self.exclude_specific_files.rowCount() - 1:
-            self.exclude_specific_files.insertRow(self.exclude_specific_files.rowCount())
+            self.exclude_specific_files.insertRow(
+                self.exclude_specific_files.rowCount()
+            )
 
     def action_exclude_specific_dirs(self, row: int, column: int) -> None:
         """
