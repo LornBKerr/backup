@@ -30,3 +30,7 @@ match-dir='./src/*'
 [tool.black]
 force-exclude = "src/default_config.py"
 
+[tool.pytest]
+addopts = "--cov-report term-missing --cov=./src/ --cov-context=test"
+filterwarnings = "error::ResourceWarning"
+
