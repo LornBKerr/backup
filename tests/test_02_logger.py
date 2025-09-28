@@ -22,7 +22,7 @@ from logger import Logger
 from result_codes import ResultCodes
 
 
-def test_02_01(filesystem):
+def test_02_01_init_(filesystem):
     """
     Testing Backup.Logger.__init__()
 
@@ -32,26 +32,12 @@ def test_02_01(filesystem):
     path = dest / "test_log.db"  # temp location
     logger = Logger(path)
     assert isinstance(logger, Logger)
-    # end test_Logger_01()
+    print(type(logger))
+    print(type(logger.log_db))
+    logger.log_db.sql_close()
 
 
-def test_02_02(filesystem):
-    """
-    Testing Backup.Logger.close_log()
-
-    The database should be closed after the call
-    """
-    source, dest = filesystem
-    path = dest / "test_log.db"  # temp location
-    logger = Logger(path)
-    assert logger.log_db
-    assert logger.log_db.sql_is_connected()
-    logger.close_log()
-    assert not logger.log_db.sql_is_connected()
-    # end test_Logger_02()
-
-
-def test_02_03(filesystem):
+def test_02_02_create_log_database_bad_path(filesystem):
     """
     Testing Backup.Logger.create_log_database()
 
@@ -65,13 +51,11 @@ def test_02_03(filesystem):
         logger.create_log_database("")
     assert pytest_wrapped_e.type == FileNotFoundError
     assert str(pytest_wrapped_e.value) == "Log Database path cannot be empty."
-    # end test_Logger_03()
+    logger.log_db.sql_close()
 
 
-def test_02_04(filesystem):
+def test_02_03_create_log_database(filesystem):
     """
-    Testing Backup.Logger.create_log_database()
-
     Call with a temp file name. Check for table presence. Check for
     empty table. Check for columns in table.
     """
@@ -84,10 +68,9 @@ def test_02_04(filesystem):
     logger.create_log_database(path)
     assert os.path.exists(path)
     assert logger.log_path == path
+    assert isinstance(logger.log_db, DataFile)
 
-    # does table exist
-    dbref = DataFile()
-    dbref.sql_connect(path)
+    logger.log_db.sql_connect(path)
     # check table exists
     sql = (
         "SELECT count(*) FROM sqlite_master WHERE type='table'"
@@ -95,29 +78,39 @@ def test_02_04(filesystem):
         + logger.table
         + "'"
     )
-    result = dbref.sql_query(sql, {})
-    assert dbref.sql_fetchrow(result)["count(*)"] == 1
-
+    result = logger.log_db.sql_query(sql, {})
+    assert logger.log_db.sql_fetchrow(result)["count(*)"] == 1
     # check column names and types
     sql = "PRAGMA table_info(" + logger.table + ")"
-    result = dbref.sql_query(sql, {})
-    table_desc = dbref.sql_fetchrowset(result)
+    result = logger.log_db.sql_query(sql, {})
+    table_desc = logger.log_db.sql_fetchrowset(result)
     assert len(table_desc) == len(logger.table_def)
     for row in logger.table_def:
-        print(row)
         db_row = next(
             (table_row for table_row in table_desc if table_row["name"] == row["name"]),
             None,
         )
-        print(db_row)
         assert db_row["name"] == row["name"]
         assert db_row["type"] == row["type"]
+    logger.log_db.sql_close()
 
+
+def test_02_04_close_log(filesystem):
+    """
+    Testing Backup.Logger.close_log()
+
+    The database should be closed after the call
+    """
+    source, dest = filesystem
+    path = dest / "test_log.db"  # temp location
+    logger = Logger(path)
+    assert logger.log_db
+    assert logger.log_db.sql_is_connected()
     logger.close_log()
-    # end test_Logger_04()
+    assert not logger.log_db.sql_is_connected()
 
 
-def test_02_05(filesystem):
+def test_02_05_add_log_entry(filesystem):
     """
     Test Backup.dd_log_entry()
 
@@ -133,17 +126,15 @@ def test_02_05(filesystem):
     description = "Test"
     entry = {"timestamp": time, "result": result_code, "description": description}
     logger.add_log_entry(entry)
+    logger.close_log()
+
     # test results
-    dbref = DataFile()
-    dbref.sql_connect(path)
+    logger.log_db = DataFile()
+    logger.log_db.sql_connect(path)
     sql = "SELECT * FROM " + logger.table
-    result = dbref.sql_query(sql, {})
-    data = dbref.sql_fetchrow(result)
+    result = logger.log_db.sql_query(sql, {})
+    data = logger.log_db.sql_fetchrow(result)
     assert data["timestamp"] == time
     assert data["result"] == result_code
     assert data["description"] == description
     logger.close_log()
-    # end test_logger_05()
-
-
-# end test_backup_02_logger.py
