@@ -14,6 +14,12 @@ class ResultCodes:
     SUCCESS = 0
     """Current action completed successfully. """
 
+    LOG_FILE_READ_FAILED = 1
+    """Reading from Log File failed"""
+
+    LOG_FILE_WRITE_FAILED = 1
+    """Writing to Log File failed"""
+
     NO_CONFIG_FILE = 3
     """Configuration file could not be found, run setup (--setup)."""
 
@@ -21,7 +27,7 @@ class ResultCodes:
     """File failed to copy during file backup to External Storage."""
 
     NO_SOURCE_OR_DESTINATION = 5
-    """Need to specify both the source and destination directories. """
+    """Need to specify both the source and destination directories in 'Setup'. """
 
     NO_EXTERNAL_STORAGE = 6
     """Could not access the External Storage Drive."""
