@@ -18,6 +18,7 @@ if src_path not in sys.path:
 import pytest
 from build_filesystem import filesystem
 from lbk_library import DataFile
+
 from logger import Logger
 from result_codes import ResultCodes
 
@@ -28,12 +29,11 @@ def test_02_01_init_(filesystem):
 
     Test the the object is really a Logger class
     """
+    print("test-01")
     source, dest = filesystem
     path = dest / "test_log.db"  # temp location
     logger = Logger(path)
     assert isinstance(logger, Logger)
-    print(type(logger))
-    print(type(logger.log_db))
     logger.log_db.sql_close()
 
 
@@ -43,15 +43,16 @@ def test_02_02_create_log_database_bad_path(filesystem):
 
     Call with empty path. Should raise a FileNotFound exception.
     """
+    print("test_02")
     source, dest = filesystem
-    path = dest / "test_log.db"
-    logger = Logger(path)
+    db_path = dest / "test_log.db"
 
-    with pytest.raises(FileNotFoundError) as pytest_wrapped_e:
+    with pytest.raises(FileNotFoundError) as pytest_wrapped_exception:
+        logger = Logger()        
         logger.create_log_database("")
-    assert pytest_wrapped_e.type == FileNotFoundError
-    assert str(pytest_wrapped_e.value) == "Log Database path cannot be empty."
-    logger.log_db.sql_close()
+    assert pytest_wrapped_exception.type == FileNotFoundError
+    print("File not Found exception")
+    assert str(pytest_wrapped_exception.value) == "Log Database path cannot be empty."
 
 
 def test_02_03_create_log_database(filesystem):
@@ -61,16 +62,15 @@ def test_02_03_create_log_database(filesystem):
     """
     source, dest = filesystem
     path = dest / "test_log.db"
-    logger = Logger(path)
 
     # does path to db exist
     path = dest / "test_log.db"
-    logger.create_log_database(path)
+    logger = Logger(path)
     assert os.path.exists(path)
     assert logger.log_path == path
     assert isinstance(logger.log_db, DataFile)
+    assert logger.log_db.sql_is_connected()
 
-    logger.log_db.sql_connect(path)
     # check table exists
     sql = (
         "SELECT count(*) FROM sqlite_master WHERE type='table'"
@@ -93,7 +93,12 @@ def test_02_03_create_log_database(filesystem):
         assert db_row["name"] == row["name"]
         assert db_row["type"] == row["type"]
     logger.log_db.sql_close()
-
+    
+    # now open an existing dtafile.
+    logger = Logger(path)
+    assert logger.log_db.sql_is_connected()
+    logger.log_db.sql_close()
+    
 
 def test_02_04_close_log(filesystem):
     """
@@ -138,3 +143,4 @@ def test_02_05_add_log_entry(filesystem):
     assert data["result"] == result_code
     assert data["description"] == description
     logger.close_log()
+

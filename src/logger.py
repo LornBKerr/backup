@@ -22,17 +22,18 @@ class Logger:
         log_path (str): the path to the log database
     """
 
-    def __init__(self, log_path: str) -> None:
+    def __init__(self, log_path: str = "") -> None:
         """
         Set the path to the log file and open the log database.
 
         Parameters:
             log_path (str): the path to the log file.
         """
-        self.log_db: DataFile
-        """ the log database """
-        self.log_path = log_path
+        print("logger.init()")
+        self.log_path: str = log_path
         """ The full path to the logging database """
+        self.log_db: Datafile = DataFile()
+        """ the log database """
         self.table = "Backup_Log"
         """ The name of the table in the database """
         self.table_def = [
@@ -40,13 +41,12 @@ class Logger:
             {"name": "result", "type": "INTEGER"},
             {"name": "description", "type": "TEXT"},
         ]
-        # if database file doesn't exist, create it.
-        if not os.path.exists(self.log_path):
-            self.create_log_database(self.log_path)
 
-        # Open the database file.
-        self.log_db = DataFile()
-        self.log_db.sql_connect(self.log_path)
+        if log_path and os.path.isfile(log_path):
+            self.log_db.sql_connect(self.log_path)
+        else:
+            # if database file doesn't exist, create it.
+            self.create_log_database(self.log_path)
 
     def add_log_entry(self, entry: dict[str, Any]) -> None:
         """
@@ -95,7 +95,6 @@ class Logger:
             raise FileNotFoundError("Log Database path cannot be empty.")
 
         self.log_path = log_path
-        self.log_db = DataFile()
         self.log_db.sql_connect(log_path)
         self.log_db.sql_query("DROP TABLE IF EXISTS " + self.table)
         create_table = "CREATE TABLE IF NOT EXISTS " + self.table + " ("
