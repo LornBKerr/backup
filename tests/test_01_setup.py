@@ -15,11 +15,12 @@ src_path = os.path.join(os.path.realpath("."), "src")
 if src_path not in sys.path:
     sys.path.append(src_path)
 
-from default_config import default_config
 from lbk_library.gui import Settings
 from lbk_library.testing_support import filesystem
 from PySide6.QtCore import QCoreApplication, QSettings, Qt
 from PySide6.QtWidgets import QDialog, QFileDialog, QTableWidgetItem
+
+from default_config import default_config
 from setup import Setup
 
 file_version = "1.1.0"
@@ -113,7 +114,6 @@ def test_01_03_set_tooltips(qtbot, tmp_path):
     assert (
         setup.exclude_specific_dirs.toolTip() == setup.TOOLTIPS["exclude_specific_dirs"]
     )
-    assert setup.exclude_cache_files.toolTip() == setup.TOOLTIPS["exclude_cache_files"]
     assert (
         setup.exclude_backup_files.toolTip() == setup.TOOLTIPS["exclude_backup_files"]
     )
@@ -216,10 +216,6 @@ def test_01_08_initialize_checkboxes(qtbot, tmp_path):
         == setup.initial_config["exclude_download_dir"]
     )
     assert (
-        setup.exclude_cache_files.isChecked()
-        == setup.initial_config["exclude_cache_files"]
-    )
-    assert (
         setup.exclude_backup_files.isChecked()
         == setup.initial_config["exclude_backup_files"]
     )
@@ -228,7 +224,6 @@ def test_01_08_initialize_checkboxes(qtbot, tmp_path):
         setup.entry_changed["exclude_cache_dir"]
         + setup.entry_changed["exclude_trash_dir"]
         + setup.entry_changed["exclude_download_dir"]
-        + setup.entry_changed["exclude_cache_files"]
         + setup.entry_changed["exclude_backup_files"]
     )
 
@@ -321,7 +316,6 @@ def test_01_12_fill_exclude_items_tab(qtbot, tmp_path):
     assert setup.exclude_cache_dir.isChecked()
     assert setup.exclude_trash_dir.isChecked()
     assert setup.exclude_download_dir.isChecked()
-    assert setup.exclude_cache_files.isChecked()
     assert setup.exclude_backup_files.isChecked()
     assert setup.exclude_specific_dirs.rowCount() == len(new_list) + 1
     for i in range(len(new_list)):
@@ -427,7 +421,6 @@ def test_01_16_fill_dialog_fields(qtbot, tmp_path):
     assert setup.exclude_cache_dir.isChecked()
     assert setup.exclude_trash_dir.isChecked()
     assert setup.exclude_download_dir.isChecked()
-    assert setup.exclude_cache_files.isChecked()
     assert setup.exclude_backup_files.isChecked()
     assert (
         setup.exclude_specific_dirs.rowCount()
@@ -535,7 +528,6 @@ def test_01_21_action_checkbox_clicked(qtbot, tmp_path):
         (setup.exclude_cache_dir, "exclude_cache_dir"),
         (setup.exclude_trash_dir, "exclude_trash_dir"),
         (setup.exclude_download_dir, "exclude_download_dir"),
-        (setup.exclude_cache_files, "exclude_cache_files"),
         (setup.exclude_backup_files, "exclude_backup_files"),
     ]:
         setup.change_made = 0
@@ -684,10 +676,6 @@ def test_01_30_save_config(qtbot, tmp_path):
         == setup.exclude_download_dir.isChecked()
     )
     assert (
-        setup.config.bool_value("exclude_cache_files")
-        == setup.exclude_cache_files.isChecked()
-    )
-    assert (
         setup.config.bool_value("exclude_backup_files")
         == setup.exclude_backup_files.isChecked()
     )
@@ -728,10 +716,6 @@ def test_01_31_action_save_continue_button(qtbot, tmp_path):
         == setup.exclude_download_dir.isChecked()
     )
     assert (
-        setup.config.bool_value("exclude_cache_files")
-        == setup.exclude_cache_files.isChecked()
-    )
-    assert (
         setup.config.bool_value("exclude_backup_files")
         == setup.exclude_backup_files.isChecked()
     )
@@ -770,10 +754,6 @@ def test_01_32_action_save_exit_button(qtbot, tmp_path):
     assert (
         setup.config.bool_value("exclude_download_dir")
         == setup.exclude_download_dir.isChecked()
-    )
-    assert (
-        setup.config.bool_value("exclude_cache_files")
-        == setup.exclude_cache_files.isChecked()
     )
     assert (
         setup.config.bool_value("exclude_backup_files")

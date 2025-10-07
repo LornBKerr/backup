@@ -81,8 +81,6 @@ class Setup(Dialog, Ui_Setup):
         + "as desired. By default,\npython '*venv' (virtual environment) "
         + "directories and python 'tox'\n directories are excluded and should "
         + "be regenerated as needed.\nThis can be changed.",
-        "exclude_cache_files": "Some programs use a single file for for the\n"
-        + "'cache' rather than a directory. Exclude these files if True.",
         "exclude_backup_files": "Don't need standard backup files generated\n"
         + "by various programs with signatures like '*~' and '*.bak'",
         "exclude_specific_files": "Specific files can be noted for exclusion,",
@@ -122,12 +120,11 @@ class Setup(Dialog, Ui_Setup):
             "exclude_cache_dir": 4,
             "exclude_trash_dir": 8,
             "exclude_download_dir": 16,
-            "exclude_cache_files": 32,
-            "exclude_backup_files": 64,
-            "exclude_specific_dirs": 128,
-            "exclude_specific_files": 256,
-            "include_specific_dirs": 512,
-            "include_specific_files": 1024,
+            "exclude_backup_files": 32,
+            "exclude_specific_dirs": 64,
+            "exclude_specific_files": 128,
+            "include_specific_dirs": 256,
+            "include_specific_files": 512,
         }
         """The binary value in self.change_made for a change to the form entries,"""
         self.config_arrays = [
@@ -140,7 +137,6 @@ class Setup(Dialog, Ui_Setup):
             "exclude_cache_dir",
             "exclude_trash_dir",
             "exclude_download_dir",
-            "exclude_cache_files",
             "exclude_backup_files",
         ]
 
@@ -164,11 +160,6 @@ class Setup(Dialog, Ui_Setup):
         self.exclude_download_dir.clicked.connect(
             lambda: self.action_checkbox_clicked(
                 self.exclude_download_dir, "exclude_download_dir"
-            )
-        )
-        self.exclude_cache_files.clicked.connect(
-            lambda: self.action_checkbox_clicked(
-                self.exclude_cache_files, "exclude_cache_files"
             )
         )
         self.exclude_backup_files.clicked.connect(
@@ -259,9 +250,6 @@ class Setup(Dialog, Ui_Setup):
         )
         self.config.set_bool_value(
             "exclude_download_dir", self.exclude_download_dir.isChecked()
-        )
-        self.config.set_bool_value(
-            "exclude_cache_files", self.exclude_cache_files.isChecked()
         )
         self.config.set_bool_value(
             "exclude_backup_files", self.exclude_backup_files.isChecked()
@@ -489,7 +477,6 @@ class Setup(Dialog, Ui_Setup):
             (self.exclude_cache_dir, "exclude_cache_dir"),
             (self.exclude_trash_dir, "exclude_trash_dir"),
             (self.exclude_download_dir, "exclude_download_dir"),
-            (self.exclude_cache_files, "exclude_cache_files"),
             (self.exclude_backup_files, "exclude_backup_files"),
         ]
         for box, config_name in chkboxes:
@@ -576,7 +563,6 @@ class Setup(Dialog, Ui_Setup):
         self.exclude_cache_dir.setToolTip(self.TOOLTIPS["exclude_cache_dir"])
         self.exclude_trash_dir.setToolTip(self.TOOLTIPS["exclude_trash_dir"])
         self.exclude_download_dir.setToolTip(self.TOOLTIPS["exclude_download_dir"])
-        self.exclude_cache_files.setToolTip(self.TOOLTIPS["exclude_cache_files"])
         self.exclude_backup_files.setToolTip(self.TOOLTIPS["exclude_backup_files"])
         self.exclude_specific_dirs.setToolTip(self.TOOLTIPS["exclude_specific_dirs"])
         self.exclude_specific_files.setToolTip(self.TOOLTIPS["exclude_specific_files"])
