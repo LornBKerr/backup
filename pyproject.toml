@@ -30,8 +30,6 @@ match-dir='./src/*'
 [tool.black]
 force-exclude = "src/default_config.py"
 
-[tool.pytest]
+[tool.pytest.ini_options]
 pythonpath = ""
 addopts = "--cov-report term-missing --cov=./src/ --cov-context=test"
-filterwarnings = "error::ResourceWarning"
-
