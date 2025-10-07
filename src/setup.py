@@ -591,6 +591,3 @@ class Setup(Dialog, Ui_Setup):
         dir_open_pixmap = QPixmap()
         dir_open_pixmap.loadFromData(base64.b64decode(Setup.icon_folder))
         return QIcon(dir_open_pixmap)
-
-
-#

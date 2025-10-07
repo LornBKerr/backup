@@ -1,216 +1,158 @@
 # -*- coding: utf-8 -*-
 
-###############################################################################
-# Form generated from reading UI file 'setup.ui'
-#
-# Created by: Qt User Interface Compiler version 6.9.1
-#
-# WARNING! All changes made in this file will be lost when recompiling UI file!
-###############################################################################
+################################################################################
+## Form generated from reading UI file 'setup.ui'
+##
+## Created by: Qt User Interface Compiler version 6.9.1
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
-from PySide6.QtCore import (
-    QCoreApplication,
-    QDate,
-    QDateTime,
-    QLocale,
-    QMetaObject,
-    QObject,
-    QPoint,
-    QRect,
-    QSize,
-    Qt,
-    QTime,
-    QUrl,
-)
-from PySide6.QtGui import (
-    QBrush,
-    QColor,
-    QConicalGradient,
-    QCursor,
-    QFont,
-    QFontDatabase,
-    QGradient,
-    QIcon,
-    QImage,
-    QKeySequence,
-    QLinearGradient,
-    QPainter,
-    QPalette,
-    QPixmap,
-    QRadialGradient,
-    QTransform,
-)
-from PySide6.QtWidgets import (
-    QApplication,
-    QCheckBox,
-    QDialog,
-    QFrame,
-    QHeaderView,
-    QLabel,
-    QLineEdit,
-    QPushButton,
-    QSizePolicy,
-    QTableWidget,
-    QTableWidgetItem,
-    QTabWidget,
-    QWidget,
-)
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QDialog, QFrame,
+    QHeaderView, QLabel, QLineEdit, QPushButton,
+    QSizePolicy, QTabWidget, QTableWidget, QTableWidgetItem,
+    QWidget)
 
 class Ui_Setup(object):
     def setupUi(self, Setup):
         if not Setup.objectName():
-            Setup.setObjectName("Setup")
+            Setup.setObjectName(u"Setup")
         Setup.resize(600, 765)
         self.tabWidget = QTabWidget(Setup)
-        self.tabWidget.setObjectName("tabWidget")
+        self.tabWidget.setObjectName(u"tabWidget")
         self.tabWidget.setGeometry(QRect(10, 10, 550, 695))
         self.common_tab = QWidget()
-        self.common_tab.setObjectName("common_tab")
+        self.common_tab.setObjectName(u"common_tab")
         self.lbl_general_header = QLabel(self.common_tab)
-        self.lbl_general_header.setObjectName("lbl_general_header")
+        self.lbl_general_header.setObjectName(u"lbl_general_header")
         self.lbl_general_header.setGeometry(QRect(0, 0, 476, 36))
         self.lbl_general_header.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.common_next_button = QPushButton(self.common_tab)
-        self.common_next_button.setObjectName("common_next_button")
+        self.common_next_button.setObjectName(u"common_next_button")
         self.common_next_button.setGeometry(QRect(450, 610, 75, 36))
         self.lbl_start_dir = QLabel(self.common_tab)
-        self.lbl_start_dir.setObjectName("lbl_start_dir")
+        self.lbl_start_dir.setObjectName(u"lbl_start_dir")
         self.lbl_start_dir.setGeometry(QRect(10, 40, 182, 36))
-        self.lbl_start_dir.setAlignment(
-            Qt.AlignmentFlag.AlignRight
-            | Qt.AlignmentFlag.AlignTrailing
-            | Qt.AlignmentFlag.AlignVCenter
-        )
+        self.lbl_start_dir.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.start_dir = QLineEdit(self.common_tab)
-        self.start_dir.setObjectName("start_dir")
+        self.start_dir.setObjectName(u"start_dir")
         self.start_dir.setGeometry(QRect(200, 40, 300, 36))
         self.lbl_backup_location = QLabel(self.common_tab)
-        self.lbl_backup_location.setObjectName("lbl_backup_location")
+        self.lbl_backup_location.setObjectName(u"lbl_backup_location")
         self.lbl_backup_location.setGeometry(QRect(10, 90, 182, 36))
-        self.lbl_backup_location.setAlignment(
-            Qt.AlignmentFlag.AlignRight
-            | Qt.AlignmentFlag.AlignTrailing
-            | Qt.AlignmentFlag.AlignVCenter
-        )
+        self.lbl_backup_location.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.backup_location = QLineEdit(self.common_tab)
-        self.backup_location.setObjectName("backup_location")
+        self.backup_location.setObjectName(u"backup_location")
         self.backup_location.setGeometry(QRect(200, 90, 300, 36))
         self.lbl_log_filename = QLabel(self.common_tab)
-        self.lbl_log_filename.setObjectName("lbl_log_filename")
+        self.lbl_log_filename.setObjectName(u"lbl_log_filename")
         self.lbl_log_filename.setGeometry(QRect(10, 160, 182, 30))
-        self.lbl_log_filename.setAlignment(
-            Qt.AlignmentFlag.AlignRight
-            | Qt.AlignmentFlag.AlignTrailing
-            | Qt.AlignmentFlag.AlignVCenter
-        )
+        self.lbl_log_filename.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.log_file = QLabel(self.common_tab)
-        self.log_file.setObjectName("log_file")
+        self.log_file.setObjectName(u"log_file")
         self.log_file.setGeometry(QRect(200, 160, 274, 30))
         self.lbl_last_backup = QLabel(self.common_tab)
-        self.lbl_last_backup.setObjectName("lbl_last_backup")
+        self.lbl_last_backup.setObjectName(u"lbl_last_backup")
         self.lbl_last_backup.setGeometry(QRect(10, 135, 182, 30))
-        self.lbl_last_backup.setAlignment(
-            Qt.AlignmentFlag.AlignRight
-            | Qt.AlignmentFlag.AlignTrailing
-            | Qt.AlignmentFlag.AlignVCenter
-        )
+        self.lbl_last_backup.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.last_backup = QLabel(self.common_tab)
-        self.last_backup.setObjectName("last_backup")
+        self.last_backup.setObjectName(u"last_backup")
         self.last_backup.setGeometry(QRect(200, 135, 274, 30))
         self.tabWidget.addTab(self.common_tab, "")
         self.exclusions_tab = QWidget()
-        self.exclusions_tab.setObjectName("exclusions_tab")
+        self.exclusions_tab.setObjectName(u"exclusions_tab")
         self.lbl_exclude_description = QLabel(self.exclusions_tab)
-        self.lbl_exclude_description.setObjectName("lbl_exclude_description")
+        self.lbl_exclude_description.setObjectName(u"lbl_exclude_description")
         self.lbl_exclude_description.setGeometry(QRect(30, 10, 491, 110))
-        self.lbl_exclude_description.setTextInteractionFlags(
-            Qt.TextInteractionFlag.NoTextInteraction
-        )
+        self.lbl_exclude_description.setTextInteractionFlags(Qt.TextInteractionFlag.NoTextInteraction)
         self.exclude_previous_button = QPushButton(self.exclusions_tab)
-        self.exclude_previous_button.setObjectName("exclude_previous_button")
+        self.exclude_previous_button.setObjectName(u"exclude_previous_button")
         self.exclude_previous_button.setGeometry(QRect(360, 610, 75, 36))
         self.exclude_next_button = QPushButton(self.exclusions_tab)
-        self.exclude_next_button.setObjectName("exclude_next_button")
+        self.exclude_next_button.setObjectName(u"exclude_next_button")
         self.exclude_next_button.setGeometry(QRect(450, 610, 75, 36))
         self.exclude_specific_dirs = QTableWidget(self.exclusions_tab)
-        self.exclude_specific_dirs.setObjectName("exclude_specific_dirs")
+        self.exclude_specific_dirs.setObjectName(u"exclude_specific_dirs")
         self.exclude_specific_dirs.setGeometry(QRect(10, 250, 255, 345))
         self.exclude_specific_dirs.setMidLineWidth(1)
         self.exclude_specific_files = QTableWidget(self.exclusions_tab)
-        self.exclude_specific_files.setObjectName("exclude_specific_files")
+        self.exclude_specific_files.setObjectName(u"exclude_specific_files")
         self.exclude_specific_files.setGeometry(QRect(280, 250, 250, 345))
         self.exclude_specific_files.horizontalHeader().setStretchLastSection(True)
         self.lbl_exclude_common_file = QLabel(self.exclusions_tab)
-        self.lbl_exclude_common_file.setObjectName("lbl_exclude_common_file")
+        self.lbl_exclude_common_file.setObjectName(u"lbl_exclude_common_file")
         self.lbl_exclude_common_file.setGeometry(QRect(290, 120, 181, 16))
         self.lbl_exclude_common_file.setTextFormat(Qt.TextFormat.PlainText)
-        self.exclude_cache_files = QCheckBox(self.exclusions_tab)
-        self.exclude_cache_files.setObjectName("exclude_cache_files")
-        self.exclude_cache_files.setGeometry(QRect(310, 140, 170, 16))
         self.exclude_backup_files = QCheckBox(self.exclusions_tab)
-        self.exclude_backup_files.setObjectName("exclude_backup_files")
+        self.exclude_backup_files.setObjectName(u"exclude_backup_files")
         self.exclude_backup_files.setGeometry(QRect(310, 165, 170, 16))
         self.lbl_exclude_common_dir = QLabel(self.exclusions_tab)
-        self.lbl_exclude_common_dir.setObjectName("lbl_exclude_common_dir")
+        self.lbl_exclude_common_dir.setObjectName(u"lbl_exclude_common_dir")
         self.lbl_exclude_common_dir.setGeometry(QRect(10, 120, 221, 16))
         self.lbl_exclude_common_dir.setTextFormat(Qt.TextFormat.PlainText)
         self.exclude_cache_dir = QCheckBox(self.exclusions_tab)
-        self.exclude_cache_dir.setObjectName("exclude_cache_dir")
+        self.exclude_cache_dir.setObjectName(u"exclude_cache_dir")
         self.exclude_cache_dir.setGeometry(QRect(30, 140, 170, 16))
         self.exclude_trash_dir = QCheckBox(self.exclusions_tab)
-        self.exclude_trash_dir.setObjectName("exclude_trash_dir")
+        self.exclude_trash_dir.setObjectName(u"exclude_trash_dir")
         self.exclude_trash_dir.setGeometry(QRect(30, 165, 170, 16))
         self.exclude_download_dir = QCheckBox(self.exclusions_tab)
-        self.exclude_download_dir.setObjectName("exclude_download_dir")
+        self.exclude_download_dir.setObjectName(u"exclude_download_dir")
         self.exclude_download_dir.setGeometry(QRect(30, 190, 171, 16))
         self.lbl_exclude_specific_dir = QLabel(self.exclusions_tab)
-        self.lbl_exclude_specific_dir.setObjectName("lbl_exclude_specific_dir")
+        self.lbl_exclude_specific_dir.setObjectName(u"lbl_exclude_specific_dir")
         self.lbl_exclude_specific_dir.setGeometry(QRect(20, 220, 221, 22))
         self.lbl_exclude_specific_file = QLabel(self.exclusions_tab)
-        self.lbl_exclude_specific_file.setObjectName("lbl_exclude_specific_file")
+        self.lbl_exclude_specific_file.setObjectName(u"lbl_exclude_specific_file")
         self.lbl_exclude_specific_file.setGeometry(QRect(290, 220, 171, 22))
         self.line = QFrame(self.exclusions_tab)
-        self.line.setObjectName("line")
+        self.line.setObjectName(u"line")
         self.line.setGeometry(QRect(265, 125, 16, 471))
         self.line.setFrameShape(QFrame.Shape.VLine)
         self.line.setFrameShadow(QFrame.Shadow.Sunken)
         self.tabWidget.addTab(self.exclusions_tab, "")
         self.inclusions_tab = QWidget()
-        self.inclusions_tab.setObjectName("inclusions_tab")
+        self.inclusions_tab.setObjectName(u"inclusions_tab")
         self.lbl_inclusion_header = QLabel(self.inclusions_tab)
-        self.lbl_inclusion_header.setObjectName("lbl_inclusion_header")
+        self.lbl_inclusion_header.setObjectName(u"lbl_inclusion_header")
         self.lbl_inclusion_header.setGeometry(QRect(30, 10, 471, 51))
         self.lbl_dir_include = QLabel(self.inclusions_tab)
-        self.lbl_dir_include.setObjectName("lbl_dir_include")
+        self.lbl_dir_include.setObjectName(u"lbl_dir_include")
         self.lbl_dir_include.setGeometry(QRect(20, 75, 221, 22))
         self.include_previous_button = QPushButton(self.inclusions_tab)
-        self.include_previous_button.setObjectName("include_previous_button")
+        self.include_previous_button.setObjectName(u"include_previous_button")
         self.include_previous_button.setGeometry(QRect(360, 610, 75, 36))
         self.include_specific_files = QTableWidget(self.inclusions_tab)
-        self.include_specific_files.setObjectName("include_specific_files")
+        self.include_specific_files.setObjectName(u"include_specific_files")
         self.include_specific_files.setGeometry(QRect(280, 100, 250, 345))
         self.include_specific_dirs = QTableWidget(self.inclusions_tab)
-        self.include_specific_dirs.setObjectName("include_specific_dirs")
+        self.include_specific_dirs.setObjectName(u"include_specific_dirs")
         self.include_specific_dirs.setGeometry(QRect(10, 100, 250, 345))
         self.include_specific_dirs.setMidLineWidth(1)
         self.lbl_incld_files_list = QLabel(self.inclusions_tab)
-        self.lbl_incld_files_list.setObjectName("lbl_incld_files_list")
+        self.lbl_incld_files_list.setObjectName(u"lbl_incld_files_list")
         self.lbl_incld_files_list.setGeometry(QRect(280, 75, 181, 22))
         self.tabWidget.addTab(self.inclusions_tab, "")
         self.save_cancel_button_bar = QFrame(Setup)
-        self.save_cancel_button_bar.setObjectName("save_cancel_button_bar")
+        self.save_cancel_button_bar.setObjectName(u"save_cancel_button_bar")
         self.save_cancel_button_bar.setGeometry(QRect(10, 715, 551, 36))
         self.save_cancel_button_bar.setAutoFillBackground(True)
         self.save_cancel_button_bar.setFrameShape(QFrame.Shape.NoFrame)
         self.cancel_button = QPushButton(self.save_cancel_button_bar)
-        self.cancel_button.setObjectName("cancel_button")
+        self.cancel_button.setObjectName(u"cancel_button")
         self.cancel_button.setGeometry(QRect(0, 0, 103, 36))
         self.save_continue_button = QPushButton(self.save_cancel_button_bar)
-        self.save_continue_button.setObjectName("save_continue_button")
+        self.save_continue_button.setObjectName(u"save_continue_button")
         self.save_continue_button.setGeometry(QRect(330, 0, 103, 36))
         self.save_exit_button = QPushButton(self.save_cancel_button_bar)
-        self.save_exit_button.setObjectName("save_exit_button")
+        self.save_exit_button.setObjectName(u"save_exit_button")
         self.save_exit_button.setGeometry(QRect(443, 0, 103, 36))
         self.save_exit_button.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
         self.save_exit_button.setAutoFillBackground(False)
@@ -219,8 +161,7 @@ class Ui_Setup(object):
         QWidget.setTabOrder(self.backup_location, self.common_next_button)
         QWidget.setTabOrder(self.common_next_button, self.exclude_cache_dir)
         QWidget.setTabOrder(self.exclude_cache_dir, self.exclude_trash_dir)
-        QWidget.setTabOrder(self.exclude_trash_dir, self.exclude_cache_files)
-        QWidget.setTabOrder(self.exclude_cache_files, self.exclude_backup_files)
+        QWidget.setTabOrder(self.exclude_trash_dir, self.exclude_backup_files)
         QWidget.setTabOrder(self.exclude_backup_files, self.exclude_next_button)
         QWidget.setTabOrder(self.exclude_next_button, self.exclude_previous_button)
         QWidget.setTabOrder(self.exclude_previous_button, self.save_continue_button)
@@ -232,171 +173,91 @@ class Ui_Setup(object):
 
         self.tabWidget.setCurrentIndex(2)
 
-        QMetaObject.connectSlotsByName(Setup)
 
+        QMetaObject.connectSlotsByName(Setup)
     # setupUi
 
     def retranslateUi(self, Setup):
-        Setup.setWindowTitle(QCoreApplication.translate("Setup", "Setup", None))
-        # if QT_CONFIG(tooltip)
+        Setup.setWindowTitle(QCoreApplication.translate("Setup", u"Setup", None))
+#if QT_CONFIG(tooltip)
         self.tabWidget.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
-        # if QT_CONFIG(tooltip)
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
         self.common_tab.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
-        self.lbl_general_header.setText(
-            QCoreApplication.translate(
-                "Setup", "General conditions that apply in all cases", None
-            )
-        )
-        # if QT_CONFIG(tooltip)
+#endif // QT_CONFIG(tooltip)
+        self.lbl_general_header.setText(QCoreApplication.translate("Setup", u"General conditions that apply in all cases", None))
+#if QT_CONFIG(tooltip)
         self.common_next_button.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
-        self.common_next_button.setText(
-            QCoreApplication.translate("Setup", "Next", None)
-        )
-        self.lbl_start_dir.setText(
-            QCoreApplication.translate("Setup", "Directory to Backup:", None)
-        )
-        # if QT_CONFIG(tooltip)
+#endif // QT_CONFIG(tooltip)
+        self.common_next_button.setText(QCoreApplication.translate("Setup", u"Next", None))
+        self.lbl_start_dir.setText(QCoreApplication.translate("Setup", u"Directory to Backup:", None))
+#if QT_CONFIG(tooltip)
         self.start_dir.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
-        self.lbl_backup_location.setText(
-            QCoreApplication.translate("Setup", "Backup to:", None)
-        )
-        # if QT_CONFIG(tooltip)
+#endif // QT_CONFIG(tooltip)
+        self.lbl_backup_location.setText(QCoreApplication.translate("Setup", u"Backup to:", None))
+#if QT_CONFIG(tooltip)
         self.backup_location.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
-        self.lbl_log_filename.setText(
-            QCoreApplication.translate("Setup", "Log Filename:", None)
-        )
-        # if QT_CONFIG(tooltip)
+#endif // QT_CONFIG(tooltip)
+        self.lbl_log_filename.setText(QCoreApplication.translate("Setup", u"Log Filename:", None))
+#if QT_CONFIG(tooltip)
         self.log_file.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
+#endif // QT_CONFIG(tooltip)
         self.log_file.setText("")
-        self.lbl_last_backup.setText(
-            QCoreApplication.translate("Setup", "Last Backup Time/Date:", None)
-        )
+        self.lbl_last_backup.setText(QCoreApplication.translate("Setup", u"Last Backup Time/Date:", None))
         self.last_backup.setText("")
-        self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.common_tab),
-            QCoreApplication.translate("Setup", "Common", None),
-        )
-        # if QT_CONFIG(tooltip)
-        self.tabWidget.setTabToolTip(
-            self.tabWidget.indexOf(self.common_tab),
-            QCoreApplication.translate(
-                "Setup", "Determine the general parameters of the backup.", None
-            ),
-        )
-        # endif // QT_CONFIG(tooltip)
-        self.lbl_exclude_description.setText(
-            QCoreApplication.translate(
-                "Setup",
-                "What directories and files do we want to exclude from the backup?\n"
-                "\n"
-                "In general operation, areas like the various cache, download and\n"
-                "trash directories and files are volatile and probably don't need\n"
-                "backup. Other  specific directories and files can also be specified.\n"
-                "",
-                None,
-            )
-        )
-        # if QT_CONFIG(tooltip)
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.common_tab), QCoreApplication.translate("Setup", u"Common", None))
+#if QT_CONFIG(tooltip)
+        self.tabWidget.setTabToolTip(self.tabWidget.indexOf(self.common_tab), QCoreApplication.translate("Setup", u"Determine the general parameters of the backup.", None))
+#endif // QT_CONFIG(tooltip)
+        self.lbl_exclude_description.setText(QCoreApplication.translate("Setup", u"What directories and files do we want to exclude from the backup?\n"
+"\n"
+"In general operation, areas like the various cache, download and\n"
+"trash directories and files are volatile and probably don't need\n"
+"backup. Other  specific directories and files can also be specified.\n"
+"", None))
+#if QT_CONFIG(tooltip)
         self.exclude_previous_button.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
-        self.exclude_previous_button.setText(
-            QCoreApplication.translate("Setup", "Previous", None)
-        )
-        # if QT_CONFIG(tooltip)
+#endif // QT_CONFIG(tooltip)
+        self.exclude_previous_button.setText(QCoreApplication.translate("Setup", u"Previous", None))
+#if QT_CONFIG(tooltip)
         self.exclude_next_button.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
-        self.exclude_next_button.setText(
-            QCoreApplication.translate("Setup", "Next", None)
-        )
-        self.lbl_exclude_common_file.setText(
-            QCoreApplication.translate("Setup", "Common Files to Exclude:", None)
-        )
-        # if QT_CONFIG(tooltip)
-        self.exclude_cache_files.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
-        self.exclude_cache_files.setText(
-            QCoreApplication.translate("Setup", "Cache Files", None)
-        )
-        # if QT_CONFIG(tooltip)
+#endif // QT_CONFIG(tooltip)
+        self.exclude_next_button.setText(QCoreApplication.translate("Setup", u"Next", None))
+        self.lbl_exclude_common_file.setText(QCoreApplication.translate("Setup", u"Common Files to Exclude:", None))
+#if QT_CONFIG(tooltip)
         self.exclude_backup_files.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
-        self.exclude_backup_files.setText(
-            QCoreApplication.translate("Setup", "Backup Files", None)
-        )
-        self.lbl_exclude_common_dir.setText(
-            QCoreApplication.translate("Setup", "Common Directories to Exclude:", None)
-        )
-        # if QT_CONFIG(tooltip)
+#endif // QT_CONFIG(tooltip)
+        self.exclude_backup_files.setText(QCoreApplication.translate("Setup", u"Backup Files", None))
+        self.lbl_exclude_common_dir.setText(QCoreApplication.translate("Setup", u"Common Directories to Exclude:", None))
+#if QT_CONFIG(tooltip)
         self.exclude_cache_dir.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
-        self.exclude_cache_dir.setText(
-            QCoreApplication.translate("Setup", "Cache Directories", None)
-        )
-        # if QT_CONFIG(tooltip)
+#endif // QT_CONFIG(tooltip)
+        self.exclude_cache_dir.setText(QCoreApplication.translate("Setup", u"Cache Directories", None))
+#if QT_CONFIG(tooltip)
         self.exclude_trash_dir.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
-        self.exclude_trash_dir.setText(
-            QCoreApplication.translate("Setup", "Trash Directories", None)
-        )
-        self.exclude_download_dir.setText(
-            QCoreApplication.translate("Setup", "Download Directories", None)
-        )
-        self.lbl_exclude_specific_dir.setText(
-            QCoreApplication.translate(
-                "Setup", "Specific Directories to Exclude:", None
-            )
-        )
-        self.lbl_exclude_specific_file.setText(
-            QCoreApplication.translate("Setup", "Specific Files to Exclude:", None)
-        )
-        self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.exclusions_tab),
-            QCoreApplication.translate("Setup", "Excluded Items", None),
-        )
-        self.lbl_inclusion_header.setText(
-            QCoreApplication.translate(
-                "Setup",
-                "Specify the directories and files we want to include in the backup\n"
-                " that would otherwise be excluded?",
-                None,
-            )
-        )
-        self.lbl_dir_include.setText(
-            QCoreApplication.translate(
-                "Setup", "Specific Directories to Include:", None
-            )
-        )
-        self.include_previous_button.setText(
-            QCoreApplication.translate("Setup", "Previous", None)
-        )
-        self.lbl_incld_files_list.setText(
-            QCoreApplication.translate("Setup", "Specific Files to Include:", None)
-        )
-        self.tabWidget.setTabText(
-            self.tabWidget.indexOf(self.inclusions_tab),
-            QCoreApplication.translate("Setup", "Included Items", None),
-        )
-        # if QT_CONFIG(tooltip)
+#endif // QT_CONFIG(tooltip)
+        self.exclude_trash_dir.setText(QCoreApplication.translate("Setup", u"Trash Directories", None))
+        self.exclude_download_dir.setText(QCoreApplication.translate("Setup", u"Download Directories", None))
+        self.lbl_exclude_specific_dir.setText(QCoreApplication.translate("Setup", u"Specific Directories to Exclude:", None))
+        self.lbl_exclude_specific_file.setText(QCoreApplication.translate("Setup", u"Specific Files to Exclude:", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.exclusions_tab), QCoreApplication.translate("Setup", u"Excluded Items", None))
+        self.lbl_inclusion_header.setText(QCoreApplication.translate("Setup", u"Specify the directories and files we want to include in the backup\n"
+" that would otherwise be excluded?", None))
+        self.lbl_dir_include.setText(QCoreApplication.translate("Setup", u"Specific Directories to Include:", None))
+        self.include_previous_button.setText(QCoreApplication.translate("Setup", u"Previous", None))
+        self.lbl_incld_files_list.setText(QCoreApplication.translate("Setup", u"Specific Files to Include:", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.inclusions_tab), QCoreApplication.translate("Setup", u"Included Items", None))
+#if QT_CONFIG(tooltip)
         self.cancel_button.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
-        self.cancel_button.setText(QCoreApplication.translate("Setup", "Cancel", None))
-        # if QT_CONFIG(tooltip)
+#endif // QT_CONFIG(tooltip)
+        self.cancel_button.setText(QCoreApplication.translate("Setup", u"Cancel", None))
+#if QT_CONFIG(tooltip)
         self.save_continue_button.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
-        self.save_continue_button.setText(
-            QCoreApplication.translate("Setup", "Save / Cont", None)
-        )
-        # if QT_CONFIG(tooltip)
+#endif // QT_CONFIG(tooltip)
+        self.save_continue_button.setText(QCoreApplication.translate("Setup", u"Save / Cont", None))
+#if QT_CONFIG(tooltip)
         self.save_exit_button.setToolTip("")
-        # endif // QT_CONFIG(tooltip)
-        self.save_exit_button.setText(
-            QCoreApplication.translate("Setup", "Save / Exit", None)
-        )
-
+#endif // QT_CONFIG(tooltip)
+        self.save_exit_button.setText(QCoreApplication.translate("Setup", u"Save / Exit", None))
     # retranslateUi
+
