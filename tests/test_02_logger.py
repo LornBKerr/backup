@@ -29,7 +29,6 @@ def test_02_01_init_(filesystem):
 
     Test the the object is really a Logger class
     """
-    print("test-01")
     source, dest = filesystem
     path = dest / "test_log.db"  # temp location
     logger = Logger(path)
@@ -43,7 +42,6 @@ def test_02_02_create_log_database_bad_path(filesystem):
 
     Call with empty path. Should raise a FileNotFound exception.
     """
-    print("test_02")
     source, dest = filesystem
     db_path = dest / "test_log.db"
 
@@ -51,7 +49,6 @@ def test_02_02_create_log_database_bad_path(filesystem):
         logger = Logger()        
         logger.create_log_database("")
     assert pytest_wrapped_exception.type == FileNotFoundError
-    print("File not Found exception")
     assert str(pytest_wrapped_exception.value) == "Log Database path cannot be empty."
 
 
