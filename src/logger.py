@@ -29,7 +29,6 @@ class Logger:
         Parameters:
             log_path (str): the path to the log file.
         """
-        print("logger.init()")
         self.log_path: str = log_path
         """ The full path to the logging database """
         self.log_db: Datafile = DataFile()
