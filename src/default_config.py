@@ -69,8 +69,8 @@ default_config = {
 
     # Some programs use a single file for for the 'cache' rather
     # than a directory. Exclude these files if True
-#    "exclude_cache_files": True,  
-#    'Can't really find instances of this that are useful, so delete for now.
+    #"exclude_cache_files": True,
+    #'Can't really find instances of this that are useful, so delete for now.
 
     # Specific files can be noted for exclusion as desired.
     "exclude_specific_files": [],
