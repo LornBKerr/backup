@@ -199,10 +199,6 @@ def test_01_07_fill_common_tab(qtbot, tmp_path):
 def test_01_08_initialize_checkboxes(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
-    #    setup.config.setValue("exclude_backup_files", False)
-    #    setup.initial_config["exclude_backup_files"] = False
-    #    setup.initial_config["exclude_cache_files"] = True
-
     setup.change_made = 0xF000
     setup.initialize_checkboxes()
     assert (
