@@ -22,7 +22,6 @@ from copy import deepcopy
 from datetime import datetime
 from typing import Any
 
-from default_config import default_config
 from lbk_library.gui import Dialog, Settings
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
@@ -33,6 +32,8 @@ from PySide6.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
 )
+
+from default_config import default_config
 from setup_form import Ui_Setup
 
 file_version = "1.0.0"
@@ -102,7 +103,7 @@ class Setup(Dialog, Ui_Setup):
         Initialize the Setup dialog.
 
         Parameters:
-            config (dict): the current configuration settings,
+            config (Settings): the current configuration settings,
                 default is None. If there is no config, the config is
                 initialized to the default config settings,
         """
