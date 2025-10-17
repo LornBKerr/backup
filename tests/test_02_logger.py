@@ -91,7 +91,7 @@ def test_02_03_create_log_database(filesystem):
         assert db_row["type"] == row["type"]
     logger.log_db.sql_close()
     
-    # now open an existing dtafile.
+    # now open an existing datafile.
     logger = Logger(path)
     assert logger.log_db.sql_is_connected()
     logger.log_db.sql_close()
@@ -116,7 +116,7 @@ def test_02_05_add_log_entry(filesystem):
     """
     Test Backup.dd_log_entry()
 
-    Generate a valid log entry, write to database, cheek the resulting
+    Generate a valid log entry, write to database, check the resulting
     row
     """
     source, dest = filesystem
@@ -140,4 +140,3 @@ def test_02_05_add_log_entry(filesystem):
     assert data["result"] == result_code
     assert data["description"] == description
     logger.close_log()
-
