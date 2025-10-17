@@ -289,22 +289,6 @@ backup. Other  specific directories and files can also be specified.
       <enum>Qt::TextFormat::PlainText</enum>
      </property>
     </widget>
-    <widget class="QCheckBox" name="exclude_cache_files">
-     <property name="geometry">
-      <rect>
-       <x>310</x>
-       <y>140</y>
-       <width>170</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="text">
-      <string>Cache Files</string>
-     </property>
-    </widget>
     <widget class="QCheckBox" name="exclude_backup_files">
      <property name="geometry">
       <rect>
@@ -584,7 +568,6 @@ backup. Other  specific directories and files can also be specified.
   <tabstop>common_next_button</tabstop>
   <tabstop>exclude_cache_dir</tabstop>
   <tabstop>exclude_trash_dir</tabstop>
-  <tabstop>exclude_cache_files</tabstop>
   <tabstop>exclude_backup_files</tabstop>
   <tabstop>exclude_next_button</tabstop>
   <tabstop>exclude_previous_button</tabstop>
