@@ -18,8 +18,10 @@ Version:    1.1.0
 
 import base64
 import os
+import platformdirs
 from copy import deepcopy
 from datetime import datetime
+from time import time
 from typing import Any
 
 from lbk_library.gui import Dialog, Settings
@@ -243,6 +245,8 @@ class Setup(Dialog, Ui_Setup):
         """Save the entered configuration values to the config.file."""
         self.config.setValue("start_dir", self.start_dir.text())
         self.config.setValue("backup_location", self.backup_location.text())
+        self.config.setValue("log_file", platformdirs.user_config_dir() + "/backup_log.db")
+        self.config.setValue("last_backup", time())
         self.config.set_bool_value(
             "exclude_cache_dir", self.exclude_cache_dir.isChecked()
         )
@@ -498,10 +502,10 @@ class Setup(Dialog, Ui_Setup):
         last_backup = self.initial_config["last_backup"]
         if last_backup not in ("", "-", "0", 0, None):
             self.last_backup.setText(
-                datetime.fromtimestamp(int(last_backup)).strftime("%H:%M, %b %d, %Y")
+                datetime.fromtimestamp(float(last_backup)).strftime("%I:%M %p , %b %d, %Y")
             )
         else:
-            self.last_backup.setText("0")
+            self.last_backup.setText("-")
         self.log_file.setText(self.initial_config["log_file"])
 
     def set_backup_location(self) -> None:
