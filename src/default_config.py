@@ -21,7 +21,7 @@ changes = {
 
 default_config = {
     # Time stamp of the last backup. Default of '0' means never.
-    "last_backup": "0",
+    "last_backup": "-",
 
     # What is the base directory to start scanning for changed
     # files. By default, it is the 'user_id' dir, '/home/{user_id}' on linux
