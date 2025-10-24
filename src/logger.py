@@ -43,7 +43,7 @@ class Logger:
 
         if log_path and os.path.isfile(log_path):
             self.log_db.sql_connect(self.log_path)
-        else:
+        elif log_path:
             # if database file doesn't exist, create it.
             self.create_log_database(self.log_path)
 
