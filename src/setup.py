@@ -18,9 +18,9 @@ Version:    1.1.0
 
 import base64
 import os
-import platformdirs
+from platformdirs import PlatformDirs
 from copy import deepcopy
-from datetime import datetime
+#from datetime import datetime
 from time import time
 from typing import Any
 
@@ -30,17 +30,20 @@ from PySide6.QtWidgets import (
     QCheckBox,
     QFileDialog,
     QLineEdit,
-    QMessageBox,
+#    QMessageBox,
     QTableWidget,
     QTableWidgetItem,
 )
 
 from default_config import default_config
+##from logger import logger
 from setup_form import Ui_Setup
 
+filename = "setup.py"
 file_version = "1.0.0"
 changes = {
     "1.0.0": "Initial release",
+    "1.1.0": "Revised extensively with full functionality."
 }
 
 
@@ -71,7 +74,6 @@ class Setup(Dialog, Ui_Setup):
         "backup_location": "The location to save the backup to. Click"
         + " the icon to select a different file location.",
         "last_backup": "This is the last time the system was backed up.",
-        "log_file": "This file contains the log of the backup actions.",
         "common_next_button": "Move to the 'Excluded Items' tab.",
         "exclude_cache_dir": "Cache directories can generally be excluded\n"
         + "and usually have the form '*/*cache*/'.",
@@ -142,6 +144,7 @@ class Setup(Dialog, Ui_Setup):
             "exclude_download_dir",
             "exclude_backup_files",
         ]
+        self.platform_dirs = PlatformDirs("UnknownBranch", "Backup")
 
         self.set_tooltips()
         self.initial_config = self.initial_setup()
@@ -245,7 +248,7 @@ class Setup(Dialog, Ui_Setup):
         """Save the entered configuration values to the config.file."""
         self.config.setValue("start_dir", self.start_dir.text())
         self.config.setValue("backup_location", self.backup_location.text())
-        self.config.setValue("log_file", platformdirs.user_config_dir() + "/backup_log.db")
+        self.config.setValue("log_file", self.platform_dirs.user_log_dir + "/backup_log.db")
         self.config.setValue("last_backup", time())
         self.config.set_bool_value(
             "exclude_cache_dir", self.exclude_cache_dir.isChecked()
@@ -506,7 +509,6 @@ class Setup(Dialog, Ui_Setup):
             )
         else:
             self.last_backup.setText("-")
-        self.log_file.setText(self.initial_config["log_file"])
 
     def set_backup_location(self) -> None:
         """
@@ -562,7 +564,6 @@ class Setup(Dialog, Ui_Setup):
         self.start_dir.setToolTip(self.TOOLTIPS["start_dir"])
         self.backup_location.setToolTip(self.TOOLTIPS["backup_location"])
         self.last_backup.setToolTip(self.TOOLTIPS["last_backup"])
-        self.log_file.setToolTip(self.TOOLTIPS["log_file"])
         self.common_next_button.setToolTip(self.TOOLTIPS["common_next_button"])
 
         self.exclude_cache_dir.setToolTip(self.TOOLTIPS["exclude_cache_dir"])
