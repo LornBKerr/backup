@@ -51,13 +51,6 @@ class Ui_Setup(object):
         self.backup_location = QLineEdit(self.common_tab)
         self.backup_location.setObjectName(u"backup_location")
         self.backup_location.setGeometry(QRect(200, 90, 300, 36))
-        self.lbl_log_filename = QLabel(self.common_tab)
-        self.lbl_log_filename.setObjectName(u"lbl_log_filename")
-        self.lbl_log_filename.setGeometry(QRect(10, 160, 182, 30))
-        self.lbl_log_filename.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-        self.log_file = QLabel(self.common_tab)
-        self.log_file.setObjectName(u"log_file")
-        self.log_file.setGeometry(QRect(200, 160, 274, 30))
         self.lbl_last_backup = QLabel(self.common_tab)
         self.lbl_last_backup.setObjectName(u"lbl_last_backup")
         self.lbl_last_backup.setGeometry(QRect(10, 135, 182, 30))
@@ -171,7 +164,7 @@ class Ui_Setup(object):
 
         self.retranslateUi(Setup)
 
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Setup)
@@ -198,11 +191,6 @@ class Ui_Setup(object):
 #if QT_CONFIG(tooltip)
         self.backup_location.setToolTip("")
 #endif // QT_CONFIG(tooltip)
-        self.lbl_log_filename.setText(QCoreApplication.translate("Setup", u"Log Filename:", None))
-#if QT_CONFIG(tooltip)
-        self.log_file.setToolTip("")
-#endif // QT_CONFIG(tooltip)
-        self.log_file.setText("")
         self.lbl_last_backup.setText(QCoreApplication.translate("Setup", u"Last Backup Time/Date:", None))
         self.last_backup.setText("")
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.common_tab), QCoreApplication.translate("Setup", u"Common", None))

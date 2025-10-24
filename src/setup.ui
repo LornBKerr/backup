@@ -26,7 +26,7 @@
     <string/>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="common_tab">
     <property name="toolTip">
@@ -125,38 +125,6 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QLabel" name="lbl_log_filename">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>160</y>
-       <width>182</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Log Filename:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="log_file">
-     <property name="geometry">
-      <rect>
-       <x>200</x>
-       <y>160</y>
-       <width>274</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="text">
       <string/>
      </property>
     </widget>
