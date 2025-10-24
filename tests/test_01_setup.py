@@ -1,7 +1,7 @@
 """
 Test the Setup class functionality.
 
-File:       test_01_setup.py
+#File:       test_01_setup.py
 Author:     Lorn B Kerr
 Copyright:  (c) 2022 - 2025 Lorn B Kerr
 License:    MIT, see file LICENSE
@@ -23,6 +23,7 @@ from PySide6.QtWidgets import QDialog, QFileDialog, QTableWidgetItem
 from default_config import default_config
 from setup import Setup
 
+filename = "test_01_setup.py"
 file_version = "1.1.0"
 changes = {
     "1.0.0": "Initial release",
@@ -54,7 +55,6 @@ def load_test_config(window):
     window.config.setValue("starting_dir", "a_dir")
     window.config.setValue("backup_location", "a_dir")
     window.config.setValue("last_backup", "100")
-    window.config.setValue("log_file", "new_log_file")
 
     window.config.setValue("exclude_cache_dir", False)
     window.config.setValue("exclude_trash_dir", True)
@@ -103,7 +103,7 @@ def test_01_03_set_tooltips(qtbot, tmp_path):
     assert setup.start_dir.toolTip() == setup.TOOLTIPS["start_dir"]
     assert setup.backup_location.toolTip() == setup.TOOLTIPS["backup_location"]
     assert setup.last_backup.toolTip() == setup.TOOLTIPS["last_backup"]
-    assert setup.log_file.toolTip() == setup.TOOLTIPS["log_file"]
+#    assert setup.log_file.toolTip() == setup.TOOLTIPS["log_file"]
     assert setup.common_next_button.toolTip() == setup.TOOLTIPS["common_next_button"]
 
     assert setup.exclude_cache_dir.toolTip() == setup.TOOLTIPS["exclude_cache_dir"]
@@ -180,7 +180,6 @@ def test_01_06_set_info_values(qtbot, tmp_path):
 
     setup.set_info_values()
     assert setup.last_backup.text() == default_config["last_backup"]
-    assert setup.log_file.text() == default_config["log_file"]
     close_window(setup)
 
 
@@ -192,7 +191,6 @@ def test_01_07_fill_common_tab(qtbot, tmp_path):
     assert setup.start_dir.text() == default_config["start_dir"]
     assert setup.backup_location.text() == default_config["backup_location"]
     assert setup.last_backup.text() == default_config["last_backup"]
-    assert setup.log_file.text() == default_config["log_file"]
     close_window(setup)
 
 
@@ -412,7 +410,6 @@ def test_01_16_fill_dialog_fields(qtbot, tmp_path):
     assert setup.start_dir.text() == default_config["start_dir"]
     assert setup.backup_location.text() == default_config["backup_location"]
     assert setup.last_backup.text() == default_config["last_backup"]
-    assert setup.log_file.text() == default_config["log_file"]
 
     assert setup.exclude_cache_dir.isChecked()
     assert setup.exclude_trash_dir.isChecked()
