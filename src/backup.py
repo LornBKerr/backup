@@ -20,14 +20,13 @@ License:    MIT, see file LICENSE
 Version:    1.1.0
 """
 
-#import sys
-#
-#from main import Backup
-#from result_codes import ResultCodes
-#
+import sys
+
+from main import Backup
+from result_codes import ResultCodes
+
 file_name = "backup.py"
 file_version = "1.1.0"
-
 changes = {"1.0.0": "Initial release", "1.1.0": "added file version info."}
 
 if __name__ == "__main__":
