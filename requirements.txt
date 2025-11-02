@@ -13,7 +13,7 @@
 -e ../lbk_library/
 
 # Run time requirements
-PySide6         # gui base
+PySide6        # gui base
 platformdirs    # cross platform directory structure.
 
 # Testing Requirements
