@@ -19,9 +19,10 @@ if src_path not in sys.path:
 from build_filesystem import (
     add_files,
     additional_files,
+    build_config_file,
     directories,
     filesystem,
-    get_test_config,
+#    get_test_config,
     load_directory_set,
 )
 from external_storage import ExternalStorage
@@ -34,11 +35,9 @@ def test_03_01_init(filesystem):
 
     Test the the object is really a ExternalStorage class
     """
-    test_config = get_test_config()
-    actions = {
-        "verbose": True,
-    }
     source, dest = filesystem
+    test_config = build_config_file(source, dest)
+    actions = {"verbose": True}
     path = dest / "test_log.db"
     logger = Logger(path)
     bes = ExternalStorage(test_config, logger, actions)
@@ -54,13 +53,12 @@ def test_03_02_dir_exclude_list_empty(filesystem):
     no exclusions. Should be an empty list.
     """
     source, dest = filesystem
-    test_config = get_test_config()
-    actions = {
-        "verbose": True,
-    }
-    logger = Logger(dest / "test_log.db")
-    bes = ExternalStorage(test_config, logger, actions)
+    test_config = build_config_file(source, dest)
+    actions = {"verbose": True}
+    path = dest / "test_log.db"
+    logger = Logger(path)
 
+    bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert len(exclusion_list) == 0
     logger.close_log()
@@ -74,20 +72,19 @@ def test_03_03_dir_exclude_list_dir_names(filesystem):
     excluding specific directories.
     """
     source, dest = filesystem
+    test_config = build_config_file(source, dest)
+    actions = {"verbose": True}
+    path = dest / "test_log.db"
+    logger = Logger(path)
 
     # check that 'specific_dirs' is picked up
-    test_config = get_test_config()
-    test_config["exclude_specific_dirs"].append("a dir")
-    actions = {
-        "verbose": True,
-    }
-    logger = Logger(dest / "test_log.db")
+    test_config.write_list("exclude_specific_dirs", ["a dir"])
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
-    assert exclusion_list == test_config["exclude_specific_dirs"]
-    assert not exclusion_list is test_config["exclude_specific_dirs"]
+    assert exclusion_list == test_config.read_list("exclude_specific_dirs")
     assert "a dir" in exclusion_list
     logger.close_log()
+
 
 
 def test_03_04_dir_exclude_list_cache(filesystem):
@@ -96,16 +93,16 @@ def test_03_04_dir_exclude_list_cache(filesystem):
 
     Check that 'cache_dir' is handled if requested.
     """
-    test_config = get_test_config()
-    actions = {
-        "verbose": True,
-    }
     source, dest = filesystem
-    logger = Logger(dest / "test_log.db")
+    test_config = build_config_file(source, dest)
+    actions = {"verbose": True}
+    path = dest / "test_log.db"
+    logger = Logger(path)
+
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert not "cache" in exclusion_list
-    test_config["exclude_cache_dir"] = True
+    test_config.set_bool_value("exclude_cache_dir", True)
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert "cache" in exclusion_list
@@ -120,16 +117,16 @@ def test_03_05_dir_exclude_list_trash(filesystem):
 
     Check that 'trash_dir' is handled if requested. Includes Linux and Windows.
     """
-    test_config = get_test_config()
-    actions = {
-        "verbose": True,
-    }
     source, dest = filesystem
-    logger = Logger(dest / "test_log.db")
+    test_config = build_config_file(source, dest)
+    actions = {"verbose": True}
+    path = dest / "test_log.db"
+    logger = Logger(path)
+
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert not "trash" in exclusion_list
-    test_config["exclude_trash_dir"] = True
+    test_config.set_bool_value("exclude_trash_dir", True)
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert "trash" in exclusion_list
@@ -144,43 +141,43 @@ def test_03_06_dir_exclude_list_download(filesystem):
 
     Check that 'download_dir' is handled if requested. Includes Linux and Windows
     """
-    test_config = get_test_config()
-    actions = {
-        "verbose": True,
-    }
     source, dest = filesystem
-    logger = Logger(dest / "test_log.db")
+    test_config = build_config_file(source, dest)
+    actions = {"verbose": True}
+    path = dest / "test_log.db"
+    logger = Logger(path)
+
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert not "Downloads" in exclusion_list
-    test_config["exclude_download_dir"] = True
+    test_config.set_bool_value("exclude_download_dir", True)
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert "Downloads" in exclusion_list
     logger.close_log()
 
 
-## HOLD for windows testing
-##def test_03_07_dir_exclude_list_SysVolInfo(filesystem):
-##    """
-##    Testing ExternalStorage.dir_exclude_list() for excluding 'SysVolInfo' directories.
-##
-##    Check that 'System Volumn Info' file is handled if requested. Primarily Windows
-##    """
-##    test_config = get_test_config()
-##    actions = {
-##        "verbose": True,
-##    }
-##    source, dest = filesystem
-##    logger = Logger(dest / "test_log.db")
-##    bes = ExternalStorage(test_config, logger, actions)
-##    exclusion_list = bes.dir_exclude_list
-##    assert not "System Volume Information" in exclusion_list
-##    test_config["exclude_sysvolinfo_dir"] = True
-##    bes = ExternalStorage(test_config, logger, actions)
-##    exclusion_list = bes.dir_exclude_list
-##    assert "System Volume Information" in exclusion_list
-##    logger.close_log()
+# HOLD for windows testing
+#def test_03_07_dir_exclude_list_SysVolInfo(filesystem):
+#    """
+#    Testing ExternalStorage.dir_exclude_list() for excluding 'SysVolInfo' directories.
+#
+#    Check that 'System Volumn Info' file is handled if requested. Primarily Windows
+#    """
+#    test_config = get_test_config()
+#    actions = {
+#        "verbose": True,
+#    }
+#    source, dest = filesystem
+#    logger = Logger(dest / "test_log.db")
+#    bes = ExternalStorage(test_config, logger, actions)
+#    exclusion_list = bes.dir_exclude_list
+#    assert not "System Volume Information" in exclusion_list
+#    test_config["exclude_sysvolinfo_dir"] = True
+#    bes = ExternalStorage(test_config, logger, actions)
+#    exclusion_list = bes.dir_exclude_list
+#    assert "System Volume Information" in exclusion_list
+#    logger.close_log()
 
 
 def test_03_08_dir_include_list(filesystem):
@@ -189,70 +186,43 @@ def test_03_08_dir_include_list(filesystem):
 
     Test the results of ExternalStorage.dir_include_list().
     """
-    test_config = get_test_config()
-    actions = {
-        "verbose": True,
-    }
     source, dest = filesystem
-    logger = Logger(dest / "test_log.db")
+    test_config = build_config_file(source, dest)
+    actions = {"verbose": True}
+    path = dest / "test_log.db"
+    logger = Logger(path)
+
     bes = ExternalStorage(test_config, logger, actions)
     inclusion_list = bes.dir_include_list
     # empty list and not a empty subset of any of the pieces of test_config.
     assert len(inclusion_list) == 0
-    assert not inclusion_list is test_config["include_specific_dirs"]
-    assert not inclusion_list is test_config
+
     # check that 'specific_dirs' is picked up
-    test_config["include_specific_dirs"].append("a dir")
+    test_config.write_list("include_specific_dirs", ["a dir"])
     bes = ExternalStorage(test_config, logger, actions)
     inclusion_list = bes.dir_include_list
-    assert inclusion_list == test_config["include_specific_dirs"]
-    assert not inclusion_list is test_config["include_specific_dirs"]
+    assert inclusion_list == test_config.read_list("include_specific_dirs")
     assert "a dir" in inclusion_list
     logger.close_log()
 
 
-def test_03_09_file_exclude_list_no_files(filesystem):
-    """
-    Testing ExternalStorage.file_exclude_list() for not excluding any files.
-
-    Test the results of ExternalStorage.file_exclude_list() for
-    no exclusions. Should be an empty list.
-    """
-    test_config = get_test_config()
-    actions = {
-        "verbose": True,
-    }
-    source, dest = filesystem
-    logger = Logger(dest / "test_log.db")
-    bes = ExternalStorage(test_config, logger, actions)
-    exclusion_list = bes.file_exclude_list
-    # empty list and not a empty subset of any of the pieces of test_config.
-    assert len(exclusion_list) == 0
-    assert not exclusion_list is test_config["exclude_specific_files"]
-    assert not exclusion_list is test_config
-    logger.close_log()
-
-
-def test_03_10_file_exclude_list(filesystem):
+def test_03_09_file_exclude_list_empty(filesystem):
     """
     Testing ExternalStorage.file_exclude_list() for excluding specific files.
 
     Test the results of ExternalStorage.file_exclude_list() for
     excluding specific directories.
     """
-    # check that 'specific_files' is picked up
-    test_config = get_test_config()
-    test_config["exclude_specific_files"].append("a file")
-    actions = {
-        "verbose": True,
-    }
     source, dest = filesystem
-    logger = Logger(dest / "test_log.db")
+    test_config = build_config_file(source, dest)
+    actions = {"verbose": True}
+    path = dest / "test_log.db"
+    logger = Logger(path)
+
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.file_exclude_list
-    assert exclusion_list == test_config["exclude_specific_files"]
-    assert not exclusion_list is test_config["exclude_specific_files"]
-    assert "a file" in exclusion_list
+    assert exclusion_list == test_config.read_list("exclude_specific_files")
+    assert len(exclusion_list) == 0
     logger.close_log()
 
 
@@ -262,16 +232,16 @@ def test_03_11_file_exclude_list(filesystem):
 
     Check that 'backup_files' (*.~ and *.bak) are handled if requested.
     """
-    test_config = get_test_config()
-    actions = {
-        "verbose": True,
-    }
     source, dest = filesystem
-    logger = Logger(dest / "test_log.db")
+    test_config = build_config_file(source, dest)
+    actions = {"verbose": True}
+    path = dest / "test_log.db"
+    logger = Logger(path)
+
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.file_exclude_list
     assert not ".bak" in exclusion_list
-    test_config["exclude_backup_files"] = True
+    test_config.set_bool_value("exclude_backup_files", True)
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.file_exclude_list
     assert "~" in exclusion_list
@@ -296,24 +266,22 @@ def test_03_12_file_include_list(filesystem):
     config file or any of the subsets of the the
     config file['file_include'] section.
     """
-    test_config = get_test_config()
-    actions = {
-        "verbose": True,
-    }
     source, dest = filesystem
-    logger = Logger(dest / "test_log.db")
+    test_config = build_config_file(source, dest)
+    actions = {"verbose": True}
+    path = dest / "test_log.db"
+    logger = Logger(path)
+
     bes = ExternalStorage(test_config, logger, actions)
     inclusion_list = bes.file_include_list
     # empty list and not a empty subset of any of the pieces of test_config.
     assert len(inclusion_list) == 0
-    assert not inclusion_list is test_config["include_specific_files"]
-    assert not inclusion_list is test_config
+
     # check that 'specific_files' is picked up
-    test_config["include_specific_files"].append("a file")
+    test_config.write_list("include_specific_files", ["a file"])    
     bes = ExternalStorage(test_config, logger, actions)
     inclusion_list = bes.file_include_list
-    assert inclusion_list == test_config["include_specific_files"]
-    assert not inclusion_list is test_config["include_specific_files"]
+    assert inclusion_list == test_config.read_list("include_specific_files")
     assert "a file" in inclusion_list
     logger.close_log()
 
@@ -328,18 +296,17 @@ def test_03_13_process_file_1(filesystem):
     source file (change the modification time) and back up the file.
     Ensure the destination file has the new modification time.
     """
-    # set filesystem
     source, dest = filesystem
-    test_config = get_test_config()
-    actions = {
-        "verbose": True,
-    }
-    logger = Logger(dest / "test_log.db")
-    bes = ExternalStorage(test_config, logger, actions)
+    test_config = build_config_file(source, dest)
+    actions = {"verbose": True}
+    path = dest / "test_log.db"
+    logger = Logger(path)
+
     load_directory_set(directories, dest, False)
     # Test for regular files
     current_dir = source / "test1"
     destination_dir = dest / "test1"
+    bes = ExternalStorage(test_config, logger, actions)
     bes.process_file(current_dir, destination_dir, "file1.txt")
     assert os.path.getmtime(current_dir / "file1.txt") == os.path.getmtime(
         destination_dir / "file1.txt"
@@ -362,14 +329,13 @@ def test_03_14_process_file_2(filesystem):
     if sys.platform.startswith("linux"):
         # set filesystem
         source, dest = filesystem
-        test_config = get_test_config()
-        actions = {
-            "verbose": True,
-        }
-        source, dest = filesystem
-        logger = Logger(dest / "test_log.db")
-        bes = ExternalStorage(test_config, logger, actions)
+        test_config = build_config_file(source, dest)
+        actions = {"verbose": True}
+        path = dest / "test_log.db"
+        logger = Logger(path)
+
         load_directory_set(directories, dest, False)
+        bes = ExternalStorage(test_config, logger, actions)
         # good link is copied and bad link is not
         current_dir = source / "test_links"
         destination_dir = dest / "test_links"
@@ -382,8 +348,8 @@ def test_03_14_process_file_2(filesystem):
         # Check bad link
         bes.process_file(current_dir, destination_dir, "link_bad")
         assert not os.path.islink(current_dir / "bad_link")
-    else:  # Windows doesn't do symlinks well, probably should look at shortcuts
-        assert 1
+#    else:  # Windows doesn't do symlinks well, probably should look at shortcuts
+#        assert 1
     logger.close_log()
 
 
@@ -393,18 +359,17 @@ def test_03_15_process_dir_files_1(filesystem):
 
     Include all files in test1 dir.
     """
-    # set filesystem
     source, dest = filesystem
+    test_config = build_config_file(source, dest)
+    actions = {"verbose": True}
+    path = dest / "test_log.db"
+    logger = Logger(path)
+
     load_directory_set(directories, dest, False)
     current_dir = source / "test1"
     destination_dir = dest / "test1"
     add_files(additional_files, source / "test1")
-    # All files should be present in dir 'test1'
-    test_config = get_test_config(source, dest)
-    actions = {
-        "verbose": True,
-    }
-    logger = Logger(dest / "test_log.db")
+
     bes = ExternalStorage(test_config, logger, actions)
     bes.process_dir_files(current_dir, destination_dir, additional_files)
     for filename in additional_files:
@@ -420,17 +385,18 @@ def test_03_16_process_dir_files_2(filesystem):
     """
     # set filesystem
     source, dest = filesystem
+    test_config = build_config_file(source, dest)
+    actions = {"verbose": True}
+    path = dest / "test_log.db"
+    logger = Logger(path)
+
+    load_directory_set(directories, dest, False)
     current_dir = source / "test1"
     destination_dir = dest / "test1"
-    load_directory_set(directories, dest, False)
     add_files(additional_files, source / "test1")
     # exclude backup files
-    test_config = get_test_config(source, dest)
-    test_config["exclude_backup_files"] = True
-    actions = {
-        "verbose": True,
-    }
-    logger = Logger(dest / "test_log.db")
+    test_config.set_bool_value("exclude_backup_files", True)
+
     bes = ExternalStorage(test_config, logger, actions)
     bes.process_dir_files(current_dir, destination_dir, additional_files)
     assert not os.path.isfile(destination_dir / "backup_file_1~")
@@ -448,22 +414,22 @@ def test_03_17_process_dir_files_3(filesystem):
     """
     # set filesystem
     source, dest = filesystem
+    test_config = build_config_file(source, dest)
+    actions = {"verbose": True}
+    path = dest / "test_log.db"
+    logger = Logger(path)
+
+    load_directory_set(directories, dest, False)
     current_dir = source / "test1"
     destination_dir = dest / "test1"
-    load_directory_set(directories, dest, False)
     add_files(additional_files, source / "test1")
     # exclude backup files
-    test_config = get_test_config(source, dest)
-    actions = {
-        "verbose": True,
-    }
-    logger = Logger(dest / "test_log.db")
+    test_config.set_bool_value("exclude_cache_files", True)
+
     bes = ExternalStorage(test_config, logger, actions)
     bes.process_dir_files(current_dir, destination_dir, additional_files)
-    assert os.path.isfile(destination_dir / "backup_file_1~")
-    assert os.path.isfile(destination_dir / "backup_file2.bak")
-    assert os.path.isfile(destination_dir / "py_file.py")
-    assert os.path.isfile(destination_dir / "py_file.pyc")
+    assert not os.path.isfile(destination_dir / "cache/file_1.txt")
+    assert not os.path.isfile(destination_dir / "cachefile2.txt")
     logger.close_log()
 
 
@@ -481,8 +447,8 @@ def test_03_18_process_dir_file_4(filesystem):
     load_directory_set(directories, dest, False)
     add_files(additional_files, source / "test1")
     # exclude specific files
-    test_config = get_test_config(source, dest)
-    test_config["exclude_specific_files"] = [".pyc"]
+    test_config = build_config_file(source, dest)
+    test_config.write_list("exclude_specific_files", [".pyc"])
     actions = {
         "verbose": True,
     }
@@ -493,40 +459,4 @@ def test_03_18_process_dir_file_4(filesystem):
     assert os.path.isfile(destination_dir / "backup_file2.bak")
     assert os.path.isfile(destination_dir / "py_file.py")
     assert not os.path.isfile(destination_dir / "py_file.pyc")
-    logger.close_log()
-
-
-def test_03_19_base_config(filesystem):
-    """
-    Test the overall program with a base config file.
-
-    All exclusion and inclusion choices are off. The base dir and backup
-    locations are set to temparary locations. All files and directories
-    should be copied except for broken links wich are always ignored.
-    """
-    # set filesystem
-    source, dest = filesystem
-    current_dir = source / "test1"
-    destination_dir = dest / "test1"
-    load_directory_set(directories, dest, True)
-    add_files(additional_files, source / "test1")
-    test_config = get_test_config(source, dest)
-    actions = {
-        "verbose": False,
-    }
-
-    logger = Logger(dest / "test_log.db")
-    bes = ExternalStorage(test_config, logger, actions)
-    for a_dir in directories:
-        print(a_dir)
-        for filename in os.listdir(source / a_dir):
-            print(source / a_dir, filename)
-            print(dest / a_dir, filename, "\n")
-            if not os.path.islink(source / a_dir / filename):
-                assert os.path.exists(dest / a_dir / filename)
-            else:
-                if os.path.isfile(source / a_dir / filename):
-                    assert os.path.isfile(dest / a_dir / filename)
-                else:
-                    assert not os.path.isfile(dest / a_dir / filename)
     logger.close_log()

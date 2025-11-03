@@ -8,12 +8,15 @@ License:    MIT, see file LICENSE
 Version:    1.1.0
 """
 
+
 import os
 import shutil
 #import sys
 import time
-from copy import deepcopy
-from typing import Any
+#from copy import deepcopy
+#from typing import Any
+
+from lbk_library.gui import Settings
 
 from logger import Logger
 from result_codes import ResultCodes
@@ -38,7 +41,7 @@ class ExternalStorage:
     """
 
     def __init__(
-        self, config: dict[str, Any], logger: Logger, actions: dict[str, bool] = None
+        self, config: Settings, logger: Logger, actions: dict[str, bool] = None
     ) -> None:
         """
         Backup all fresh files to the external drive.
@@ -48,7 +51,7 @@ class ExternalStorage:
         """
         self.actions: dict[str, bool] = actions
         """ The list of actions directed """
-        self.config: dict[str, Any] = config
+        self.config: Settings = config
         """ The configuration controlling the backup """
         self.directories_checked: int = 0
         """ The count of all directories traversed. """
@@ -61,9 +64,10 @@ class ExternalStorage:
         self.logger: Logger = logger
         """ The result logger for the database. """
 
+
         if (
-            self.config["start_dir"] == ""
-            and self.config["backup_location"] == ""
+            self.config.value("start_dir") == ""
+            and self.config.value("backup_location") == ""
         ):
             self.logger.add_log_entry(
                 {
@@ -128,9 +132,9 @@ class ExternalStorage:
         ensure the destination is present prior to tring to copy a
         new or changed file to the destination.
         """
-        source = self.config["start_dir"]
+        source = self.config.value("start_dir")
         source_len = len(str(source)) + 1
-        destination = self.config["backup_location"]
+        destination = self.config.value("backup_location")
 
         # make sure the base destination directory exists
         try:
@@ -169,7 +173,7 @@ class ExternalStorage:
                 self.process_dir_files(current_dir, destination_dir, fileset)
 
     def process_dir_files(
-        self, current_dir: str, destination_dir: str, fileset: list[str]
+       self, current_dir: str, destination_dir: str, fileset: list[str]
     ) -> None:
         """
         Step through the the current directory.
@@ -218,7 +222,7 @@ class ExternalStorage:
         if (
             not os.path.exists(destination_path)
             or int(os.stat(current_path).st_mtime)
-            > int(self.config["last_backup"])
+            > int(self.config.value("last_backup"))
             or int(os.stat(current_path).st_mtime)
             > int(os.stat(destination_path).st_mtime)
         ):
@@ -247,21 +251,21 @@ class ExternalStorage:
         Returns:
             (list[str]) the set of excluded directories.
         """
-        exclusion_list = deepcopy(self.config["exclude_specific_dirs"])
-        if self.config["exclude_cache_dir"]:
+        exclusion_list = self.config.read_list("exclude_specific_dirs")
+        if self.config.bool_value("exclude_cache_dir"):
             exclusion_list.append("cache")
             exclusion_list.append("Cache")
-        if self.config["exclude_trash_dir"]:
+        if self.config.bool_value("exclude_trash_dir"):
             exclusion_list.append("trash")  # linux
             exclusion_list.append("Trash")
             exclusion_list.append("$RECYCLE.BIN")  # windows
-        if self.config["exclude_download_dir"]:
+        if self.config.bool_value("exclude_download_dir"):
             exclusion_list.append("Downloads")  # Linux
 
             # Don't save the Windows 'System Volume Information'.
             # Restoring this MAY lead to interesting and unnerving
             # results with Windows.
-        # if self.config["exclude_sysvolinfo_dir"]:
+        # if self.config.bool_value("exclude_sysvolinfo_dir"):
         #   exclusion_list.append("System Volume Information")
 
         return exclusion_list
@@ -274,7 +278,7 @@ class ExternalStorage:
         Returns:
             (list[str]) the set of included directories.
         """
-        inclusion_list = deepcopy(self.config["include_specific_dirs"])
+        inclusion_list = self.config.read_list("include_specific_dirs")
         return inclusion_list
 
     @property
@@ -286,8 +290,8 @@ class ExternalStorage:
             (list[str]) the set of excluded directories.
         """
         # What specific files do we want to exclude from backup.
-        exclusion_list = deepcopy(self.config["exclude_specific_files"])
-        if self.config["exclude_backup_files"]:
+        exclusion_list = self.config.read_list("exclude_specific_files")
+        if self.config.value("exclude_backup_files"):
             exclusion_list.append("~")
             exclusion_list.append(".bak")
         return exclusion_list
@@ -301,5 +305,5 @@ class ExternalStorage:
             (list[str]) the set of included directories.
         """
         # What specific files do we want to include in the backup.
-        inclusion_list = deepcopy(self.config["include_specific_files"])
+        inclusion_list = self.config.read_list("include_specific_files")
         return inclusion_list
