@@ -1,9 +1,9 @@
 """
 Edit the configuration file for the backup program.
 
-This configuration file provides the criteria for what is saved to the
-backup file. The criteria are set as categories of files such as 'cache'
-files and 'trash' files along with other settings.
+This configuration file provides the criteria for what is and is not backed up.
+The criteria are set as categories of files such as 'cache' files and 'trash'
+files along with other settings.
 
 The first time the program is run, a set of default settings are loaded
 into the dialog. These can be accepted or modified as desired.then saved
@@ -11,7 +11,7 @@ to be used for future runs.
 
 File:       setup.py
 Author:     Lorn B Kerr
-Copyright:  (c) 2022, 2023 Lorn B Kerr
+Copyright:  (c) 2022, 2025 Lorn B Kerr
 License:    MIT see file LICENSE
 Version:    1.1.0
 """
@@ -20,7 +20,7 @@ import base64
 import os
 from platformdirs import PlatformDirs
 from copy import deepcopy
-#from datetime import datetime
+from datetime import datetime
 from time import time
 from typing import Any
 
@@ -30,13 +30,12 @@ from PySide6.QtWidgets import (
     QCheckBox,
     QFileDialog,
     QLineEdit,
-#    QMessageBox,
+    QMessageBox,
     QTableWidget,
     QTableWidgetItem,
 )
 
 from default_config import default_config
-##from logger import logger
 from setup_form import Ui_Setup
 
 filename = "setup.py"
@@ -144,7 +143,10 @@ class Setup(Dialog, Ui_Setup):
             "exclude_download_dir",
             "exclude_backup_files",
         ]
-        self.platform_dirs = PlatformDirs("UnknownBranch", "Backup")
+        self.platform_dirs = PlatformDirs("newBackup")
+        if not os.path.isdir(self.platform_dirs.user_config_dir):
+            # if log path doesn't exist, make the directory.
+            os.makedirs(self.platform_dirs.user_config_dir)
 
         self.set_tooltips()
         self.initial_config = self.initial_setup()
