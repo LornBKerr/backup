@@ -9,6 +9,7 @@ Version:    1.0.1
 """
 
 import os
+from platformdirs import PlatformDirs
 
 file_name = "default_config.py"
 file_version = "1.1.0"
@@ -33,8 +34,10 @@ default_config = {
     # will be a drive letter, generally 'E:' or greater.
     "backup_location": "",
 
+    # Tha backup log file path. Use the OS standard location
+    "log_path": PlatformDirs.user_log_dir()
     # The backup log file name
-    "log_file": "backup_log.db",
+    "log_file": "backup.log",
 
     # What directories and files do we want to exclude from the backup?
     # In general operation, areas like the various cache and trash
