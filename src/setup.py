@@ -6,21 +6,21 @@ The criteria are set as categories of files such as 'cache' files and 'trash'
 files along with other settings.
 
 The first time the program is run, a set of default settings are loaded
-into the dialog. These can be accepted or modified as desired.then saved
+into the dialog. These can be accepted or modified as desired, then saved
 to be used for future runs.
 
 File:       setup.py
 Author:     Lorn B Kerr
 Copyright:  (c) 2022, 2025 Lorn B Kerr
 License:    MIT see file LICENSE
-Version:    1.1.0
+ersion:    1.1.0
 """
 
 import base64
 import os
-from platformdirs import PlatformDirs
+#from platformdirs import PlatformDirs
 from copy import deepcopy
-from datetime import datetime
+#from datetime import datetime
 from time import time
 from typing import Any
 
@@ -30,7 +30,7 @@ from PySide6.QtWidgets import (
     QCheckBox,
     QFileDialog,
     QLineEdit,
-    QMessageBox,
+#    QMessageBox,
     QTableWidget,
     QTableWidgetItem,
 )
@@ -72,6 +72,11 @@ class Setup(Dialog, Ui_Setup):
         + "different directory location.",
         "backup_location": "The location to save the backup to. Click"
         + " the icon to select a different file location.",
+        "log_path": "The path to the Backup log file, initially"
+        + " set to the os system standard location.",
+        "log_name": "The file name for the log file."
+        + " initially set to 'backup.log'.\nIf the file doesn't"
+        + " exist, it will be created as needed.",
         "last_backup": "This is the last time the system was backed up.",
         "common_next_button": "Move to the 'Excluded Items' tab.",
         "exclude_cache_dir": "Cache directories can generally be excluded\n"
@@ -121,14 +126,16 @@ class Setup(Dialog, Ui_Setup):
         self.entry_changed: dict[str, int] = {
             "start_dir": 1,
             "backup_location": 2,
-            "exclude_cache_dir": 4,
-            "exclude_trash_dir": 8,
-            "exclude_download_dir": 16,
-            "exclude_backup_files": 32,
-            "exclude_specific_dirs": 64,
-            "exclude_specific_files": 128,
-            "include_specific_dirs": 256,
-            "include_specific_files": 512,
+            "log_path": 4,
+            "log_name": 8,
+            "exclude_cache_dir": 16,
+            "exclude_trash_dir": 32,
+            "exclude_download_dir": 64,
+            "exclude_backup_files": 128,
+            "exclude_specific_dirs": 256,
+            "exclude_specific_files": 512,
+            "include_specific_dirs": 1024,
+            "include_specific_files": 2048,
         }
         """The binary value in self.change_made for a change to the form entries,"""
         self.config_arrays = [
@@ -137,16 +144,18 @@ class Setup(Dialog, Ui_Setup):
             "include_specific_dirs",
             "include_specific_files",
         ]
+        """The set of arrays used."""
         self.config_bools = [
             "exclude_cache_dir",
             "exclude_trash_dir",
             "exclude_download_dir",
             "exclude_backup_files",
         ]
-        self.platform_dirs = PlatformDirs("newBackup")
-        if not os.path.isdir(self.platform_dirs.user_config_dir):
-            # if log path doesn't exist, make the directory.
-            os.makedirs(self.platform_dirs.user_config_dir)
+        """The set of booleans used."""
+
+        # if log path doesn't exist, make the directory.
+        if not os.path.isdir(default_config["log_path"]):
+            os.makedirs(default_config["log_path"])
 
         self.set_tooltips()
         self.initial_config = self.initial_setup()
@@ -154,6 +163,8 @@ class Setup(Dialog, Ui_Setup):
 
         self.start_dir_action.triggered.connect(self.action_start_dir)
         self.backup_location_action.triggered.connect(self.action_backup_location)
+        self.log_path_action.triggered.connect(self.action_log_path)
+        self.log_name_action.triggered.connect(self.action_log_name)
 
         self.exclude_cache_dir.clicked.connect(
             lambda: self.action_checkbox_clicked(
@@ -250,7 +261,8 @@ class Setup(Dialog, Ui_Setup):
         """Save the entered configuration values to the config.file."""
         self.config.setValue("start_dir", self.start_dir.text())
         self.config.setValue("backup_location", self.backup_location.text())
-        self.config.setValue("log_file", self.platform_dirs.user_log_dir + "/backup_log.db")
+        self.config.setValue("log_path", self.log_path.text())
+        self.config.setValue("log_name", self.log_name.text())
         self.config.setValue("last_backup", time())
         self.config.set_bool_value(
             "exclude_cache_dir", self.exclude_cache_dir.isChecked()
@@ -308,7 +320,6 @@ class Setup(Dialog, Ui_Setup):
             self.change_made = (
                 self.change_made | self.entry_changed["include_specific_files"]
             )
-
         elif (
             not self.include_specific_files.item(row, 0).text()
             in self.initial_config["include_specific_files"]
@@ -384,6 +395,23 @@ class Setup(Dialog, Ui_Setup):
     def action_common_next_button(self) -> None:
         """Move to the 'Excluded Items' tab."""
         self.tabWidget.setCurrentIndex(self.tabWidget.indexOf(self.exclusions_tab))
+
+    def action_log_name(self) -> None:
+        """Handle a change in the log name."""
+        if self.log_name.text() == "":
+            self.log_name.setText(self.initial_config["log_name"])
+        if self.log_name.text() != self.initial_config["log_name"]:
+            self.change_made = self.change_made | self.entry_changed["log_name"]
+        else:
+            self.change_made = self.change_made & ~self.entry_changed["log_name"]
+
+    def action_log_path(self) -> None:
+        """Handle a change in the log location."""
+        self.open_dir_dialog(self.log_path)
+        if self.log_path.text() != self.initial_config["log_path"]:
+            self.change_made = self.change_made | self.entry_changed["log_path"]
+        else:
+            self.change_made = self.change_made & ~self.entry_changed["log_path"]
 
     def action_backup_location(self) -> None:
         """Handle a change in the starting directory location."""
@@ -500,9 +528,11 @@ class Setup(Dialog, Ui_Setup):
         """Initialize the General Settings page of the dialog."""
         self.set_start_directory()
         self.set_backup_location()
-        self.set_info_values()
+        self.set_log_path()
+        self.set_log_name()
+        self.set_last_backup()
 
-    def set_info_values(self) -> None:
+    def set_last_backup(self) -> None:
         """Fill the info fields on the 'common' tab of the dialog"""
         last_backup = self.initial_config["last_backup"]
         if last_backup not in ("", "-", "0", 0, None):
@@ -511,6 +541,34 @@ class Setup(Dialog, Ui_Setup):
             )
         else:
             self.last_backup.setText("-")
+
+    def set_log_name(self) -> None:
+        """
+        Set the contents and actions of the backup log path edit box.
+        """
+        self.log_name.setText(self.initial_config["log_name"])
+        self.log_name_action = self.log_name.addAction(
+            self.dir_icon(),
+            self.log_name.ActionPosition.TrailingPosition,
+        )
+        if self.log_name.text() != self.config.value("log_name"):
+            self.change_made = self.change_made | self.entry_changed["log_name"]
+        else:
+            self.change_made = self.change_made & ~self.entry_changed["log_name"]
+
+    def set_log_path(self) -> None:
+        """
+        Set the contents and actions of the backup log path edit box.
+        """
+        self.log_path.setText(self.initial_config["log_path"])
+        self.log_path_action = self.log_path.addAction(
+            self.dir_icon(),
+            self.log_path.ActionPosition.TrailingPosition,
+        )
+        if self.log_path.text() != self.config.value("log_path"):
+            self.change_made = self.change_made | self.entry_changed["log_path"]
+        else:
+            self.change_made = self.change_made & ~self.entry_changed["log_path"]
 
     def set_backup_location(self) -> None:
         """
@@ -565,6 +623,8 @@ class Setup(Dialog, Ui_Setup):
         """Set tooltips for all entry elements and buttons."""
         self.start_dir.setToolTip(self.TOOLTIPS["start_dir"])
         self.backup_location.setToolTip(self.TOOLTIPS["backup_location"])
+        self.log_path.setToolTip(self.TOOLTIPS["log_path"])
+        self.log_name.setToolTip(self.TOOLTIPS["log_name"])
         self.last_backup.setToolTip(self.TOOLTIPS["last_backup"])
         self.common_next_button.setToolTip(self.TOOLTIPS["common_next_button"])
 

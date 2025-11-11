@@ -1,7 +1,7 @@
 """
 Test the Setup class functionality.
 
-#File:       test_01_setup.py
+File:       test_01_setup.py
 Author:     Lorn B Kerr
 Copyright:  (c) 2022 - 2025 Lorn B Kerr
 License:    MIT, see file LICENSE
@@ -17,8 +17,8 @@ if src_path not in sys.path:
 
 from lbk_library.gui import Settings
 from lbk_library.testing_support import filesystem
-from PySide6.QtCore import QCoreApplication, QSettings, Qt
-from PySide6.QtWidgets import QDialog, QFileDialog, QTableWidgetItem
+from PySide6.QtCore import QSettings,  Qt     # , QCoreApplication
+from PySide6.QtWidgets import QDialog, QFileDialog, QTableWidgetItem       #
 
 from default_config import default_config
 from setup import Setup
@@ -38,8 +38,6 @@ def build_window(qtbot, tmp_path):
     dest_dir = test_dir + "/dest"
     os.mkdir(dest_dir)
 
-    QCoreApplication.setOrganizationName("LBK Software")
-    QCoreApplication.setApplicationName("Backup")
     filename = starting_dir + "/.config/test.conf"
     config = Settings(filename, QSettings.IniFormat)
     setup = Setup(config)
@@ -54,6 +52,8 @@ def close_window(window):
 def load_test_config(window):
     window.config.setValue("starting_dir", "a_dir")
     window.config.setValue("backup_location", "a_dir")
+    window.config.setValue("log_path", "backup_dir")
+    window.config.setValue("log_name", "backup_test.log")
     window.config.setValue("last_backup", "100")
 
     window.config.setValue("exclude_cache_dir", False)
@@ -82,6 +82,7 @@ def test_01_02_initial_setup(qtbot, tmp_path):
     assert (len(active_config.allKeys())) == 0
 
     initial_config = setup.initial_setup()
+
     for key in initial_config.keys():
         assert initial_config[key] == default_config[key]
 
@@ -102,8 +103,10 @@ def test_01_03_set_tooltips(qtbot, tmp_path):
     setup.set_tooltips()
     assert setup.start_dir.toolTip() == setup.TOOLTIPS["start_dir"]
     assert setup.backup_location.toolTip() == setup.TOOLTIPS["backup_location"]
+    assert setup.log_path.toolTip() == setup.TOOLTIPS["log_path"]
+    assert setup.log_name.toolTip() == setup.TOOLTIPS["log_name"]
+
     assert setup.last_backup.toolTip() == setup.TOOLTIPS["last_backup"]
-#    assert setup.log_file.toolTip() == setup.TOOLTIPS["log_file"]
     assert setup.common_next_button.toolTip() == setup.TOOLTIPS["common_next_button"]
 
     assert setup.exclude_cache_dir.toolTip() == setup.TOOLTIPS["exclude_cache_dir"]
@@ -175,26 +178,58 @@ def test_01_05_set_backup_Location(qtbot, tmp_path):
     close_window(setup)
 
 
-def test_01_06_set_info_values(qtbot, tmp_path):
+def test_01_06_set_log_path(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
-    setup.set_info_values()
+    setup.change_made = 0
+    setup.set_log_path()
+    assert setup.log_path.text() == default_config["log_path"]
+    assert setup.change_made == setup.entry_changed["log_path"]
+
+    setup.config.setValue("log_path", default_config["log_path"])
+    setup.set_log_path()
+    assert setup.log_path.text() == default_config["log_path"]
+    assert setup.change_made == 0
+    close_window(setup)
+
+
+def test_01_07_set_log_name(qtbot, tmp_path):
+    setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.change_made = 0
+    setup.set_log_name()
+    assert setup.log_name.text() == default_config["log_name"]
+    assert setup.change_made == setup.entry_changed["log_name"]
+
+    setup.config.setValue("log_name", default_config["log_name"])
+    setup.set_log_name()
+    assert setup.log_name.text() == default_config["log_name"]
+    assert setup.change_made == 0
+    close_window(setup)
+
+
+def test_01_08_set_last_backup(qtbot, tmp_path):
+    setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.set_last_backup()
     assert setup.last_backup.text() == default_config["last_backup"]
     close_window(setup)
 
 
-def test_01_07_fill_common_tab(qtbot, tmp_path):
+def test_01_09_fill_common_tab(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     setup.fill_common_tab()
     assert setup.tabWidget.currentIndex() == setup.tabWidget.indexOf(setup.common_tab)
     assert setup.start_dir.text() == default_config["start_dir"]
     assert setup.backup_location.text() == default_config["backup_location"]
+    assert setup.log_name.text() == default_config["log_name"]
+    assert setup.log_name.text() == default_config["log_name"]
     assert setup.last_backup.text() == default_config["last_backup"]
     close_window(setup)
 
 
-def test_01_08_initialize_checkboxes(qtbot, tmp_path):
+def test_01_10_initialize_checkboxes(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     setup.change_made = 0xF000
@@ -230,7 +265,7 @@ def test_01_08_initialize_checkboxes(qtbot, tmp_path):
     )
 
 
-def test_01_09_fill_table(qtbot, tmp_path):
+def test_01_11_fill_table(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     setup.fill_table(setup.exclude_specific_dirs, [])
@@ -255,7 +290,7 @@ def test_01_09_fill_table(qtbot, tmp_path):
     close_window(setup)
 
 
-def test_01_10_fill_exclude_dirs_table(qtbot, tmp_path):
+def test_01_12_fill_exclude_dirs_table(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     setup.initial_config["exclude_specific_dirs"] = []
@@ -277,7 +312,7 @@ def test_01_10_fill_exclude_dirs_table(qtbot, tmp_path):
     close_window(setup)
 
 
-def test_01_11_fill_exclude_files_table(qtbot, tmp_path):
+def test_01_13_fill_exclude_files_table(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     setup.initial_config["exclude_specific_files"] = []
@@ -299,7 +334,7 @@ def test_01_11_fill_exclude_files_table(qtbot, tmp_path):
     close_window(setup)
 
 
-def test_01_12_fill_exclude_items_tab(qtbot, tmp_path):
+def test_01_14_fill_exclude_items_tab(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     new_list = ["A", "B", "C"]
@@ -326,7 +361,7 @@ def test_01_12_fill_exclude_items_tab(qtbot, tmp_path):
     close_window(setup)
 
 
-def test_01_13_fill_include_dirs_table(qtbot, tmp_path):
+def test_01_15_fill_include_dirs_table(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     setup.initial_config["include_specific_dirs"] = []
@@ -348,7 +383,7 @@ def test_01_13_fill_include_dirs_table(qtbot, tmp_path):
     close_window(setup)
 
 
-def test_01_14_fill_include_files_table(qtbot, tmp_path):
+def test_01_16_fill_include_files_table(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     setup.initial_config["include_specific_files"] = []
@@ -370,7 +405,7 @@ def test_01_14_fill_include_files_table(qtbot, tmp_path):
     close_window(setup)
 
 
-def test_01_15_fill_include_items_tab(qtbot, tmp_path):
+def test_01_17_fill_include_items_tab(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     setup.fill_include_items_tab()
@@ -402,7 +437,7 @@ def test_01_15_fill_include_items_tab(qtbot, tmp_path):
     close_window(setup)
 
 
-def test_01_16_fill_dialog_fields(qtbot, tmp_path):
+def test_01_18_fill_dialog_fields(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     setup.fill_dialog_fields()
@@ -438,7 +473,7 @@ def test_01_16_fill_dialog_fields(qtbot, tmp_path):
     close_window(setup)
 
 
-def test_01_17_open_dir_dialog(qtbot, tmp_path, mocker):
+def test_01_19_open_dir_dialog(qtbot, tmp_path, mocker):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     setup.start_dir.setText(None)
@@ -461,7 +496,7 @@ def test_01_17_open_dir_dialog(qtbot, tmp_path, mocker):
     close_window(setup)
 
 
-def test_01_18_action_start_dir(qtbot, tmp_path, mocker):
+def test_01_20_action_start_dir(qtbot, tmp_path, mocker):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     setup.change_made = 0
@@ -481,7 +516,7 @@ def test_01_18_action_start_dir(qtbot, tmp_path, mocker):
     close_window(setup)
 
 
-def test_01_19_action_backup_location(qtbot, tmp_path, mocker):
+def test_01_21_action_backup_location(qtbot, tmp_path, mocker):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     setup.change_made = 0
@@ -503,7 +538,42 @@ def test_01_19_action_backup_location(qtbot, tmp_path, mocker):
     close_window(setup)
 
 
-def test_01_20_action_common_next_button(qtbot, tmp_path):
+def test_01_22_action_log_path(qtbot, tmp_path, mocker):
+    setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.change_made = 0
+    setup.log_path.setText(setup.initial_config["log_path"])
+    mocker.patch.object(QFileDialog, "getExistingDirectory")
+    QFileDialog.getExistingDirectory.return_value = setup.initial_config["log_path"]
+    setup.action_log_path()
+    assert setup.change_made == 0
+
+    setup.log_path.setText(setup.initial_config["log_path"])
+    mocker.patch.object(QFileDialog, "getExistingDirectory")
+    QFileDialog.getExistingDirectory.return_value = (
+        setup.initial_config["log_path"] + "/Downloads"
+    )
+    setup.log_path_action.trigger()
+    assert setup.change_made == setup.entry_changed["log_path"]
+    close_window(setup)
+
+
+def test_01_23_action_log_name(qtbot, tmp_path):
+    setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
+
+    setup.change_made = 0
+    assert setup.log_name.text() == setup.initial_config["log_name"]
+    setup.log_name.setText("")
+    setup.action_log_name()
+    assert setup.log_name.text() == setup.initial_config["log_name"]
+    assert not setup.change_made == setup.entry_changed["log_name"]
+    setup.log_name.setText("a_name")
+    setup.action_log_name()
+    assert setup.change_made == setup.entry_changed["log_name"]
+    close_window(setup)
+
+
+def test_01_24_action_common_next_button(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     assert setup.tabWidget.currentIndex() == setup.tabWidget.indexOf(setup.common_tab)
@@ -514,7 +584,7 @@ def test_01_20_action_common_next_button(qtbot, tmp_path):
     close_window(setup)
 
 
-def test_01_21_action_checkbox_clicked(qtbot, tmp_path):
+def test_01_25_action_checkbox_clicked(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     for check_box, name in [
@@ -534,7 +604,7 @@ def test_01_21_action_checkbox_clicked(qtbot, tmp_path):
         assert setup.change_made == 0
 
 
-def test_01_22_action_exclude_specific_dirs(qtbot, tmp_path, mocker):
+def test_01_26_action_exclude_specific_dirs(qtbot, tmp_path, mocker):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
     load_test_config(setup)
 
@@ -548,7 +618,7 @@ def test_01_22_action_exclude_specific_dirs(qtbot, tmp_path, mocker):
     close_window(setup)
 
 
-def test_01_23_action_exclude_specific_files(qtbot, tmp_path, mocker):
+def test_01_27_action_exclude_specific_files(qtbot, tmp_path, mocker):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
     load_test_config(setup)
 
@@ -562,7 +632,7 @@ def test_01_23_action_exclude_specific_files(qtbot, tmp_path, mocker):
     close_window(setup)
 
 
-def test_01_24_action_exclude_previous_button(qtbot, tmp_path):
+def test_01_28_action_exclude_previous_button(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
     load_test_config(setup)
 
@@ -575,7 +645,7 @@ def test_01_24_action_exclude_previous_button(qtbot, tmp_path):
     close_window(setup)
 
 
-def test_01_25_action_exclude_next_button(qtbot, tmp_path):
+def test_01_29_action_exclude_next_button(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
     load_test_config(setup)
 
@@ -590,7 +660,7 @@ def test_01_25_action_exclude_next_button(qtbot, tmp_path):
     close_window(setup)
 
 
-def test_01_26_action_include_specific_dirs(qtbot, tmp_path, mocker):
+def test_01_30_action_include_specific_dirs(qtbot, tmp_path, mocker):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
     load_test_config(setup)
 
@@ -604,7 +674,7 @@ def test_01_26_action_include_specific_dirs(qtbot, tmp_path, mocker):
     close_window(setup)
 
 
-def test_01_27_action_include_specific_files(qtbot, tmp_path, mocker):
+def test_01_31_action_include_specific_files(qtbot, tmp_path, mocker):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
     load_test_config(setup)
 
@@ -618,7 +688,7 @@ def test_01_27_action_include_specific_files(qtbot, tmp_path, mocker):
     close_window(setup)
 
 
-def test_01_29_action_include_previous_button(qtbot, tmp_path):
+def test_01_32_action_include_previous_button(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
     load_test_config(setup)
 
@@ -633,7 +703,7 @@ def test_01_29_action_include_previous_button(qtbot, tmp_path):
     close_window(setup)
 
 
-def test_01_29_get_table_list(qtbot, tmp_path):
+def test_01_33_get_table_list(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     new_list = ["A", "B", "C"]
@@ -646,7 +716,7 @@ def test_01_29_get_table_list(qtbot, tmp_path):
     close_window(setup)
 
 
-def test_01_30_save_config(qtbot, tmp_path):
+def test_01_34_save_config(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     new_list = ["A", "B", "C"]
@@ -686,10 +756,11 @@ def test_01_30_save_config(qtbot, tmp_path):
     )
 
 
-def test_01_31_action_save_continue_button(qtbot, tmp_path):
+def test_01_35_action_save_continue_button(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
-
+    
     new_list = ["A", "B", "C"]
+    setup.start_dir.setText("abc")
     setup.backup_location.setText("zxy")
     setup.fill_table(setup.include_specific_files, new_list)
     setup.save_continue_button.click()
@@ -726,7 +797,7 @@ def test_01_31_action_save_continue_button(qtbot, tmp_path):
     )
 
 
-def test_01_32_action_save_exit_button(qtbot, tmp_path):
+def test_01_36_action_save_exit_button(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
 
     new_list = ["A", "B", "C"]

@@ -70,57 +70,38 @@
       <string>Next</string>
      </property>
     </widget>
-    <widget class="QLabel" name="lbl_start_dir">
+    <widget class="QLabel" name="start_dir_lbl">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>40</y>
-       <width>182</width>
+       <width>161</width>
        <height>36</height>
       </rect>
      </property>
      <property name="text">
       <string>Directory to Backup:</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-     </property>
     </widget>
     <widget class="QLineEdit" name="start_dir">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>40</y>
-       <width>300</width>
+       <x>30</x>
+       <y>70</y>
+       <width>500</width>
        <height>36</height>
       </rect>
      </property>
      <property name="toolTip">
       <string/>
-     </property>
-    </widget>
-    <widget class="QLabel" name="lbl_backup_location">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>90</y>
-       <width>182</width>
-       <height>36</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Backup to:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLineEdit" name="backup_location">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>90</y>
-       <width>300</width>
+       <x>30</x>
+       <y>140</y>
+       <width>500</width>
        <height>36</height>
       </rect>
      </property>
@@ -128,11 +109,11 @@
       <string/>
      </property>
     </widget>
-    <widget class="QLabel" name="lbl_last_backup">
+    <widget class="QLabel" name="last_backup_lbl">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>135</y>
+       <y>330</y>
        <width>182</width>
        <height>30</height>
       </rect>
@@ -141,20 +122,91 @@
       <string>Last Backup Time/Date:</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="last_backup">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>135</y>
+       <x>190</x>
+       <y>330</y>
        <width>274</width>
        <height>30</height>
       </rect>
      </property>
      <property name="text">
       <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="backup_llbl">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>110</y>
+       <width>161</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Backup to:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="log_name">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>280</y>
+       <width>500</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="backup_path_lbl">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>180</y>
+       <width>161</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Backup Log Path:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="log_path">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>210</y>
+       <width>500</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="backup_log_filename_lbl">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>250</y>
+       <width>161</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Backup Log Filename:</string>
      </property>
     </widget>
    </widget>
