@@ -9,7 +9,8 @@ Version:    1.0.1
 """
 
 import os
-from platformdirs import PlatformDirs
+import platform
+#from platformdirs import PlatformDirs
 
 file_name = "default_config.py"
 file_version = "1.1.0"
@@ -19,6 +20,13 @@ changes = {
     + "Removed unnecessary section headers to make a single level dict;"
     + "Corrected 'base_dir' to 'start_dir'.",
 }
+
+# Set correct platform directories.
+# The backup log file path; Use the OS standard location
+if platform.system() == "Linux":
+    __log_path = os.path.expanduser('~') + "/.local/state/UnNamedBranch/log"
+elif platform.system() == "Windows":
+    __log_path = None   # to be determined.
 
 default_config = {
     # Time stamp of the last backup. Default of '0' means never.
@@ -34,10 +42,10 @@ default_config = {
     # will be a drive letter, generally 'E:' or greater.
     "backup_location": "",
 
-    # Tha backup log file path. Use the OS standard location
-    "log_path": PlatformDirs.user_log_dir()
+    # Tha backup log file path. Use the OS standard location.
+    "log_path": __log_path,
     # The backup log file name
-    "log_file": "backup.log",
+    "log_name": "backup.log",
 
     # What directories and files do we want to exclude from the backup?
     # In general operation, areas like the various cache and trash
