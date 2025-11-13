@@ -30,7 +30,7 @@ def test_02_01_init_(filesystem):
     Test the the object is really a Logger class
     """
     source, dest = filesystem
-    path = dest / "test_log.db"  # temp location
+    path = dest / "logger/test_log.log"  # temp location
     logger = Logger(path)
     assert isinstance(logger, Logger)
     logger.log_db.sql_close()
@@ -43,13 +43,13 @@ def test_02_02_create_log_database_bad_path(filesystem):
     Call with empty path. Should raise a FileNotFound exception.
     """
     source, dest = filesystem
-    db_path = dest / "test_log.db"
+    db_path = dest / "tests/test_log.db"
 
     with pytest.raises(FileNotFoundError) as pytest_wrapped_exception:
         logger = Logger()        
         logger.create_log_database("")
     assert pytest_wrapped_exception.type == FileNotFoundError
-    assert str(pytest_wrapped_exception.value) == "Log Database path cannot be empty."
+    assert str(pytest_wrapped_exception.value) == "Log file path cannot be empty."
 
 
 def test_02_03_create_log_database(filesystem):
@@ -58,10 +58,9 @@ def test_02_03_create_log_database(filesystem):
     empty table. Check for columns in table.
     """
     source, dest = filesystem
-    path = dest / "test_log.db"
+    path = dest / "tests/test_log.db"
 
     # does path to db exist
-    path = dest / "test_log.db"
     logger = Logger(path)
     assert os.path.exists(path)
     assert logger.log_path == path
@@ -104,7 +103,7 @@ def test_02_04_close_log(filesystem):
     The database should be closed after the call
     """
     source, dest = filesystem
-    path = dest / "test_log.db"  # temp location
+    path = dest / "tests/test_log.db"  # temp location
     logger = Logger(path)
     assert logger.log_db
     assert logger.log_db.sql_is_connected()
@@ -120,7 +119,7 @@ def test_02_05_add_log_entry(filesystem):
     row
     """
     source, dest = filesystem
-    path = dest / "test_log.db"
+    path = dest / "tests/test_log.db"
     logger = Logger(path)
     assert logger.log_db.sql_is_connected()
     time = 1000000
