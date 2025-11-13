@@ -1,9 +1,12 @@
 """
 Manage the database log of backup actions.
 
+The actions log is stored by default in the system standard log directory.
+For Linux, this is '/home/<user name>/.local/state/UnNamedBranch/log/'.
+
 File:       logger.py
 Author:     Lorn B Kerr
-Copyright:  (c) 2022 Lorn B Kerr
+Copyright:  (c) 2022, 2025; Lorn B Kerr
 License:    MIT, see file LICENSE
 Version:    1.0.1
 """
@@ -91,9 +94,13 @@ class Logger:
             FileNotFoundError
         """
         if not log_path:
-            raise FileNotFoundError("Log Database path cannot be empty.")
+            raise FileNotFoundError("Log file path cannot be empty.")
 
         self.log_path = log_path
+        if not os.path.exists(self.log_path):
+            directory_path, filename = os.path.split(self.log_path)
+            os.makedirs(directory_path)
+
         self.log_db.sql_connect(log_path)
         self.log_db.sql_query("DROP TABLE IF EXISTS " + self.table)
         create_table = "CREATE TABLE IF NOT EXISTS " + self.table + " ("
