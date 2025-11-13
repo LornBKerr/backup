@@ -11,10 +11,10 @@ Version:    1.1.0
 
 import os
 import shutil
-#import sys
+import sys
 import time
-#from copy import deepcopy
-#from typing import Any
+from copy import deepcopy
+from typing import Any
 
 from lbk_library.gui import Settings
 
@@ -35,8 +35,7 @@ class ExternalStorage:
     Backup a directory structure to an external drive.
 
     Parameters:
-        config (dict[str, Any]): the config file; the criteria for
-                the backup.
+        config (Settings): the config file; the criteria for the backup.
         actions (dict[str, bool]): The required actions to take.
     """
 
