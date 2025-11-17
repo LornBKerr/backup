@@ -128,7 +128,7 @@ class ExternalStorage:
         check for any specifically included directories and files.
 
         As the directories are scanned, the destination is checked to
-        ensure the destination is present prior to tring to copy a
+        ensure the destination is present prior to trying to copy a
         new or changed file to the destination.
         """
         source = self.config.value("start_dir")
