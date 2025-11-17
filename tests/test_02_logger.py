@@ -31,7 +31,8 @@ def test_02_01_init_(filesystem):
     """
     source, dest = filesystem
     path = dest / "logger/test_log.log"  # temp location
-    logger = Logger(path)
+    dir_path, filename = os.path.split(path)
+    logger = Logger(dir_path, filename)
     assert isinstance(logger, Logger)
     logger.log_db.sql_close()
 
@@ -45,11 +46,11 @@ def test_02_02_create_log_database_bad_path(filesystem):
     source, dest = filesystem
     db_path = dest / "tests/test_log.db"
 
-    with pytest.raises(FileNotFoundError) as pytest_wrapped_exception:
+    with pytest.raises(TypeError) as pytest_wrapped_exception:
         logger = Logger()        
         logger.create_log_database("")
-    assert pytest_wrapped_exception.type == FileNotFoundError
-    assert str(pytest_wrapped_exception.value) == "Log file path cannot be empty."
+    assert pytest_wrapped_exception.type == TypeError
+    assert str(pytest_wrapped_exception.value) == "Logger.__init__() missing 2 required positional arguments: 'log_path' and 'log_name'"
 
 
 def test_02_03_create_log_database(filesystem):
@@ -61,9 +62,10 @@ def test_02_03_create_log_database(filesystem):
     path = dest / "tests/test_log.db"
 
     # does path to db exist
-    logger = Logger(path)
-    assert os.path.exists(path)
-    assert logger.log_path == path
+    dir_path, filename = os.path.split(path)
+    logger = Logger(dir_path, filename)
+    assert os.path.exists(dir_path)
+    assert logger.log_path == str(path)
     assert isinstance(logger.log_db, DataFile)
     assert logger.log_db.sql_is_connected()
 
@@ -91,7 +93,7 @@ def test_02_03_create_log_database(filesystem):
     logger.log_db.sql_close()
     
     # now open an existing datafile.
-    logger = Logger(path)
+    logger = Logger(dir_path, filename)
     assert logger.log_db.sql_is_connected()
     logger.log_db.sql_close()
     
@@ -104,7 +106,8 @@ def test_02_04_close_log(filesystem):
     """
     source, dest = filesystem
     path = dest / "tests/test_log.db"  # temp location
-    logger = Logger(path)
+    dir_path, filename = os.path.split(path)
+    logger = Logger(dir_path, filename)
     assert logger.log_db
     assert logger.log_db.sql_is_connected()
     logger.close_log()
@@ -120,7 +123,8 @@ def test_02_05_add_log_entry(filesystem):
     """
     source, dest = filesystem
     path = dest / "tests/test_log.db"
-    logger = Logger(path)
+    dir_path, filename = os.path.split(path)
+    logger = Logger(dir_path, filename)
     assert logger.log_db.sql_is_connected()
     time = 1000000
     result_code = ResultCodes.NO_CONFIG_FILE

@@ -25,15 +25,17 @@ class Logger:
         log_path (str): the path to the log database
     """
 
-    def __init__(self, log_path: str = "") -> None:
+    def __init__(self, log_path: str, log_name: str) -> None:
         """
         Set the path to the log file and open the log database.
 
         Parameters:
             log_path (str): the path to the log file.
+            log_name (str): the name of the log file
         """
-        self.log_path: str = log_path
+        self.log_path: str = log_path + "/" + log_name
         """ The full path to the logging database """
+
         self.log_db: Datafile = DataFile()
         """ the log database """
         self.table = "Backup_Log"
@@ -97,8 +99,8 @@ class Logger:
             raise FileNotFoundError("Log file path cannot be empty.")
 
         self.log_path = log_path
-        if not os.path.exists(self.log_path):
-            directory_path, filename = os.path.split(self.log_path)
+        directory_path, filename = os.path.split(self.log_path)
+        if not os.path.exists(directory_path):
             os.makedirs(directory_path)
 
         self.log_db.sql_connect(log_path)
