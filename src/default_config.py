@@ -26,11 +26,11 @@ changes = {
 if platform.system() == "Linux":
     __log_path = os.path.expanduser('~') + "/.local/state/UnNamedBranch/log"
 elif platform.system() == "Windows":
-    __log_path = None   # to be determined.
+    __log_path = os.path.expanduser('~') + "\\AppData\\Local\\UnNamedBranch\\Backup\\Logs"
 
 default_config = {
     # Time stamp of the last backup. Default of '0' means never.
-    "last_backup": "-",
+    "last_backup": "0",
 
     # What is the base directory to start scanning for changed
     # files. By default, it is the 'user_id' dir, '/home/{user_id}' on linux
