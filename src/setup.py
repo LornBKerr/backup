@@ -540,7 +540,7 @@ class Setup(Dialog, Ui_Setup):
                 datetime.fromtimestamp(float(last_backup)).strftime("%I:%M %p , %b %d, %Y")
             )
         else:
-            self.last_backup.setText("-")
+            self.last_backup.setText("0")
 
     def set_log_name(self) -> None:
         """
