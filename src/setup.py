@@ -18,7 +18,6 @@ ersion:    1.1.0
 
 import base64
 import os
-#from platformdirs import PlatformDirs
 from copy import deepcopy
 from datetime import datetime
 from time import time
