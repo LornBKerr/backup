@@ -37,8 +37,8 @@ def test_03_01_init(filesystem):
     source, dest = filesystem
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
-    path = dest / "tests/test_log.db"
-    logger = Logger(path)
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
     bes = ExternalStorage(test_config, logger, actions)
     assert isinstance(bes, ExternalStorage)
     logger.close_log()
@@ -54,9 +54,8 @@ def test_03_02_dir_exclude_list_empty(filesystem):
     source, dest = filesystem
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
-    path = dest / "tests/test_log.db"
-
-    logger = Logger(path)
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
 
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
@@ -74,8 +73,8 @@ def test_03_03_dir_exclude_list_dir_names(filesystem):
     source, dest = filesystem
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
-    path = dest / "tests/test_log.db"
-    logger = Logger(path)
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
 
     # check that 'specific_dirs' is picked up
     test_config.write_list("exclude_specific_dirs", ["a dir"])
@@ -95,8 +94,8 @@ def test_03_04_dir_exclude_list_cache(filesystem):
     source, dest = filesystem
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
-    path = dest / "tests/test_log.db"
-    logger = Logger(path)
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
 
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
@@ -119,8 +118,8 @@ def test_03_05_dir_exclude_list_trash(filesystem):
     source, dest = filesystem
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
-    path = dest / "tests/test_log.db"
-    logger = Logger(path)
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
 
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
@@ -143,8 +142,8 @@ def test_03_06_dir_exclude_list_download(filesystem):
     source, dest = filesystem
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
-    path = dest / "tests/test_log.db"
-    logger = Logger(path)
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
 
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
@@ -168,7 +167,8 @@ def test_03_06_dir_exclude_list_download(filesystem):
 #        "verbose": True,
 #    }
 #    source, dest = filesystem
-#    logger = Logger(dest / "test_log.db")
+#    log_file = "tests/test_log.db"
+#    logger = Logger(str(dest), log_file)
 #    bes = ExternalStorage(test_config, logger, actions)
 #    exclusion_list = bes.dir_exclude_list
 #    assert not "System Volume Information" in exclusion_list
@@ -188,8 +188,8 @@ def test_03_08_dir_include_list(filesystem):
     source, dest = filesystem
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
-    path = dest / "tests/test_log.db"
-    logger = Logger(path)
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
 
     bes = ExternalStorage(test_config, logger, actions)
     inclusion_list = bes.dir_include_list
@@ -215,8 +215,8 @@ def test_03_09_file_exclude_list_empty(filesystem):
     source, dest = filesystem
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
-    path = dest / "tests/test_log.db"
-    logger = Logger(path)
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
 
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.file_exclude_list
@@ -234,8 +234,8 @@ def test_03_11_file_exclude_list(filesystem):
     source, dest = filesystem
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
-    path = dest / "tests/test_log.db"
-    logger = Logger(path)
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
 
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.file_exclude_list
@@ -268,8 +268,8 @@ def test_03_12_file_include_list(filesystem):
     source, dest = filesystem
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
-    path = dest / "tests/test_log.db"
-    logger = Logger(path)
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
 
     bes = ExternalStorage(test_config, logger, actions)
     inclusion_list = bes.file_include_list
@@ -298,8 +298,8 @@ def test_03_13_process_file_1(filesystem):
     source, dest = filesystem
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
-    path = dest / "tests/test_log.db"
-    logger = Logger(path)
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
 
     load_directory_set(directories, dest, False)
     # Test for regular files
@@ -330,8 +330,8 @@ def test_03_14_process_file_2(filesystem):
         source, dest = filesystem
         test_config = build_config_file(source, dest)
         actions = {"verbose": True}
-        path = dest / "tests/test_log.db"
-        logger = Logger(path)
+        log_file = "tests/test_log.db"
+        logger = Logger(str(dest), log_file)
 
         load_directory_set(directories, dest, False)
         bes = ExternalStorage(test_config, logger, actions)
@@ -361,8 +361,8 @@ def test_03_15_process_dir_files_1(filesystem):
     source, dest = filesystem
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
-    path = dest / "tests/test_log.db"
-    logger = Logger(path)
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
 
     load_directory_set(directories, dest, False)
     current_dir = source / "test1"
@@ -386,8 +386,8 @@ def test_03_16_process_dir_files_2(filesystem):
     source, dest = filesystem
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
-    path = dest / "tests/test_log.db"
-    logger = Logger(path)
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
 
     load_directory_set(directories, dest, False)
     current_dir = source / "test1"
@@ -415,8 +415,8 @@ def test_03_17_process_dir_files_3(filesystem):
     source, dest = filesystem
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
-    path = dest / "tests/test_log.db"
-    logger = Logger(path)
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
 
     load_directory_set(directories, dest, False)
     current_dir = source / "test1"
@@ -451,7 +451,8 @@ def test_03_18_process_dir_file_4(filesystem):
     actions = {
         "verbose": True,
     }
-    logger = Logger(dest / "tests/test_log.db")
+    log_file = "tests/test_log.db"
+    logger = Logger(str(dest), log_file)
 
     bes = ExternalStorage(test_config, logger, actions)
     bes.process_dir_files(current_dir, destination_dir, additional_files)
