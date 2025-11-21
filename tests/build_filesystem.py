@@ -1,7 +1,7 @@
 """
 Provide common support functionality for the test files.
 
-File:       test_02_logger.py
+File:       build_file_system.py
 Author:     Lorn B Kerr
 Copyright:  (c) 2022 - 2025 Lorn B Kerr
 License:    MIT, see file LICENSE
@@ -9,12 +9,11 @@ Version:    1.0.1
 """
 
 import os
-import pathlib
 import sys
 import time
 
 import pytest
-from lbk_library import IniFileParser
+from lbk_library.gui import Settings
 
 # Directories for Windows and Linux
 directories = [
@@ -36,7 +35,6 @@ if sys.platform.startswith("linux"):
     directories.append("Cache")
     directories.append("Trash")
 
-
 links = ["link_good", "link_bad"]
 """ The set of test links, one valid link, one broken link. """
 
@@ -44,65 +42,12 @@ ten_days_previous = time.time() - (10 * 86400)
 """ set a timestamp for 10 days before now. """
 
 additional_files = [
-    "file_is_cache_file",
     "backup_file_1~",
     "backup_file2.bak",
     "py_file.py",
     "py_file.pyc",
 ]
-"""
-The set of additional files to be added to one of the directories to
-test the file exclusion config settings.
-"""
-
-
-def get_test_config(source: pathlib.Path = "", dest: pathlib.Path = ""):
-    """
-    A basic, do nothing  config file with the base_dir set to source and the
-    backup_dir set to dest. All other selections are set to the False or
-    empty settings.
-
-    Parameters:
-        source: (pathlib.Path) the file path to be backed up, default is
-            blank string.
-        dest: (pathlib.Path) the destination for the backup, default is
-            blank string.
-
-    Returns:
-        (dict[str, Any]) a do nothing config file.
-    """
-    return {
-        "general": {
-            "last_backup": 0,
-            "base_dir": source,
-            "backup_dir": dest,
-            #            "config_file": os.path.join(source, ".config"),
-            "external_storage": False,
-            "cloud_storage": False,
-            "config_dir": "LBKBackup",
-            "config_file": "backup.ini",
-            "log_file": "backup_log.db",
-        },
-        "dir_exclude": {
-            "cache_dir": False,
-            "trash_dir": False,
-            "download_dir": False,
-            "sysvolinfo_dir": False,
-            "specific_dirs": [],
-        },
-        "dir_include": {
-            "specific_dirs": [],
-        },
-        "file_exclude": {
-            "backup_files": False,
-            "cache_files": False,
-            "specific_files": [],
-        },
-        "file_include": {
-            "specific_files": [],
-        },
-    }
-    # end get_test_config()
+"""The set of additional files to be added to one of the directories."""
 
 
 def load_directory_set(dirs, base_dir, add_files=True):
@@ -122,6 +67,7 @@ def load_directory_set(dirs, base_dir, add_files=True):
     for a_dir in dirs:
         new_dir = base_dir / a_dir
         new_dir.mkdir()
+        
         if add_files and a_dir != ".config":
             file1 = new_dir / "file1.txt"
             file1.write_text("This is file1 in " + a_dir)
@@ -129,7 +75,6 @@ def load_directory_set(dirs, base_dir, add_files=True):
             file2 = new_dir / "file2.txt"
             file2.write_text("This is file2 in " + a_dir)
             os.utime(file2, (ten_days_previous, ten_days_previous))
-    # end load_directory_set()
 
 
 def load_links(links, ln_src_dir):
@@ -148,7 +93,6 @@ def load_links(links, ln_src_dir):
     bad_link_file.write_text("This is a bad link")
     os.symlink(bad_link_file, ln_src_dir / "link_bad")
     os.remove(bad_link_file)
-    # end load_links()
 
 
 def add_files(file_list, dir):
@@ -164,15 +108,36 @@ def add_files(file_list, dir):
         add_file = dir / filename
         add_file.write_text("This is " + filename)
         os.utime(add_file, (ten_days_previous, ten_days_previous))
-    # end add_files()
 
 
-def build_config_file(source, dest):
-    # set the config file
-    config_handler = IniFileParser(
-        "backup.ini", "backup", source / ".config/lbk_software"
-    )
-    config_handler.write_config(get_test_config(source, dest))
+def build_config_file(source: str, dest: str, name: str = "BackupTest") -> Settings:
+    """
+    Create a custom configuration file for testing purposes.
+
+    Parameters:
+        source (str): The source path to be backed up.
+        dest (str): The destination for the backup files.
+        name (str): The name of the config file to be built. Default is
+            'BackupTest';
+    """
+    config_file = Settings("UnnamedBranch", "BackupTest")
+    config_file.setValue("last_backup", 0)
+    config_file.setValue("start_dir", str(source))
+    config_file.setValue("backup_location", str(dest / "backup_dir"))
+    config_file.setValue("log_path", str(dest / "log_dir"))
+    config_file.setValue("log_name", str("test_log.log"))
+    config_file.set_bool_value("exclude_cache_dir", False)
+    config_file.set_bool_value("exclude_trash_dir", False)
+    config_file.set_bool_value("exclude_download_dir", False)
+    config_file.set_bool_value("exclude_cache_files", False)
+    config_file.set_bool_value("exclude_backup_files", False)
+    config_file.write_list("exclude_specific_dirs", [])
+    config_file.write_list("exclude_specific_files", [])
+    config_file.write_list("include_specific_dirs", [])
+    config_file.write_list("include_specific_files", [])
+    config_file.sync()
+
+    return config_file
 
 
 @pytest.fixture
@@ -198,7 +163,6 @@ def filesystem(tmp_path):
     source.mkdir()
     dest = tmp_path / "dest"
     dest.mkdir()
-
     # make a set of source directories and files
     load_directory_set(directories, source)
     # only do symlinks for Linux, not Windows
@@ -210,7 +174,3 @@ def filesystem(tmp_path):
     build_config_file(source, dest)
 
     return source, dest
-    # end filesystem()
-
-
-# end build_file_system.py
