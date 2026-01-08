@@ -25,7 +25,8 @@ changes = {
 if platform.system() == "Linux":
     __log_path = os.path.expanduser('~') + "/.local/state/UnNamedBranch/log"
 elif platform.system() == "Windows":
-    __log_path = os.path.expanduser('~') + "\\AppData\\Local\\UnNamedBranch\\Backup\\Logs"
+    __log_path = \
+        os.path.expanduser('~') + "\\AppData\\Local\\UnNamedBranch\\Backup\\Logs"
 
 default_config = {
     # Time stamp of the last backup. Default of '0' means never.
@@ -79,8 +80,8 @@ default_config = {
 
     # Some programs use a single file for for the 'cache' rather
     # than a directory. Exclude these files if True
-    #"exclude_cache_files": True,
-    #'Can't really find instances of this that are useful, so delete for now.
+    # "exclude_cache_files": True,
+    # 'Can't really find instances of this that are useful, so delete for now.
 
     # Specific files can be noted for exclusion as desired.
     "exclude_specific_files": [],
