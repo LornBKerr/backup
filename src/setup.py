@@ -41,7 +41,7 @@ filename = "setup.py"
 file_version = "1.0.0"
 changes = {
     "1.0.0": "Initial release",
-    "1.1.0": "Revised extensively with full functionality."
+    "1.1.0": "Revised extensively with full functionality.",
 }
 
 
@@ -536,7 +536,9 @@ class Setup(Dialog, Ui_Setup):
         last_backup = self.initial_config["last_backup"]
         if last_backup not in ("", "-", "0", 0, None):
             self.last_backup.setText(
-                datetime.fromtimestamp(float(last_backup)).strftime("%I:%M %p , %b %d, %Y")
+                datetime.fromtimestamp(float(last_backup)).strftime(
+                    "%I:%M %p , %b %d, %Y"
+                )
             )
         else:
             self.last_backup.setText("0")
