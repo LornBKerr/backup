@@ -23,7 +23,6 @@ Version:    1.1.0
 import sys
 
 from main import Backup
-from result_codes import ResultCodes
 
 file_name = "backup.py"
 file_version = "1.1.0"
