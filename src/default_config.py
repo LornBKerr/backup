@@ -5,12 +5,11 @@ File:       default_config.py
 Author:     Lorn B Kerr
 Copyright:  (c) 2022,2023 Lorn B Kerr
 License:    MIT, see file LICENSE
-Version:    1.0.1
+Version:    1.1.0
 """
 
 import os
 import platform
-#from platformdirs import PlatformDirs
 
 file_name = "default_config.py"
 file_version = "1.1.0"
