@@ -23,6 +23,7 @@ from datetime import datetime
 from time import time
 from typing import Any
 
+from default_config import default_config
 from lbk_library.gui import Dialog, Settings
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
@@ -33,9 +34,8 @@ from PySide6.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
 )
-
-from default_config import default_config
 from setup_form import Ui_Setup
+
 
 filename = "setup.py"
 file_version = "1.0.0"
