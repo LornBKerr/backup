@@ -15,12 +15,11 @@ src_path = os.path.join(os.path.realpath("."), "src")
 if src_path not in sys.path:
     sys.path.append(src_path)
 
+from default_config import default_config
 from lbk_library.gui import Settings
 from lbk_library.testing_support import filesystem
-from PySide6.QtCore import QSettings,  Qt     # , QCoreApplication
-from PySide6.QtWidgets import QDialog, QFileDialog, QTableWidgetItem       #
-
-from default_config import default_config
+from PySide6.QtCore import QSettings, Qt
+from PySide6.QtWidgets import QDialog, QFileDialog, QTableWidgetItem
 from setup import Setup
 
 filename = "test_01_setup.py"
@@ -758,7 +757,7 @@ def test_01_34_save_config(qtbot, tmp_path):
 
 def test_01_35_action_save_continue_button(qtbot, tmp_path):
     setup, starting_dir, dest_dir = build_window(qtbot, tmp_path)
-    
+
     new_list = ["A", "B", "C"]
     setup.start_dir.setText("abc")
     setup.backup_location.setText("zxy")
