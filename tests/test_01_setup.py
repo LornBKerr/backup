@@ -285,7 +285,7 @@ def test_01_11_fill_table(qtbot, tmp_path):
         setup.exclude_specific_dirs.item(2, 0).data(Qt.ItemDataRole.EditRole)
         == new_list[2]
     )
-    assert setup.exclude_specific_dirs.item(3, 0) == None
+    assert setup.exclude_specific_dirs.item(3, 0) is None
     close_window(setup)
 
 
