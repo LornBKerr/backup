@@ -35,8 +35,7 @@ class Logger:
         """
         self.log_path: str = log_path + "/" + log_name
         """ The full path to the logging database """
-
-        self.log_db: Datafile = DataFile()
+        self.log_db: DataFile = DataFile()
         """ the log database """
         self.table = "Backup_Log"
         """ The name of the table in the database """
