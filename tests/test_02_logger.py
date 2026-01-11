@@ -16,56 +16,68 @@ if src_path not in sys.path:
     sys.path.append(src_path)
 
 import pytest
-from build_filesystem import filesystem
-from lbk_library import DataFile
+from build_filesystem import new_filesys
 
+from lbk_library import DataFile
 from logger import Logger
 from result_codes import ResultCodes
 
 
-def test_02_01_init_(filesystem):
+def test_02_01_init_(tmp_path):
     """
     Testing Backup.Logger.__init__()
 
     Test the the object is really a Logger class
     """
-    source, dest = filesystem
-    path = dest / "logger/test_log.log"  # temp location
-    dir_path, filename = os.path.split(path)
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
+
+    log_path = dest / "logger/test_log.log"  # temp location
+    dir_path, filename = os.path.split(log_path)
     logger = Logger(dir_path, filename)
     assert isinstance(logger, Logger)
     logger.log_db.sql_close()
 
 
-def test_02_02_create_log_database_bad_path(filesystem):
+
+def test_02_02_create_log_database_bad_path(tmp_path):
     """
     Testing Backup.Logger.create_log_database()
 
     Call with empty path. Should raise a FileNotFound exception.
     """
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     db_path = dest / "tests/test_log.db"
 
     with pytest.raises(TypeError) as pytest_wrapped_exception:
-        logger = Logger()        
+        logger = Logger()
         logger.create_log_database("")
     assert pytest_wrapped_exception.type == TypeError
-    assert str(pytest_wrapped_exception.value) == "Logger.__init__() missing 2 required positional arguments: 'log_path' and 'log_name'"
+    assert (
+        str(pytest_wrapped_exception.value)
+        == "Logger.__init__() missing 2 required positional arguments:"
+        + " 'log_path' and 'log_name'"
+    )
 
 
-def test_02_03_create_log_database(filesystem):
+def test_02_03_create_log_database(tmp_path):
     """
     Call with a temp file name. Check for table presence. Check for
     empty table. Check for columns in table.
     """
-    source, dest = filesystem
-    path = dest / "tests/test_log.db"
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
+    db_path = dest / "tests/test_log.db"
 
     # does path to db exist
-    dir_path, filename = os.path.split(path)
+    dir_path, filename = os.path.split(db_path)
     logger = Logger(dir_path, filename)
     assert os.path.exists(dir_path)
-    assert logger.log_path == str(path)
+    assert logger.log_path == str(db_path)
     assert isinstance(logger.log_db, DataFile)
     assert logger.log_db.sql_is_connected()
 
@@ -91,22 +103,24 @@ def test_02_03_create_log_database(filesystem):
         assert db_row["name"] == row["name"]
         assert db_row["type"] == row["type"]
     logger.log_db.sql_close()
-    
+
     # now open an existing datafile.
     logger = Logger(dir_path, filename)
     assert logger.log_db.sql_is_connected()
     logger.log_db.sql_close()
-    
 
-def test_02_04_close_log(filesystem):
+
+def test_02_04_close_log(tmp_path):
     """
     Testing Backup.Logger.close_log()
 
     The database should be closed after the call
     """
-    source, dest = filesystem
-    path = dest / "tests/test_log.db"  # temp location
-    dir_path, filename = os.path.split(path)
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
+    db_path = dest / "tests/test_log.db"
+    dir_path, filename = os.path.split(db_path)
     logger = Logger(dir_path, filename)
     assert logger.log_db
     assert logger.log_db.sql_is_connected()
@@ -114,16 +128,18 @@ def test_02_04_close_log(filesystem):
     assert not logger.log_db.sql_is_connected()
 
 
-def test_02_05_add_log_entry(filesystem):
+def test_02_05_add_log_entry(tmp_path):
     """
     Test Backup.dd_log_entry()
 
     Generate a valid log entry, write to database, check the resulting
     row
     """
-    source, dest = filesystem
-    path = dest / "tests/test_log.db"
-    dir_path, filename = os.path.split(path)
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
+    db_path = dest / "tests/test_log.db"
+    dir_path, filename = os.path.split(db_path)
     logger = Logger(dir_path, filename)
     assert logger.log_db.sql_is_connected()
     time = 1000000
@@ -135,7 +151,7 @@ def test_02_05_add_log_entry(filesystem):
 
     # test results
     logger.log_db = DataFile()
-    logger.log_db.sql_connect(path)
+    logger.log_db.sql_connect(db_path)
     sql = "SELECT * FROM " + logger.table
     result = logger.log_db.sql_query(sql, {})
     data = logger.log_db.sql_fetchrow(result)
