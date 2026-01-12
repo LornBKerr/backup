@@ -1,7 +1,7 @@
 """
 Test the ExternalStorage class functionality.
 
-File:       test_02_external_storage.py
+File:       test_03_external_storage.py
 Author:     Lorn B Kerr
 Copyright:  (c) 2022 - 2025 Lorn B Kerr
 License:    MIT, see file LICENSE
@@ -21,20 +21,22 @@ from build_filesystem import (
     additional_files,
     build_config_file,
     directories,
-    filesystem,
     load_directory_set,
+    new_filesys,
 )
 from external_storage import ExternalStorage
 from logger import Logger
 
 
-def test_03_01_init(filesystem):
+def test_03_01_init(tmp_path):
     """
     Testing Backup.ExternalStorage.__init__()
 
     Test the the object is really a ExternalStorage class
     """
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
     log_file = "tests/test_log.db"
@@ -44,14 +46,16 @@ def test_03_01_init(filesystem):
     logger.close_log()
 
 
-def test_03_02_dir_exclude_list_empty(filesystem):
+def test_03_02_dir_exclude_list_empty(tmp_path):
     """
     Testing ExternalStorage.dir_exclude_list() with no exclusions.
 
     Test the results of ExternalStorage.dir_exclude_list() for
     no exclusions. Should be an empty list.
     """
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
     log_file = "tests/test_log.db"
@@ -63,14 +67,16 @@ def test_03_02_dir_exclude_list_empty(filesystem):
     logger.close_log()
 
 
-def test_03_03_dir_exclude_list_dir_names(filesystem):
+def test_03_03_dir_exclude_list_dir_names(tmp_path):
     """
     Testing ExternalStorage.dir_exclude_list() for excluding specific directories.
 
     Test the results of ExternalStorage.dir_exclude_list() for
     excluding specific directories.
     """
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
     log_file = "tests/test_log.db"
@@ -85,13 +91,15 @@ def test_03_03_dir_exclude_list_dir_names(filesystem):
     logger.close_log()
 
 
-def test_03_04_dir_exclude_list_cache(filesystem):
+def test_03_04_dir_exclude_list_cache(tmp_path):
     """
     Testing ExternalStorage.dir_exclude_list() for excluding 'cache' directories.
 
     Check that 'cache_dir' is handled if requested.
     """
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
     log_file = "tests/test_log.db"
@@ -109,13 +117,15 @@ def test_03_04_dir_exclude_list_cache(filesystem):
     logger.close_log()
 
 
-def test_03_05_dir_exclude_list_trash(filesystem):
+def test_03_05_dir_exclude_list_trash(tmp_path):
     """
     Testing ExternalStorage.dir_exclude_list() for excluding 'trash' directories.
 
     Check that 'trash_dir' is handled if requested. Includes Linux and Windows.
     """
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
     log_file = "tests/test_log.db"
@@ -133,13 +143,15 @@ def test_03_05_dir_exclude_list_trash(filesystem):
     logger.close_log()
 
 
-def test_03_06_dir_exclude_list_download(filesystem):
+def test_03_06_dir_exclude_list_download(tmp_path):
     """
     Testing ExternalStorage.dir_exclude_list() for excluding 'download' directories.
 
     Check that 'download_dir' is handled if requested. Includes Linux and Windows
     """
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
     log_file = "tests/test_log.db"
@@ -156,7 +168,7 @@ def test_03_06_dir_exclude_list_download(filesystem):
 
 
 # HOLD for windows testing
-#def test_03_07_dir_exclude_list_SysVolInfo(filesystem):
+# def test_03_07_dir_exclude_list_SysVolInfo(tmp_path):
 #    """
 #    Testing ExternalStorage.dir_exclude_list() for excluding 'SysVolInfo' directories.
 #
@@ -179,13 +191,15 @@ def test_03_06_dir_exclude_list_download(filesystem):
 #    logger.close_log()
 
 
-def test_03_08_dir_include_list(filesystem):
+def test_03_08_dir_include_list(tmp_path):
     """
     Testing ExternalStorage.dir_include_list() for directories.
 
     Test the results of ExternalStorage.dir_include_list().
     """
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
     log_file = "tests/test_log.db"
@@ -205,14 +219,16 @@ def test_03_08_dir_include_list(filesystem):
     logger.close_log()
 
 
-def test_03_09_file_exclude_list_empty(filesystem):
+def test_03_09_file_exclude_list_empty(tmp_path):
     """
     Testing ExternalStorage.file_exclude_list() for excluding specific files.
 
     Test the results of ExternalStorage.file_exclude_list() for
     excluding specific directories.
     """
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
     log_file = "tests/test_log.db"
@@ -225,13 +241,15 @@ def test_03_09_file_exclude_list_empty(filesystem):
     logger.close_log()
 
 
-def test_03_11_file_exclude_list(filesystem):
+def test_03_11_file_exclude_list(tmp_path):
     """
     Testing ExternalStorage.file_exclude_list() for excluding backup files.
 
     Check that 'backup_files' (*.~ and *.bak) are handled if requested.
     """
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
     log_file = "tests/test_log.db"
@@ -249,7 +267,7 @@ def test_03_11_file_exclude_list(filesystem):
     logger.close_log()
 
 
-def test_03_12_file_include_list(filesystem):
+def test_03_12_file_include_list(tmp_path):
     """
     Testing the ExternalStorage.file_include_list() method.
 
@@ -265,7 +283,9 @@ def test_03_12_file_include_list(filesystem):
     config file or any of the subsets of the the
     config file['file_include'] section.
     """
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
     log_file = "tests/test_log.db"
@@ -277,7 +297,7 @@ def test_03_12_file_include_list(filesystem):
     assert len(inclusion_list) == 0
 
     # check that 'specific_files' is picked up
-    test_config.write_list("include_specific_files", ["a file"])    
+    test_config.write_list("include_specific_files", ["a file"])
     bes = ExternalStorage(test_config, logger, actions)
     inclusion_list = bes.file_include_list
     assert inclusion_list == test_config.read_list("include_specific_files")
@@ -285,7 +305,7 @@ def test_03_12_file_include_list(filesystem):
     logger.close_log()
 
 
-def test_03_13_process_file_1(filesystem):
+def test_03_13_process_file_1(tmp_path):
     """
     Test the results of the ExternalStorage.process_file() method.
 
@@ -295,7 +315,9 @@ def test_03_13_process_file_1(filesystem):
     source file (change the modification time) and back up the file.
     Ensure the destination file has the new modification time.
     """
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
     log_file = "tests/test_log.db"
@@ -318,16 +340,18 @@ def test_03_13_process_file_1(filesystem):
     logger.close_log()
 
 
-def test_03_14_process_file_2(filesystem):
+def test_03_14_process_file_2(tmp_path):
     """
     Test the results of the ExternalStorage.process_file() method.
 
-    Test for both good and broken symbolic links in linux only, Windows just 
+    Test for both good and broken symbolic links in linux only, Windows just
     returns an assert = true.
     """
     if sys.platform.startswith("linux"):
         # set filesystem
-        source, dest = filesystem
+        source = tmp_path / "source"
+        dest = tmp_path / "dest"
+        new_filesys(source, dest)
         test_config = build_config_file(source, dest)
         actions = {"verbose": True}
         log_file = "tests/test_log.db"
@@ -348,17 +372,19 @@ def test_03_14_process_file_2(filesystem):
         bes.process_file(current_dir, destination_dir, "link_bad")
         assert not os.path.islink(current_dir / "bad_link")
     else:  # Windows doesn't do symlinks well, probably should look at shortcuts
-        assert 1
+        assert 0
     logger.close_log()
 
 
-def test_03_15_process_dir_files_1(filesystem):
+def test_03_15_process_dir_files_1(tmp_path):
     """
     Test the results of the ExternalStorage.process_dir_files() method.
 
     Include all files in test1 dir.
     """
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
     log_file = "tests/test_log.db"
@@ -376,14 +402,16 @@ def test_03_15_process_dir_files_1(filesystem):
     logger.close_log()
 
 
-def test_03_16_process_dir_files_2(filesystem):
+def test_03_16_process_dir_files_2(tmp_path):
     """
     Test the results of the ExternalStorage.process_dir_files() method.
 
     Include all files in test1 dir except backup files.
     """
     # set filesystem
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
     log_file = "tests/test_log.db"
@@ -405,14 +433,16 @@ def test_03_16_process_dir_files_2(filesystem):
     logger.close_log()
 
 
-def test_03_17_process_dir_files_3(filesystem):
+def test_03_17_process_dir_files_3(tmp_path):
     """
     Test the results of the ExternalStorage.process_dir_files() method.
 
     Include all files in test1 dir except cache files.
     """
     # set filesystem
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     test_config = build_config_file(source, dest)
     actions = {"verbose": True}
     log_file = "tests/test_log.db"
@@ -432,7 +462,7 @@ def test_03_17_process_dir_files_3(filesystem):
     logger.close_log()
 
 
-def test_03_18_process_dir_file_4(filesystem):
+def test_03_18_process_dir_file_4(tmp_path):
     """
     Test the results of the ExternalStorage.process_dir_files() method.
 
@@ -440,7 +470,9 @@ def test_03_18_process_dir_file_4(filesystem):
     setting ['file_exclude']['specific_files'].
     """
     # set filesystem
-    source, dest = filesystem
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
     current_dir = source / "test1"
     destination_dir = dest / "test1"
     load_directory_set(directories, dest, False)
