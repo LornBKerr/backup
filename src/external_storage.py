@@ -8,18 +8,15 @@ License:    MIT, see file LICENSE
 Version:    1.1.0
 """
 
-
 import os
 import shutil
 import sys
 import time
-from copy import deepcopy
-from typing import Any
 
 from lbk_library.gui import Settings
-
 from logger import Logger
 from result_codes import ResultCodes
+
 
 file_name = "external_storage.py"
 file_version = "1.1.0"
@@ -29,6 +26,7 @@ changes = {
     + "Removed unnecessary section headers to make a single level dict;"
     + "Corrected 'base_dir' to 'start_dir'.",
 }
+
 
 class ExternalStorage:
     """
@@ -62,7 +60,6 @@ class ExternalStorage:
         """ The count of the fresh files actually backed up """
         self.logger: Logger = logger
         """ The result logger for the database. """
-
 
         if (
             self.config.value("start_dir") == ""
@@ -172,7 +169,7 @@ class ExternalStorage:
                 self.process_dir_files(current_dir, destination_dir, fileset)
 
     def process_dir_files(
-       self, current_dir: str, destination_dir: str, fileset: list[str]
+        self, current_dir: str, destination_dir: str, fileset: list[str]
     ) -> None:
         """
         Step through the the current directory.
@@ -194,7 +191,7 @@ class ExternalStorage:
                 self.process_file(current_dir, destination_dir, filename)
 
     def process_file(
-       self, current_dir: str, destination_dir: str, filename: str
+        self, current_dir: str, destination_dir: str, filename: str
     ) -> None:
         """
         Backup the current file if necessary.
