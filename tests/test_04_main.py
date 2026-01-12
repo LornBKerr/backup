@@ -5,48 +5,55 @@ File:       test_02_logger.py
 Author:     Lorn B Kerr
 Copyright:  (c) 2022 - 2025 Lorn B Kerr
 License:    MIT, see file LICENSE
-Version:    1.0.1
+Version:    1.1.0
 """
 
 import os
+
 import sys
-#import time
 
 src_path = os.path.join(os.path.realpath("."), "src")
 if src_path not in sys.path:
     sys.path.append(src_path)
 
-#import pytest
-from build_filesystem import build_config_file, filesystem
+from build_filesystem import (
+    build_config_file,
+    new_filesys,
+)
+
 #from external_storage import ExternalStorage
-from lbk_library.gui import Settings
+#from lbk_library.gui import Settings
 from main import Backup
-#from result_codes import ResultCodes
-#from setup import Setup
+#
+# from result_codes import ResultCodes
+# from setup import Setup
 
 config_name = "BackupTest"
 
 # build_empty_config; config file exists but has no entries.
 
-def test_04_01_constructor(filesystem):
+
+def test_04_01_constructor(tmp_path):
     """
-    Test the the object is really a Backup class
+    Test the object is really a Backup class
     """
-    # set filesystem
-    source, dest = filesystem
-    config = build_config_file(source, dest, config_name)
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
+    test_config = build_config_file(source, dest)
+
     backup = Backup([], config_name)
     assert isinstance(backup, Backup)
 
 
-def test_04_02_config_file(filesystem):
-    config_name = "BackupTest"
-    source, dest = filesystem
-    config = build_config_file(source, dest, config_name)
+def test_04_02_config_file(tmp_path):
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
+    test_config = build_config_file(source, dest)
 
     backup = Backup([], config_name)
     assert len(backup.config.allKeys()) != 0
-    print(backup.config.allKeys())
     assert isinstance(backup.config.value("last_backup"), int)
     assert isinstance(backup.config.value("start_dir"), str)
     assert isinstance(backup.config.read_list("exclude_specific_dirs"), list)
@@ -57,20 +64,22 @@ def test_04_02_config_file(filesystem):
     backup.config.write_list("exclude_specific_dirs", ["venv", "bin"])
     backup.config.set_bool_value("exclude_download_dir", False)
     backup.config.sync()
-    assert not backup.config.bool_value("exclude_download_dir")  
+    assert not backup.config.bool_value("exclude_download_dir")
     assert isinstance(backup.config.read_list("exclude_specific_dirs"), list)
     assert len(backup.config.read_list("exclude_specific_dirs")) == 2
 
 
-def test_04_03_required_actions(filesystem):
+def test_04_03_required_actions(tmp_path):
     """
     Test the backup.set_required_actions() method
 
     Walk throgh the various allowed actions.
     """
     # set filesystem
-    source, dest = filesystem
-    config_file = source / config_name
+    source = tmp_path / "source"
+    dest = tmp_path / "dest"
+    new_filesys(source, dest)
+    test_config = build_config_file(source, dest)
 
     # Do empty action list
     action_list = []
@@ -114,8 +123,7 @@ def test_04_03_required_actions(filesystem):
     assert actions["setup"]
     assert actions["verbose"]
     assert actions["version"]
-    
-    
+
     # do action list with combined settings;
     action_list = ["-bsv", "--version"]
     # multiple actions
@@ -124,5 +132,3 @@ def test_04_03_required_actions(filesystem):
     assert actions["setup"]
     assert actions["verbose"]
     assert actions["version"]
-
-
