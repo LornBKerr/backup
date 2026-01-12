@@ -107,13 +107,13 @@ def test_03_04_dir_exclude_list_cache(tmp_path):
 
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
-    assert not "cache" in exclusion_list
+    assert "cache" not in exclusion_list
     test_config.set_bool_value("exclude_cache_dir", True)
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
     assert "cache" in exclusion_list
     assert "Cache" in exclusion_list
-    assert not "a dir" in exclusion_list
+    assert "a dir" not in exclusion_list
     logger.close_log()
 
 
@@ -133,7 +133,7 @@ def test_03_05_dir_exclude_list_trash(tmp_path):
 
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
-    assert not "trash" in exclusion_list
+    assert "trash" not in exclusion_list
     test_config.set_bool_value("exclude_trash_dir", True)
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
@@ -159,7 +159,7 @@ def test_03_06_dir_exclude_list_download(tmp_path):
 
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
-    assert not "Downloads" in exclusion_list
+    assert "Downloads" not in exclusion_list
     test_config.set_bool_value("exclude_download_dir", True)
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.dir_exclude_list
@@ -257,13 +257,13 @@ def test_03_11_file_exclude_list(tmp_path):
 
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.file_exclude_list
-    assert not ".bak" in exclusion_list
+    assert ".bak" not in exclusion_list
     test_config.set_bool_value("exclude_backup_files", True)
     bes = ExternalStorage(test_config, logger, actions)
     exclusion_list = bes.file_exclude_list
     assert "~" in exclusion_list
     assert ".bak" in exclusion_list
-    assert not "a file" in exclusion_list
+    assert "a file" not in exclusion_list
     logger.close_log()
 
 

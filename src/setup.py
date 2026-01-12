@@ -36,7 +36,6 @@ from PySide6.QtWidgets import (
 )
 from setup_form import Ui_Setup
 
-
 filename = "setup.py"
 file_version = "1.0.0"
 changes = {

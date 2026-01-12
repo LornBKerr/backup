@@ -19,7 +19,6 @@ from build_filesystem import (
     build_config_file,
     new_filesys,
 )
-
 from main import Backup
 
 config_name = "BackupTest"

@@ -17,7 +17,6 @@ from lbk_library.gui import Settings
 from logger import Logger
 from result_codes import ResultCodes
 
-
 file_name = "external_storage.py"
 file_version = "1.1.0"
 changes = {

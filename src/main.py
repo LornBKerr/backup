@@ -12,12 +12,12 @@ Version:    1.1.0
 
 import datetime
 import re
+import sys
 import time
 
 from external_storage import ExternalStorage
 from lbk_library.gui import Settings
 from logger import Logger
-
 from PySide6.QtWidgets import QApplication
 from result_codes import ResultCodes
 from setup import Setup

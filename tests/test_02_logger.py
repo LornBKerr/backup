@@ -17,7 +17,6 @@ if src_path not in sys.path:
 
 import pytest
 from build_filesystem import new_filesys
-
 from lbk_library import DataFile
 from logger import Logger
 from result_codes import ResultCodes
@@ -38,7 +37,6 @@ def test_02_01_init_(tmp_path):
     logger = Logger(dir_path, filename)
     assert isinstance(logger, Logger)
     logger.log_db.sql_close()
-
 
 
 def test_02_02_create_log_database_bad_path(tmp_path):

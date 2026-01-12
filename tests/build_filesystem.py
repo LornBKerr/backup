@@ -11,8 +11,7 @@ Version:    1.0.1
 import os
 import sys
 import time
-
-import pytest
+from pathlib import Path
 
 from lbk_library.gui import Settings
 
@@ -165,4 +164,3 @@ def new_filesys(source: Path, dest: Path):
     if sys.platform.startswith("linux"):
         link_source = source / "test_links"
         load_links(links, link_source)
-
