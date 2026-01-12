@@ -11,20 +11,14 @@ Version:    1.1.0
 """
 
 import datetime
-#import os
 import re
-import sys
 import time
-#from typing import Any
-#
-#import platformdirs
-#from PySide6.QtCore import QSettings
-from PySide6.QtWidgets import QApplication
-from lbk_library.gui import Settings
 
-#from default_config import default_config
 from external_storage import ExternalStorage
+from lbk_library.gui import Settings
 from logger import Logger
+
+from PySide6.QtWidgets import QApplication
 from result_codes import ResultCodes
 from setup import Setup
 
@@ -33,7 +27,7 @@ file_version = "1.1.0"
 changes = {
     "1.0.0": "Initial release",
     "1.0.1": "Changed library 'PyQt5' to 'PySide6' and code cleanup",
-    "1.1.0": "Changed from ini file to QSettings",
+    "1.1.0": "Changed from ini file to lbkLibrary/Settings",
 }
 
 
@@ -50,7 +44,10 @@ class Backup:
     Any new directories are created in the backup store and changed
     files are copied to the store.
     """
-    def __init__(self, action_list: list[str] = [], config_name: str = "Backup.conf") -> None:
+
+    def __init__(
+        self, action_list: list[str] = [], config_name: str = "Backup.conf"
+    ) -> None:
         """
         Initialize and run the backup program based on the action list.
 
@@ -73,10 +70,7 @@ class Backup:
         """The set requested actions from the action list."""
         self.config = Settings("UnnamedBranch", config_name)
         """The configuration setup."""
-        print(self.config.fileName())
-        print("main.config_name =", config_name)
-        print("main.config:", self.config.allKeys())
-        
+
         self.external_storage: ExternalStorage
         """Handle the backup to the external storage drive."""
         self.logger: Logger
@@ -93,18 +87,28 @@ class Backup:
             self.config = Settings("UnnamedBranch", config_name)
 
         # Start logging
-        self.logger = Logger(self.config.value("log_path"), self.config.value("log_name"))
+        self.logger = Logger(
+            self.config.value("log_path"), self.config.value("log_name")
+        )
         self.logger.add_log_entry(
-            {"timestamp": int(start_time), 
-            "result": ResultCodes.SUCCESS, 
-            "description": "Backup Started " + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(start_time))}
-            )
+            {
+                "timestamp": int(start_time),
+                "result": ResultCodes.SUCCESS,
+                "description": "Backup Started "
+                + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(start_time)),
+            }
+        )
 
         if self.actions["verbose"]:
-            print("started:", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(start_time)))
+            print(
+                "started:",
+                time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(start_time)),
+            )
 
         if self.actions["backup"]:
-            self.external_storage = ExternalStorage(self.config, self.logger, self.actions)
+            self.external_storage = ExternalStorage(
+                self.config, self.logger, self.actions
+            )
 
         # update the config file 'last backup' time
         self.config.setValue("last_backup", int(start_time))
@@ -132,9 +136,7 @@ class Backup:
 
         if self.actions["verbose"]:
             print(
-                "ended:",
-                time.strftime("%Y-%m-%d %H:%M:%S",
-                time.localtime(end_time))
+                "ended:", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(end_time))
             )
             print("Elapsed time: " + str(datetime.timedelta(seconds=elapsed)))
         self.logger.close_log()
@@ -159,7 +161,7 @@ class Backup:
         # initialize requested actions
         actions = {
             "backup": False,  # Do backup?
-            "setup": False,   # Do the setup?
+            "setup": False,  # Do the setup?
             "verbose": False,  # show progress on terminal
             "version": False,  # show program version and exit
         }
@@ -181,7 +183,7 @@ class Backup:
             for action in args:
                 if action == "-b" or action == "--backup":
                     actions["backup"] = True
-                elif action == "-s" or  action == "--setup":
+                elif action == "-s" or action == "--setup":
                     actions["setup"] = True
                 elif action == "-v" or action == "--verbose":
                     actions["verbose"] = True
@@ -201,6 +203,5 @@ class Backup:
         self.main_window = Setup(self.config)
         return_value = self.app.exec()
         self.app.shutdown()  # Undocumented workaround to destroy the app
-                        # https://bugreports.qt.io/browse/PYSIDE-1190
+        # https://bugreports.qt.io/browse/PYSIDE-1190
         return return_value
-
