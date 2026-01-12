@@ -13,9 +13,9 @@ import sys
 import time
 
 import pytest
+
 from lbk_library.gui import Settings
 
-# Directories for Windows and Linux
 directories = [
     ".config",
     "test1",
@@ -27,9 +27,9 @@ directories = [
     "System Volume Information",
     "test_links",
 ]
-""" The set of temporary directories. """
+""" The set of temporary directories, common to Windows and Linux. """
 
-# additional directories for Linux, Windows is case insensitive by
+# Additional directories for Linux, Windows is case insensitive by
 # default so these are flagged as dupicates.
 if sys.platform.startswith("linux"):
     directories.append("Cache")
@@ -67,7 +67,7 @@ def load_directory_set(dirs, base_dir, add_files=True):
     for a_dir in dirs:
         new_dir = base_dir / a_dir
         new_dir.mkdir()
-        
+
         if add_files and a_dir != ".config":
             file1 = new_dir / "file1.txt"
             file1.write_text("This is file1 in " + a_dir)
@@ -140,11 +140,9 @@ def build_config_file(source: str, dest: str, name: str = "BackupTest") -> Setti
     return config_file
 
 
-@pytest.fixture
-def filesystem(tmp_path):
+def new_filesys(source: Path, dest: Path):
     """
-    Setup a temporary filesystem in a temperary location which will be
-    discarded after the test sequence is run.
+    Set up a temporary filesystem to be discarded after each test is run.
 
     'source' is the path for a set of files to be backed up. 'dest' is
     the path to the backup location. Source will be loaded with a set of
@@ -154,23 +152,17 @@ def filesystem(tmp_path):
     be included.
 
     Parameters:
-        tmp_path: pytest fixture to setup a path to a temperary location
-
-    Returns:
-        tuple(source, dest) The temparary file paths to use.
+        source (Path)  A path to a temperary location for the source
+            directory structure.
+        dest (Path)  A path to a temperary location for the dest
+            directory structure.
     """
-    source = tmp_path / "source"
     source.mkdir()
-    dest = tmp_path / "dest"
     dest.mkdir()
     # make a set of source directories and files
     load_directory_set(directories, source)
     # only do symlinks for Linux, not Windows
     if sys.platform.startswith("linux"):
-        link_source_dir = source / "test_links"
-        load_links(links, link_source_dir)
+        link_source = source / "test_links"
+        load_links(links, link_source)
 
-    # set the config file
-    build_config_file(source, dest)
-
-    return source, dest
