@@ -9,7 +9,6 @@ Version:    1.1.0
 """
 
 import os
-
 import sys
 
 src_path = os.path.join(os.path.realpath("."), "src")
@@ -21,16 +20,9 @@ from build_filesystem import (
     new_filesys,
 )
 
-#from external_storage import ExternalStorage
-#from lbk_library.gui import Settings
 from main import Backup
-#
-# from result_codes import ResultCodes
-# from setup import Setup
 
 config_name = "BackupTest"
-
-# build_empty_config; config file exists but has no entries.
 
 
 def test_04_01_constructor(tmp_path):
