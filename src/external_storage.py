@@ -143,12 +143,12 @@ class ExternalStorage:
                     "description": " Could not access the Extrernal Storage Drive ",
                 }
             )
-
             sys.exit(ResultCodes.NO_EXTERNAL_STORAGE)
 
-            # walk the base directory and all subdirectories.
+        # walk the base directory and all subdirectories.
         for current_dir, subdirs, fileset in os.walk(source):
             self.directories_checked += 1
+
             if self.actions["verbose"]:
                 if self.directories_checked % 1000 == 0:
                     print(self.directories_checked, "directories processsed")
@@ -213,7 +213,7 @@ class ExternalStorage:
         if os.path.islink(current_path) and not os.path.isfile(current_path):
             return  # skip broken links
 
-            # if file is newer than backup file, back it up
+        # if file is newer than backup file, back it up
         if (
             not os.path.exists(destination_path)
             or int(os.stat(current_path).st_mtime)
