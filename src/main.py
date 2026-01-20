@@ -70,15 +70,12 @@ class Backup:
         """The set requested actions from the action list."""
         self.config = Settings("UnnamedBranch", config_name)
         """The configuration setup."""
-
         self.external_storage: ExternalStorage
         """Handle the backup to the external storage drive."""
         self.logger: Logger
         """The results log driver."""
 
         start_time = time.time()  # Get the starting timestamp
-        print("start time", start_time)
-        print("actions:", self.actions)
 
         # If there is no configuration set or configuration is requested,
         # initialize the configuration and reload config.
@@ -98,6 +95,11 @@ class Backup:
                 + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(start_time)),
             }
         )
+
+        if self.actions["version"]:
+            print("Backup;  Version: " + file_version)
+            print("Backup selected files to external storage.")
+            print("Copyright 2025 Lorn B Kerr")
 
         if self.actions["verbose"]:
             print(
@@ -131,8 +133,6 @@ class Backup:
                 + str(datetime.timedelta(seconds=elapsed)),
             }
         )
-
-        self.logger.close_log()
 
         if self.actions["verbose"]:
             print(
