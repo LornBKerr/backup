@@ -46,7 +46,7 @@ class Backup:
     """
 
     def __init__(
-        self, action_list: list[str] = [], config_name: str = "Backup.conf"
+        self, action_list: list[str] = [], config_name: str = "Backup"
     ) -> None:
         """
         Initialize and run the backup program based on the action list.
@@ -63,7 +63,7 @@ class Backup:
                     Show the steps being accomplished.
                 --version
                     Show the version of the program.
-            config_name (str) -: The name of the system configuration file,
+           config_name (str) -: The name of the system configuration file,
                  defaults to 'Backup'.
         """
         self.actions: dict[str, bool] = self.set_required_actions(action_list)
@@ -108,8 +108,10 @@ class Backup:
             )
 
         if self.actions["backup"]:
-            self.external_storage = ExternalStorage(
+           self.external_storage = ExternalStorage(
                 self.config, self.logger, self.actions
+
+
             )
 
         # update the config file 'last backup' time
