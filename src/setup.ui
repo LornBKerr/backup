@@ -427,10 +427,16 @@ backup. Other  specific directories and files can also be specified.
     </widget>
    </widget>
    <widget class="QWidget" name="inclusions_tab">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <attribute name="title">
      <string>Included Items</string>
     </attribute>
     <widget class="QLabel" name="lbl_inclusion_header">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -458,6 +464,9 @@ backup. Other  specific directories and files can also be specified.
      </property>
     </widget>
     <widget class="QPushButton" name="include_previous_button">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>360</x>
@@ -471,6 +480,9 @@ backup. Other  specific directories and files can also be specified.
      </property>
     </widget>
     <widget class="QTableWidget" name="include_specific_files">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>280</x>
@@ -481,6 +493,9 @@ backup. Other  specific directories and files can also be specified.
      </property>
     </widget>
     <widget class="QTableWidget" name="include_specific_dirs">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>10</x>
