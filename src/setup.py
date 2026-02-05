@@ -305,26 +305,23 @@ class Setup(Dialog, Ui_Setup):
         """
         One of the cells in the list has changed.
 
+        If the change results in an blank (empty) value, remove the frow.
         If this is the last row in the list, then append an empty row.
+        If any change is made, update the 'change_made' value.
 
         Parameters:
             row (int) - The row of the cell
             column (int) - The column of the cell.
         """
+        if self.include_specific_files.item(row, column).text() == '':
+            self.include_specific_files.removeRow(row)
+        
         if row == self.include_specific_files.rowCount() - 1:
-            self.include_specific_files.insertRow(
-                self.include_specific_files.rowCount()
-            )
-            self.change_made = (
-                self.change_made | self.entry_changed["include_specific_files"]
-            )
-        elif (
-            not self.include_specific_files.item(row, 0).text()
-            in self.initial_config["include_specific_files"]
-        ):
-            self.change_made = (
-                self.change_made | self.entry_changed["include_specific_files"]
-            )
+            self.include_specific_files.insertRow(self.include_specific_dirs.rowCount())
+
+        self.change_made = (
+            self.change_made | self.entry_changed["include_specific_files"]
+        )
 
     def action_include_specific_dirs(self, row: int, column: int) -> None:
         """
@@ -337,8 +334,15 @@ class Setup(Dialog, Ui_Setup):
             row (int) - The row of the cell
             column (int) - The column of the cell.
         """
+        if self.include_specific_dirs.item(row, column).text() == '':
+            self.include_specific_dirs.removeRow(row)
+        
         if row == self.include_specific_dirs.rowCount() - 1:
             self.include_specific_dirs.insertRow(self.include_specific_dirs.rowCount())
+
+        self.change_made = (
+            self.change_made | self.entry_changed["include_specific_files"]
+        )
 
     def action_exclude_specific_files(self, row: int, column: int) -> None:
         """
@@ -350,10 +354,17 @@ class Setup(Dialog, Ui_Setup):
             row (int) - The row of the cell
             column (int) - The column of the cell.
         """
+        if self.exclude_specific_files.item(row, column).text() == '':
+            self.exclude_specific_files.removeRow(row)
+        
         if row == self.exclude_specific_files.rowCount() - 1:
             self.exclude_specific_files.insertRow(
                 self.exclude_specific_files.rowCount()
             )
+
+        self.change_made = (
+            self.change_made | self.entry_changed["include_specific_files"]
+        )
 
     def action_exclude_specific_dirs(self, row: int, column: int) -> None:
         """
@@ -366,8 +377,15 @@ class Setup(Dialog, Ui_Setup):
             row (int) - The row of the cell
             column (int) - The column of the cell.
         """
+        if self.exclude_specific_dirs.item(row, column).text() == '':
+            self.exclude_specific_dirs.removeRow(row)
+        
         if row == self.exclude_specific_dirs.rowCount() - 1:
             self.exclude_specific_dirs.insertRow(self.exclude_specific_dirs.rowCount())
+
+        self.change_made = (
+            self.change_made | self.entry_changed["include_specific_files"]
+        )
 
     def action_exclude_previous_button(self) -> None:
         """Move to the 'Common Items' tab."""
@@ -472,6 +490,7 @@ class Setup(Dialog, Ui_Setup):
         """fill the excluded directories table."""
         listing = self.initial_config["include_specific_files"]
         self.fill_table(self.include_specific_files, listing)
+
 
     def fill_include_dirs_table(self) -> None:
         """fill the included directories table."""
