@@ -46,7 +46,7 @@ class Backup:
     """
 
     def __init__(
-        self, action_list: list[str] = [], config_name: str = "Backup"
+        self, action_list: list[str] = [], config_name: str = "backup"
     ) -> None:
         """
         Initialize and run the backup program based on the action list.
@@ -110,8 +110,6 @@ class Backup:
         if self.actions["backup"]:
            self.external_storage = ExternalStorage(
                 self.config, self.logger, self.actions
-
-
             )
 
         # update the config file 'last backup' time
