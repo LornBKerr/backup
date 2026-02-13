@@ -60,10 +60,16 @@ class ExternalStorage:
         self.logger: Logger = logger
         """ The result logger for the database. """
 
+        self.excluded_dir_list = self.dir_exclude_list()
+        self.included_dir_list = self.dir_include_list()
+        self.excluded_file_list = self.file_exclude_list()
+        self.included_file_list = self.file_include_list()
+
         if (
             self.config.value("start_dir") == ""
-            and self.config.value("backup_location") == ""
+            or self.config.value("backup_location") == ""
         ):
+            print("Need start and backup location dirs")
             self.logger.add_log_entry(
                 {
                     "timestamp": int(time.time()),
@@ -74,6 +80,7 @@ class ExternalStorage:
                     ),
                 }
             )
+            
         else:
             self.backup()
 
@@ -133,9 +140,10 @@ class ExternalStorage:
 
         # make sure the base destination directory exists
         try:
-            if not os.path.isdir(destination):
+           if not os.path.isdir(destination):
                 os.makedirs(destination)
         except Exception as exc:
+            print(" Could not access the Extrernal Storage Drive ")
             self.logger.add_log_entry(
                 {
                     "timestamp": int(time.time()),
@@ -148,24 +156,19 @@ class ExternalStorage:
         # walk the base directory and all subdirectories.
         for current_dir, subdirs, fileset in os.walk(source):
             self.directories_checked += 1
-
             if self.actions["verbose"]:
                 if self.directories_checked % 1000 == 0:
-                    print(self.directories_checked, "directories processsed")
-            # if directory not excluded, check the directory's file_set
-            is_dir_excluded = [
-                ele for ele in self.dir_exclude_list if ele in current_dir
-            ]
-            is_dir_included = [
-                ele for ele in self.dir_include_list if ele in current_dir
-            ]
-            if not bool(is_dir_excluded) or bool(is_dir_included):
-                self.directories_backed_up += 1
-                # make sure the current destination directory exists
-                destination_dir = os.path.join(destination, current_dir[source_len:])
-                if not os.path.isdir(destination_dir):
-                    os.mkdir(destination_dir)
+                    print(self.directories_checked, "directories processed")
+
+            # make sure the current destination directory exists
+            destination_dir = os.path.join(destination, current_dir[source_len:])
+            if not os.path.isdir(destination_dir):
+                os.mkdir(destination_dir)
+
+            # backup the included directories and files to the backup media
+            if not any(substring in current_dir for substring in self.excluded_dir_list) or any(substring in current_dir for substring in self.included_dir_list):
                 self.process_dir_files(current_dir, destination_dir, fileset)
+                self.directories_backed_up += 1
 
     def process_dir_files(
         self, current_dir: str, destination_dir: str, fileset: list[str]
@@ -183,10 +186,7 @@ class ExternalStorage:
         """
         for filename in fileset:
             self.files_files_checked += 1
-            if not (
-                filename.endswith(tuple(self.file_exclude_list))
-                or bool([ele for ele in self.file_exclude_list if (ele in filename)])
-            ):
+            if not any(substring in filename for substring in self.excluded_file_list) or any(substring in filename for substring in self.included_file_list):
                 self.process_file(current_dir, destination_dir, filename)
 
     def process_file(
@@ -213,17 +213,18 @@ class ExternalStorage:
         if os.path.islink(current_path) and not os.path.isfile(current_path):
             return  # skip broken links
 
-        # if file is newer than backup file, back it up
+        # if file not in backup or is newer than backup file, back it up
         if (
             not os.path.exists(destination_path)
-            or int(os.stat(current_path).st_mtime)
-            > int(self.config.value("last_backup"))
-            or int(os.stat(current_path).st_mtime)
-            > int(os.stat(destination_path).st_mtime)
+            or os.stat(current_path).st_mtime > float(os.stat(destination_path).st_mtime)
         ):
             try:
+                # copy the file, then update the access time and modification
+                #  time by +1 second to account for differences between 
+                # ext type file systems and fat filesystems.
                 shutil.copy2(current_path, destination_path, follow_symlinks=False)
-                shutil.copystat(current_path, destination_path, follow_symlinks=False)
+                os.utime(destination_path, (os.path.getatime(destination_path) + 1, os.path.getmtime(destination_path) + 1))
+                
                 self.files_backed_up += 1
                 if self.actions["verbose"]:
                     print("file:", destination_path)
@@ -238,7 +239,6 @@ class ExternalStorage:
                 if self.actions["verbose"]:
                     print("Backup of file", current_path, "failed.")
 
-    @property
     def dir_exclude_list(self) -> list[str]:
         """
         Builds the list of excluded directories from the config settings.
@@ -262,10 +262,8 @@ class ExternalStorage:
             # results with Windows.
         # if self.config.bool_value("exclude_sysvolinfo_dir"):
         #   exclusion_list.append("System Volume Information")
-
         return exclusion_list
 
-    @property
     def dir_include_list(self) -> list[str]:
         """
         Builds the list of specifically included directories.
@@ -276,7 +274,6 @@ class ExternalStorage:
         inclusion_list = self.config.read_list("include_specific_dirs")
         return inclusion_list
 
-    @property
     def file_exclude_list(self) -> list[str]:
         """
         Builds the list of excluded files.
@@ -291,7 +288,6 @@ class ExternalStorage:
             exclusion_list.append(".bak")
         return exclusion_list
 
-    @property
     def file_include_list(self) -> list[str]:
         """
         Builds the list of included files.
@@ -299,6 +295,5 @@ class ExternalStorage:
         Returns:
             (list[str]) the set of included directories.
         """
-        # What specific files do we want to include in the backup.
         inclusion_list = self.config.read_list("include_specific_files")
         return inclusion_list
