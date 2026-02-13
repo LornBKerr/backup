@@ -19,7 +19,7 @@ directories = [
     ".config",
     "test1",
     "test2",
-    "cache",
+    ".cache",
     "trash",
     "$RECYCLE.BIN",
     "Downloads",
