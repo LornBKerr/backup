@@ -216,18 +216,17 @@ class ExternalStorage:
         # if file not in backup or is newer than backup file, back it up
         if (
             not os.path.exists(destination_path)
-            or os.stat(current_path).st_mtime > float(os.stat(destination_path).st_mtime)
+            or int(os.stat(destination_path).st_mtime) < int(os.stat(current_path).st_mtime)
         ):
             try:
                 # copy the file, then update the access time and modification
                 #  time by +1 second to account for differences between 
                 # ext type file systems and fat filesystems.
                 shutil.copy2(current_path, destination_path, follow_symlinks=False)
-                os.utime(destination_path, (os.path.getatime(destination_path) + 1, os.path.getmtime(destination_path) + 1))
-                
+                os.utime(destination_path, (os.path.getatime(current_path) + 2, os.path.getmtime(current_path) + 2))
                 self.files_backed_up += 1
                 if self.actions["verbose"]:
-                    print("file:", destination_path)
+                    print("file backed up to:", destination_path)
             except Exception as exc:
                 self.logger.add_log_entry(
                     {
